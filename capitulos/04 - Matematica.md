@@ -23,6 +23,7 @@ A soma dos ângulos internos de um triângulo é sempre igual a `180°`, ou seja
 
 Em um triângulo retângulo (triângulo com um ângulo de `90°` ou `π/2 rad`), o lado oposto à este ângulo é chamado de **hipotenusa** (`h`), selecionando um dos outros ângulos como sendo `θ`, temos que o lado oposto a este ângulo se chama **cateto oposto** (`o`), e o lado que sobrou se chama **cateto adjacente** (`a`). Sendo assim, Pitágoras nos dá a seguinte relação entre o tamanho dos três lados:
 
+```
          _\|/_
          (o o)
  +----oOO-{_}-OOo--------+
@@ -31,6 +32,7 @@ Em um triângulo retângulo (triângulo com um ângulo de `90°` ou `π/2 rad`),
  |     a² + o² = h²`     |
  |                       |
  +-----------------------+
+```
 
 As funções trigonométricas, por sua vez, são funções que relacionam o ângulo `θ` com a razão de dois lados de um triângulo retângulo:
 
@@ -307,6 +309,7 @@ A matemática é um dos principais gargalos para quem deseja aprender computaç�
 
 Como sempre, obrigado por ler até aqui :)
 
+```
          _\|/_
          (o o)
  +----oOO-{_}-OOo---------------------------+
@@ -316,3 +319,4 @@ Como sempre, obrigado por ler até aqui :)
  |       Não precisa ter vergonha ;^]       |
  |                                          |
  +------------------------------------------+
+```

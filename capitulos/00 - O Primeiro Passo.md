@@ -426,6 +426,7 @@ Esperamos que tenha gostado desta breve introdução ao mundo do OpenGL. Saiba q
 
 Se você se embananou em algum momento ou não conseguiu seguir o passo a passo por algum motivo, o código que escrevemos ao longo deste capítulo está disponível neste mesmo repositório, em `codigos/src/capitulo_00.cpp`, use ele de referência a vontade.
 
+```
          _\|/_
          (o o)
  +----oOO-{_}-OOo------------------------------+
@@ -433,6 +434,7 @@ Se você se embananou em algum momento ou não conseguiu seguir o passo a passo 
  | Obrigado por ler até aqui! Até a próxima :) |
  |                                             |
  +---------------------------------------------+
+```
 
 ## Exercícios propostos
 

@@ -529,6 +529,7 @@ Shaders são um tópico muito importante e uma área com **muito** espaço para 
 
 Enfim, parabéns por ter chegado até aqui!
 
+```
          _\|/_
          (o o)
  +----oOO-{_}-OOo--------------+
@@ -536,6 +537,7 @@ Enfim, parabéns por ter chegado até aqui!
  | Que a força esteja com você |
  |                             |
  +-----------------------------+
+```
 
 ## Exercícios propostos
 
