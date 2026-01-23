@@ -212,6 +212,7 @@ Bem mais bonito e formoso né? E tudo isso alcançado com uma técnica bem tranq
 
 Essa aqui foi uma palinha do poder das texturas na iluminação e no PBR. Não adentramos no contexto de mapas normais por este ser um material mais introdutório (mapas normais são um tanto mais complicados do que mapas ARM), mas caso você tenha gostado do que viu aqui, vá aprender mais sobre eles que vale a pena. No mais, é isso aí, obrigado por ler até aqui e até a próxima!
 
+```
          _\|/_
          (o o)
  +----oOO-{_}-OOo--+
@@ -219,6 +220,7 @@ Essa aqui foi uma palinha do poder das texturas na iluminação e no PBR. Não a
  | Sayonara, baby. |
  |                 |
  +-----------------+
+```
 
 ## Exercícios propostos
 
