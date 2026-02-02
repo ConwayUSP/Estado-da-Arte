@@ -408,7 +408,7 @@ EBAAAAAA!!! Tudo deu certo e todo mundo está feliz. Nesta nota positiva, iremos
 
 ## Conclusão
 
-Este foi basicamente o último capítulo da trilha. Se você chegou até aqui, você é um verdadeiro guerreiro, um **dragão guerreiro"" até! Parabéns por ter perseverado por todos os desafios e dificuldades que eu sei que você encontrou. Nós não falamos muito sobre isso no início da trilha para não desanimá-lo, mas OpenGL tem uma curva de aprendizado bem íngreme, não é de modo algum uma biblioteca boba de se aprender. Muito do comportamento desta máquina 
+Este foi basicamente o último capítulo da trilha. Se você chegou até aqui, você é um verdadeiro guerreiro, um **dragão guerreiro** até! Parabéns por ter perseverado por todos os desafios e dificuldades que eu sei que você encontrou. Nós não falamos muito sobre isso no início da trilha para não desanimá-lo, mas OpenGL tem uma curva de aprendizado bem íngreme, não é de modo algum uma biblioteca boba de se aprender. Muito do comportamento desta máquina 
 de estados está oculto sob um longo manto de funções crípticas e conceitos estrangeiros. Contudo, esperamos que tenha valido a pena aprender um pouco deste mundo; saiba que muito do que você viu aqui será facilmente transferível para outras APIs gráficas e até mesmo para outros nichos da programação.
 
 Parabéns novamente pelo esforço e até a próxima!
