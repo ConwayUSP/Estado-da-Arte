@@ -8,18 +8,14 @@ Aqui, mostraremos matrizes utilizadas para as seguintes transformações:
 2. Translação;
 3. Rotação.
 
-Além, é claro, das suas composições e do uso de GLM para a criação delas.
-
-Também, apresentaremos os seguintes espaços e como mover entre eles na prática:
+Além, é claro, das suas composições e do uso de GLM para a criação delas. Também, apresentaremos os seguintes espaços e como mover entre eles na prática:
 
 1. Local Space;
 2. World Space;
 3. View Space;
 4. Clip Space.
 
-Por fim, demonstraremos projeções ortográficas e de perspectiva e teste de profundidade.
-
-Sem mais delongas. Vamos lá:
+Por fim, demonstraremos projeções ortográficas e de perspectiva e teste de profundidade. Sem mais delongas. Vamos lá:
 
 
 ## Redimensionamento
