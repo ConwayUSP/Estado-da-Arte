@@ -9,7 +9,7 @@ Para a alegria de muitos, a computação gráfica é uma área na qual estamos c
 
 Nesta trilha não usaremos nenhum conceito avançado sobre estes tópicos, este capítulo é realmente um bônus para refrescar a memória de alguns.
 
-## Trogonometria
+## Trigonometria
 
 A trigonometria é o estudo dos triângulos. Como já vimos lá no começo da trilha, a primitiva principal com a qual trabalhamos na computação gráfica **é** o triângulo, então vale a pena relembrar algumas coisas sobre eles.
 
