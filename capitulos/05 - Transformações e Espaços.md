@@ -1,0 +1,70 @@
+# Transformações e Espaços
+
+Ainda na pegada do capítulo anterior, vamos apresentar para vocês aplicações matemáticas que são essenciais para o desenvolvimento de um projeto não apenas no OpenGL, mas na computação gráfica como um todo. 
+
+Aqui, mostraremos matrizes utilizadas para as seguintes transformações:
+
+1. Redimensionamento;
+2. Translação;
+3. Rotação.
+
+Além, é claro, das suas composições e do uso de GLM para a criação delas.
+
+Também, apresentaremos os seguintes espaços e como mover entre eles na prática:
+
+1. Local Space;
+2. World Space;
+3. View Space;
+4. Clip Space.
+
+Por fim, demonstraremos projeções ortográficas e de perspectiva e teste de profundidade.
+
+Sem mais delongas. Vamos lá:
+
+
+## Redimensionamento
+
+Imagine que você, ao final desta trilha, está modelando uma simulação onde existe uma árvore e um prédio de 30 andares.
+
+Se a árvore não estiver anabolizada, é natural supor que o prédio terá um tamanho consideravelmente maior, não? 
+
+Ou, melhor, vamos mudar de exemplo: imagine que você está fazendo uma simulação onde uma formiga terá o tamanho de um elefante (por algum motivo). Como seremos capazes de fazer isso no nosso computador?
+
+Visualizando a nossa formiga enquanto objeto computacional com suas devidas componentes _(x, y, z, 1)_, representando suas dimensões na simulação, apresentaremos nossa primeira matriz de transformação e faremos um exemplo de sua aplicação!
+
+Vamos lá. Observe a matriz _4x1_ abaixo:
+
+![Componentes do nosso objeto representado por um vetor](../imagens/05_vetor.png)
+
+Ela é o vetor que representa o nosso objeto. Aqui, não tem mistério:
+
+1. A componente X representa a largura;
+2. A componente Y representa a altura;
+3. A componente Z representa a profundidade.
+
+Ok! Mas e aquele número 1 na quarta linha da nossa matriz? Se estamos tratando aqui de um modelo 3D, por que o nosso vetor teria quatro componentes?
+
+Ora, aquele valor serve unicamente para facilitar o processo de transformação. Para redimencionar um objeto, alteraremos o valor das componentes através de multiplicações em cada uma. 
+Ao invés de multiplicarmos nosso vetor de maneira sucessiva por escalares, vamos "compactar" toda a nossa transformação em uma única nova matriz e realizar apenas uma multiplicação de matrizes. Isso facilita bastante o processo, além de reduzir a complexidade computacional. (Por quê?)
+
+Inclusive, segue abaixo a nossa querida matriz de redimensionamento:
+
+![Matriz utilizada para redimensionar objetos](../imagens/05_matrizred.png)
+
+Ela é uma matriz _4x4_ e possui uma formatação um tanto quanto familiar, não? Perceba que ela é, basicamente, uma matriz identidade com os valores nas três primeiras linhas alterados de maneira arbitrária. No caso, _(S1, S2, S3)_ são nossas variáveis de redimensionamento.
+
+Ao realizar a multiplicação dessa matriz pela outra que representa nosso objeto, teremos o seguinte:
+
+![Aplicação de transformação para redimensionamento](../imagens/05_redimensionamento.png)
+>Caso você tenha ficado na dúvida do porquê de chegarmos neste resultado, verifique o capítulo anterior na parte de multiplicação de matrizes.
+
+Mavilha! Repare que essa alteração provocaria uma distorção das dimensões do nosso objeto a partir do que estivesse definido para _(S1, S2, S3)_. Assim, é possível fazer uma formiga ficar com as mesmas proporções que um elefante!
+
+
+## Translação
+
+(...)
+
+## Rotação
+
+(...)
