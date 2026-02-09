@@ -59,8 +59,24 @@ Mavilha! Repare que essa alteração provocaria uma distorção das dimensões d
 
 ## Translação
 
-(...)
+![Matriz de translação](../imagens/05_matriztransl.png)
+![Aplicação de transformação para translação](../imagens/05_translocamento.png)
 
 ## Rotação
 
-(...)
+### Rotação em torno do eixo x
+
+![Matriz de rotação em torno de x](../imagens/05_matrizrotacaox.png)
+![Aplicação de rotação em torno de x](../imagens/05_rotacaox.png)
+
+
+### Rotação em torno do eixo y
+
+![Matriz de rotação em torno de y](../imagens/05_matrizrotacaoy.png)
+![Aplicação de rotação em torno de y](../imagens/05_rotacaoy.png)
+
+
+### Rotação em torno do eixo z
+
+![Matriz de rotação em torno de z](../imagens/05_matrizrotacaoz.png)
+![Aplicação de rotação em torno de z](../imagens/05_rotacaoz.png)
