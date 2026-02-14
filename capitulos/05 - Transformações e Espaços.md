@@ -78,19 +78,31 @@ Logo, com a matriz de translação no nosso arsenal, podemos mover objetos em qu
 
 ## Rotação
 
-### Rotação em torno do eixo x
+![Rotação](../imagens/05_angulo.png)
 
+Quando falamos de rotação, é possível perceber que aqui as coisas ficam um pouco mais complexas do que as duas aplicações que acabamos de apresentar. Isso, pois, elas são mais intuitivas. Tentaremos manter a simplicidade aqui o máximo possível. 
+
+Podemos rotacionar no nosso objeto em torno de cada um dos eixos. Para cada um, temos uma matriz de rotação diferente que se baseia em um ângulo theta (Θ), que é baseado em graus ou radianos e é recebido pelas funções trigonométricas _seno_ e _cosseno_. Explicar detalhadamente o funcionamento delas acaba saindo um pouco do escopo da nossa trilha. Se você quiser se aprofundar, pesquise vídeos no youtube ou livros voltados para isso.
+
+A seguir, temos cada uma das matrizes de rotação. Novamente, realizaremos multiplicação com cada uma:
+### _Rotação em torno do eixo X_:
 ![Matriz de rotação em torno de x](../imagens/05_matrizrotacaox.png)
 ![Aplicação de rotação em torno de x](../imagens/05_rotacaox.png)
 
-
-### Rotação em torno do eixo y
-
+### _Rotação em torno do eixo Y_:
 ![Matriz de rotação em torno de y](../imagens/05_matrizrotacaoy.png)
 ![Aplicação de rotação em torno de y](../imagens/05_rotacaoy.png)
 
-
-### Rotação em torno do eixo z
-
+### _Rotação em torno do eixo Z_:
 ![Matriz de rotação em torno de z](../imagens/05_matrizrotacaoz.png)
 ![Aplicação de rotação em torno de z](../imagens/05_rotacaoz.png)
+
+### _Matriz para rotação em torno de eixo arbitrário_:
+Para rotacionar em torno de um eixo 3D arbitrário, nós podemos combinar todas as três que acabamos de apresentar ao primeiro rotacionar em torno do eixo X, depois Y e então Z, por exemplo. Entretanto, isso rapidamente gera um problema chamado [_Gimbal lock_](https://pt.wikipedia.org/wiki/Gimbal_lock). 
+
+Não discutiremos os detalhes, mas uma solução melhor é rotacionar em torno de um eixo unitário arbitrário, por exemplo, (0,662, 0,2, 0,722) (observe que este é um vetor unitário), diretamente em vez de combinar as
+matrizes de rotação. Tal matriz existe e é dada abaixo com _(Rx, Ry, Rz)_ como o eixo de rotação arbitrário (que coisinha linda...):
+
+![Matriz genérica de rotação](../imagens/05_coisinhalinda.png)
+
+Ainda assim, essa matriz não previne completamente o _Gimbal lock_. Para realmente evitar, precisamos representar as rotações usando [quatérnios](https://pt.wikipedia.org/wiki/Quaterni%C3%A3o), que não são apenas mais seguros, mas também mais amigáveis computacionalmente. No entanto, uma discussão sobre quatérnios está fora do escopo deste capítulo.
