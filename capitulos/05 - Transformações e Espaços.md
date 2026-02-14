@@ -59,8 +59,22 @@ Mavilha! Repare que essa alteração provocaria uma distorção das dimensões d
 
 ## Translação
 
+No que diz respeito à translação, estamos falando literalmente de mover (transladar) o nosso objeto pela nossa simulação ao alterar sua posição. Para isso, fazemos uma adição entre dois vetores, retornando um novo vetor com uma posição diferente baseada em um vetor de translação.
+
+Se representarmos o nosso vetor de translação como sendo _(Tx, Ty, Tz)_, podemos definir a nossa matriz de translação da seguinte maneira:
 ![Matriz de translação](../imagens/05_matriztransl.png)
+
+E, assim como fizemos na aplicação de redimensionamento, iremos multiplicar as nossas matrizes para obter um novo resultado, isto é, o nosso vetor com posição atualizada!
+
 ![Aplicação de transformação para translação](../imagens/05_translocamento.png)
+
+> _Um breve trecho adaptado do livro Learn OpenGL sobre Coordenadas homogêneas:_ A componente w (a quarta linha, no nosso caso 4x1 acima) de um vetor também é conhecida como coordenada homogênea. Para obter o vetor 3D a partir de um vetor homogêneo, dividimos as coordenadas x, y e z pela sua coordenada w. Normalmente não percebemos isso, pois a componente w é 1,0 na maioria das vezes. O uso de coordenadas homogêneas tem várias vantagens: permite
+realizar translações matriciais em vetores 3D (sem uma componente w não podemos transladar
+vetores) e usar o valor de w para criar perspectiva 3D. Além disso,
+sempre que a coordenada homogênea for igual a 0, o vetor é especificamente conhecido como um
+vetor de direção, pois um vetor com coordenada w igual a 0 não pode ser transladado.
+
+Logo, com a matriz de translação no nosso arsenal, podemos mover objetos em qualquer um dos três eixos _(X, Y, Z)_, o que é essencial para nós.
 
 ## Rotação
 
