@@ -124,3 +124,43 @@ Aplicando a nossa matriz acima no nosso vetor _(x, y, z, 1)_, temos:
 Maravilha! O vetor é primeiro escalado por dois e depois transladado por (1,2,3).
 
 Agora que falamos um pouco sobre as transformações, podemos ir para a parte do código e ver como que funciona na prática. O OpenGL não possui nenhuma forma de conhecimento ou funcionalidades de matrizes ou vetores, então precisamos definir nossas próprias classes e funções. Felizmente, existe uma biblioteca matemática fácil de usar e feita sob medida para OpenGL chamada GLM. Acompanhe!
+
+## GLM
+
+GLM significa OpenGL Mathematics e é uma biblioteca composta apenas por arquivos de cabeçalho, o que significa que basta incluir os arquivos de cabeçalho apropriados e pronto; não é necessário vincular nem compilar.
+
+Para instalar no Linux (saia do Windows imediatamente), temos duas formas comuns de fazer:
+
+### 1. Usando o Gerenciador de Pacotes (Recomendado)
+
+A maioria das distribuições Linux possui o GLM nos repositórios oficiais. Essa é a melhor opção porque facilita as atualizações e a gestão de dependências.
+
+_Ubuntu / Debian / Linux Mint:_
+```
+sudo apt update
+sudo apt install libglm-dev
+```
+_Fedora:_
+```
+sudo dnf install glm-devel
+```
+_Arch Linux:_
+```
+sudo pacman -S glm
+```
+
+### 2. Instalação Manual (Via GitHub)
+
+Se você precisa de uma versão específica ou quer a mais recente que ainda não chegou nos repositórios, pode baixar direto do código-fonte.
+
+_Clone o repositório:_
+```
+git clone https://github.com/g-truc/glm.git
+```
+_Mova para o diretório de inclusão local (opcional, mas útil para acesso global):_
+```
+sudo cp -r glm/glm /usr/local/include/
+```
+
+
+### 2. Manualmente
