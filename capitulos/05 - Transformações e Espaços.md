@@ -97,6 +97,8 @@ A seguir, temos cada uma das matrizes de rotação. Novamente, realizaremos mult
 ![Matriz de rotação em torno de z](../imagens/05_matrizrotacaoz.png)
 ![Aplicação de rotação em torno de z](../imagens/05_rotacaoz.png)
 
+Repare que, para cada um dos casos acima, o eixo o qual rotacionaremos em torno fica "travado", isto é, a componente específica no nosso vetor resultante não é dada por operações que envolvam funções trigonométricas baseadas no ângulo theta.
+
 ### _Matriz para rotação em torno de eixo arbitrário_:
 Para rotacionar em torno de um eixo 3D arbitrário, nós podemos combinar todas as três que acabamos de apresentar ao primeiro rotacionar em torno do eixo X, depois Y e então Z, por exemplo. Entretanto, isso rapidamente gera um problema chamado [_Gimbal lock_](https://pt.wikipedia.org/wiki/Gimbal_lock). 
 
@@ -129,38 +131,37 @@ Agora que falamos um pouco sobre as transformações, podemos ir para a parte do
 
 GLM significa OpenGL Mathematics e é uma biblioteca composta apenas por arquivos de cabeçalho, o que significa que basta incluir os arquivos de cabeçalho apropriados e pronto; não é necessário vincular nem compilar.
 
+### Instalação
+
 Para instalar no Linux (saia do Windows imediatamente), temos duas formas comuns de fazer:
 
-### 1. Usando o Gerenciador de Pacotes (Recomendado)
+#### 1. Usando o Gerenciador de Pacotes (Recomendado)
 
 A maioria das distribuições Linux possui o GLM nos repositórios oficiais. Essa é a melhor opção porque facilita as atualizações e a gestão de dependências.
 
 _Ubuntu / Debian / Linux Mint:_
-```
+```sh
 sudo apt update
 sudo apt install libglm-dev
 ```
 _Fedora:_
-```
+```sh
 sudo dnf install glm-devel
 ```
 _Arch Linux:_
-```
+```sh
 sudo pacman -S glm
 ```
 
-### 2. Instalação Manual (Via GitHub)
+#### 2. Instalação Manual (Via GitHub)
 
 Se você precisa de uma versão específica ou quer a mais recente que ainda não chegou nos repositórios, pode baixar direto do código-fonte.
 
-_Clone o repositório:_
-```
+Clone o repositório:
+```sh
 git clone https://github.com/g-truc/glm.git
 ```
-_Mova para o diretório de inclusão local (opcional, mas útil para acesso global):_
-```
+Mova para o diretório de inclusão local (opcional, mas útil para acesso global):
+```sh
 sudo cp -r glm/glm /usr/local/include/
 ```
-
-
-### 2. Manualmente
