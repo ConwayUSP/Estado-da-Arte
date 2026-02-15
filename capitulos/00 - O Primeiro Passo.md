@@ -239,6 +239,12 @@ Feita essa baixaria, você também vai poder incluir a biblioteca facilmente:
 
 > Um detalhe importante: coloque o `#include` do GLAD antes/acima do GLFW, caso contrário pode haver conflitos e seu programa não compilará.
 
+Para baixar algumas bibliotecas essenciais que usaremos ao longo do curso, rode, também, este comando adicional:
+
+```sh
+sudo apt install libglu1-mesa-dev libassimp-dev libxi-dev
+```
+
 ## O boilerplate do GLFW e GLAD
 
 Algo inevitável em muitas áreas da computação é ter um longo trecho de código que se repete em basicamente todos os programas - os famosos _boilerplates_. No ambiente do OpenGL, boa parte do boilerplate que teremos advém do GLFW. Vamos passar rapidamente por eles agora, tentando deixar a coisa o menos monótona possível (apesar de que você provavelmente só vai copiar e colar esses códigos sem sequer pensar no que está fazendo em seus próximos projetos).
