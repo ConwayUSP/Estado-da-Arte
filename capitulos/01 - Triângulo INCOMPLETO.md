@@ -1,8 +1,12 @@
-# Hello Triangle
+# Triângulo
 
 Olá, de volta! Se você sobreviveu ao capítulo anterior e conseguiu criar aquela janela turquesa, parabéns! Você já tem o **palco**. 
 
 Agora, está na hora de colocarmos o primeiro ator nesse palco. E não, não vai ser um modelo 3D do *Tralalero Tralala* (apesar de ser um ótima ideia). Vamos começar com o *Hello World* da computação gráfica: **O Triângulo**.
+
+![triangulo de Zelda](../imagens/01_triangulo_dancante.png)
+
+> Ops, não era esse...
 
 Neste capítulo, vamos entender como a informação sai do seu código C++ e chega na sua placa de vídeo (GPU). O OpenGL é meio fresco com isso e exige que a gente siga um protocolo rígido. Aperte os cintos: estamos prestes a transformar bytes brutos em pixels, navegando pela memória e pelas engrenagens do **Pipeline Gráfico**.
 
@@ -167,6 +171,8 @@ Como o VAO já está vinculado, o OpenGL já sabe de qual VBO ler e como interpr
 
 Como sempre, o código utilizado está disponível na parte de "codigos", então se tudo tiver dado certo 🤞, aparecerá a seguinte imagem quando rodar o código:
 
+![triangulo roxo](../imagens/01_triangulo_roxo.png)
+
 > Dá-lhe DASI!!!
 
 ## Conclusão
@@ -181,7 +187,7 @@ Para garantir que tudo ficou claro, vamos recapitular o que nós vimos:
 
 - VAO (O Gerente): Quem guarda as configurações de como ler esses dados brutos. 
 
-*"Mas pera aí... por que o triângulo é laranja?"*
+*"Mas pera aí... por que o triângulo é roxo?"*
 
 Você deve ter notado que copiamos e colamos um código "mágico" (os **Shaders**) no início do programa e não falamos muito sobre ele. Por que roxo? Como mudar o tom? Como fazer um degradê?
 
@@ -200,4 +206,9 @@ Você deve ter notado que copiamos e colamos um código "mágico" (os **Shaders*
  
 ## Exercícios propostos
 
-1. 
+1. Pesquise e substitua o parâmetro GL_TRIANGLES dentro da função glDrawArrays por outras opções de primitivas. Observe como a ordem dos seus vértices no array muda completamente o desenho dependendo do modo escolhido.
+2. Pesquise sobre a função glPolygonMode. Adicione essa linha no seu código para fazer com que o triângulo seja desenhado apenas com linhas de contorno, sem preenchimento.
+
+Divirta-se!
+
+
