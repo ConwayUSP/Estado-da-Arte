@@ -212,6 +212,8 @@ Por fim, se você quiser aprender mais formalmente sobre vetores, espaços vetor
 
 ## Interpolação linear e coordenadas baricêntricas
 
+![Interpolação Linear](../imagens/04_interpolacao.png)
+
 Uma interpolação linear entre os pontos/vetores `A` e `B` é basicamente uma função com um parâmetro `t` que passa em A quando `t = 0` e passa em B quando `t = 1`, sendo os coeficientes de A e B polinômios lineares de `t`. Uma interpolação linear (também conhecida como **_lerp_**) possui essa cara: `f(t) = (1 - t)A + tB`.
 
 No caso de pontos bidimensionais, também podemos pensar na fórmula de uma interpolação linear entre `A = <x0, y0>` e `B = <x1, y1>` como sendo:
@@ -225,6 +227,8 @@ Nesse caso, você pode pensar em em `(x - x0)` como assumindo o papel de `t` e e
 Coordenadas baricêntricas são um pouco mais confusas.
 
 Nós vimos em capítulos anteriores que atributos como cores são geralmente passados para o vertex shader como sendo atributos dos vértices de triângulos. Quando nossos triângulos passam pelo rasterizador, eles são transformados em um monte de fragmentos, e vimos que os atributos de cada fragmento são interpolações lineares dos atributos dos vértices do triângulo ao qual ele pertence. Contudo, fazer essa interpolação entre 3 valores não é tão simples quanto fazer a interpolação entre apenas dois :(. Por sorte, 200 anos atrás, um maluco chamado Möbius (sim, o da [fita de Möbius](https://pt.wikipedia.org/wiki/Fita_de_M%C3%B6bius)) inventou as coordenadas baricêntricas.
+
+![Coordenadas baricêntricas](../imagens/04_baricentro.png)
 
 Elas funcionam assim, pense que os vértices do seu triângulo têm os nomes muito criativos `a`, `b` e `c`. Nós definimos `a` como sendo a origem do nosso sistema de coordenadas, e os vetores que vão de `a` até `c` e `a` até `b` como sendo os vetores da base (ou seja, a base é `{c - a, b - a}`). Assim, qualquer ponto `P` que esteja no mesmo plano que o triângulo criativo poderá ser escrito na seguinte forma:
 
