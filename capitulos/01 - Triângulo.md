@@ -12,13 +12,13 @@ Neste capítulo, vamos entender como a informação sai do seu código C++ e che
 
 O que vamos cobrir nesse capítulo:
 
-1. O que diabos é o Pipeline Gráfico?
+1. O que é o Pipeline Gráfico?
 2. Vértices: muito mais que apenas pontos  
 3. VBO: O balde de dados  
 4. VAO: O manual de instruções  
 5. O triângulo finalmente aparece!
 
-## O que diabos é o Pipeline Gráfico?
+## O que é o Pipeline Gráfico?
 
 Antes de sairmos digitando código, você precisa entender o conceito de *Pipeline*. Imagine uma fábrica de carros: de um lado entra metal bruto e pneus, e do outro sai um possante brilhando. Na computação gráfica, o "metal bruto" são os seus vértices e o "carro pronto" são os pixels na sua tela.
 
@@ -40,19 +40,19 @@ Para não ficar perdido, aqui está o percuso dessa "fábrica":
 
 - **Tests & Blending**: A última checagem. O OpenGL verifica se o pixel está atrás de outro objeto ou se é transparente antes de pintá-lo definitivamente na tela.
 
-> Agora que você leu todos esses estágios, talvez você esteja em leve desespero com tanta informação. Mas, calme, não importante aprender todas etapas agora e ao decorrer do curso nós mencionaremos novamente, se necessário.
-
-> Vale ressaltar também que não existe uma divisão única e universal para as etapas do pipeline; a literatura varia conforme a precisão adotada por cada autor para definir os limites de cada fase.
+> Vale ressaltar que não existe uma divisão única e universal para as etapas do pipeline; a literatura varia conforme a precisão adotada por cada autor para definir os limites de cada fase.
 
 Lembrando que como o OpenGL é uma 'Máquina de Estado', nós não "enviamos um triângulo", por exemplo. Nós configuramos o estado da máquina, jogamos os dados em um buffer e damos a ordem: "Ei, robô artista, use essas configurações e desenhe o que estiver nesse balde!".
 
-Vamos construir nosso primeiro triângulo agora?
+Let's go construir nosso primeiro triângulo agora? 
+
+Todas as alterações abaixo serão feitas em cima do código **main.cpp** feito no último capítulo.
 
 ## Vértices: muito mais que apenas pontos
 
 No ensino médio, você aprendeu que um vértice é um ponto no espaço $(x, y, z)$. No OpenGL, um vértice é um pacote de informações. Sim, ele tem posição, mas ele também pode carregar cor, coordenadas de textura, e quaisquer outros atributos customizados que o seu sistema de renderização exigir.
 
-Como você ainda é um jovem gafanhoto no OpenGL, vamos definir um triângulo simples usando apenas coordenadas. No OpenGL, como vimos, a tela "visível" vai de `-1.0` a `1.0` em todos os eixos.
+Como você ainda é um pequeno gafanhoto no OpenGL, vamos definir um triângulo simples usando apenas coordenadas. No OpenGL, como vimos, a tela "visível" vai de `-1.0` a `1.0` em todos os eixos.
 
 Então, para desenhar um triângulo que fique centralizado, vamos definir três vértices dentro desse limite:
 
@@ -70,14 +70,14 @@ Agora que temos os dados dos vértices definidos, precisamos mandá-la para a me
 
 Com isso, a vantagem de usar o VBO para gerenciarmos a memória é que como podemos enviar grandes lotes de dados de uma só vez para a placa gráfica, nós não gastamos tempo enviando dados em poucas quantidades quando o envio da CPU para a GPU é relativamente lento.
 
-O processo segue aquele padrão estranho do OpenGL que agora você já conhece:
+O processo para gerar o VBO segue aquele padrão do OpenGL que agora você já conhece:
 
 ```cpp
 unsigned int VBO;
 glGenBuffers(1, &VBO); // Gera o ID
 ```
 
-O OpenGL possui vários tipos de objetos de buffer, e o tipo de buffer de um objeto de buffer de vértice é GL_ARRAY_BUFFER. Podemos vincular o buffer recém-criado ao alvo GL_ARRAY_BUFFER com a seguinte função:
+O OpenGL possui vários tipos de buffers. Para armazenar vértices, utilizamos o tipo específico chamado GL_ARRAY_BUFFER. Podemos vincular o buffer recém-criado ao alvo GL_ARRAY_BUFFER com a seguinte função:
 
 ```cpp
 glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -104,44 +104,45 @@ Os dados de posição do triângulo não mudam, são muito utilizados e permanec
 
 O VBO é só um amontoado de bytes. A GPU é rápida, mas não é vidente; ela não sabe se aqueles números são posições, cores ou o código da Matrix.
 
-O **VAO (Vertex Array Object)** é o cara que guarda a configuração desses dados. Ele é como um "atalho" que salva todo o estado necessário para desenhar um objeto. Uma vez configurado, você só precisa "vincular" o VAO e o OpenGL já sabe onde estão os dados (VBO) e como interpretá-los.
+É aqui que entra o **VAO (Vertex Array Object)**. Pense nele como um **gerente de estado ou um gravador**. Ele armazena toda a configuração necessária para interpretar os dados dos seus buffers. Uma vez que você configura um VAO, você não precisa mais repetir todo o processo de explicar o layout dos dados para a GPU a cada quadro; basta "dar o play" vinculando o VAO correspondente.
 
-O processo para gerar um VAO é semelhante ao de um VBO:
+O fluxo de configuração do VAO começa gerando o ID do objeto, assim como fizemos com o VBO:
 
 ```cpp
 unsigned int VAO;
 glGenVertexArrays(1, &VAO);
 ```
 
-Para usar um VAO, tudo o que você precisa fazer é vincular o VAO usando `glBindVertexArray`. A partir desse ponto, devemos configurar os VBOs e ponteiros de atributo correspondentes e, em seguida, desvincular o VAO para uso posterior. Assim que quisermos desenhar um objeto, basta vincular o VAO com as configurações desejadas antes de desenhar o objeto, e pronto. Em código, isso ficaria mais ou menos assim:
+A mágica acontece quando chamamos `glBindVertexArray(VAO)`. A partir desse instante, o OpenGL entra em "modo de gravação". Tudo o que você configurar em seguida — qual VBO usar, como os dados estão organizados e quais atributos estão ativos — ficará carimbado dentro desse VAO específico.
+
+No código abaixo você verá como isso é feito e se atente à ordem:
 
 ```cpp
-// Tudo o que fizermos agora será "salvo" neste VAO
+// Código acumulado do que vimos até agora de VBO e VAO
+
+unsigned int VBO, VAO;
+
+// Geramos e vinculamos o VAO primeiro para "gravar" as configurações que virão abaixo
+glGenVertexArrays(1, &VAO);
 glBindVertexArray(VAO);
 
-// Define o VBO atual no alvo GL_ARRAY_BUFFER
+// Configuramos o VBO (o balde de dados)
+glGenBuffers(1, &VBO);
 glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-// Aloca memória na GPU e copia os dados da RAM pra lá.
 glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-// Ensina ao OpenGL como ler os dados do buffer que está bindado agora.
-// O VAO "tira uma foto" dessa configuração e associa ela ao VBO atual
+// Ensinamos a GPU como ler os dados
 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+// Ativa o atributo no índice 0 (que corresponde ao "layout (location = 0)" do vertex shader)
 glEnableVertexAttribArray(0);
 
-[...]
-
-// No Loop de Renderização:
-// Ativa o Shader (que, por enquanto, considere como magia)
-glUseProgram(shaderProgram);
-// Resgata aquele estado que configuramos lá em cima (VBO + Ponteiros)
-glBindVertexArray(VAO);
-
-[...]
+// Desvinculamos para evitar bagunça (opcional, mas boa prática)
+glBindBuffer(GL_ARRAY_BUFFER, 0);
+glBindVertexArray(0);
 ```
+Note que colocamos `glBindVertexArray(VAO)` antes de "ensinar a GPU como ler os dados", pois sem esse comando inicial, o OpenGL não saberia a qual "manual de instruções" associar os dados, impedindo que você resgate essas configurações na hora de desenhar.
 
-Perceba que nós utilizamos a função `glVertexAttribPointer` que tem o papel fundamental de "falar para a GPU" como ler os bytes brutos e os seus parâmetros significam:
+Além disso, nós utilizamos a função `glVertexAttribPointer`, que tem o papel fundamental de "falar para a GPU" como ler os bytes brutos e os seus parâmetros significam:
 
 - Index (0): O índice do atributo genérico de vértice.
 
@@ -155,19 +156,40 @@ Perceba que nós utilizamos a função `glVertexAttribPointer` que tem o papel f
 
 - Pointer / Offset ((void*)0): Onde o dado começa dentro do buffer.
 
+Portanto, a grande vantagem de encapsular tudo isso em um VAO é que, na hora de desenhar, seu código fica limpo e performático. Em vez de reconfigurar tudo, você apenas diz: "Ei GPU, use o manual de instruções XXX"
+
+Isso reduz o trabalho da CPU e permite que a GPU desenhe o objeto instantaneamente com as configurações guardadas.
+
 ## O triângulo finalmente aparece!
 
 Para desenhar os objetos que desejamos, o OpenGL nos fornece `glDrawArrays`, função que desenha primitivas usando o shader atualmente ativo, a configuração de atributos de vértice previamente definida e os dados de vértice do VBO (vinculados indiretamente via VAO).
 
 ```cpp
-glUseProgram(shaderProgram); // Ativa seus shaders (o "pincel")
-glBindVertexArray(VAO);      // Carrega o manual de instruções
-glDrawArrays(GL_TRIANGLES, 0, 3);  
+// Dentro do Loop de Renderização:
+
+// Ativamos o shader e o manual de instruções (VAO)
+glUseProgram(shaderProgram);
+glBindVertexArray(VAO);       // Resgata todo o estado configurado
+        
+// O triângulo finalmente aparece!
+glDrawArrays(GL_TRIANGLES, 0, 3);
 ```
 
 O `glDrawArrays` diz ao OpenGL: "Pegue o que estiver configurado, use o modo de triângulos, comece no índice 0 e processe 3 vértices".
 
 Como o VAO já está vinculado, o OpenGL já sabe de qual VBO ler e como interpretar os bytes.
+
+E, por fim, em OpenGL, quando você cria objetos como VAOs, VBOs e Shaders, eles não ficam guardados na memória RAM comum do seu PC, mas sim na memória dedicada da GPU (Placa de Vídeo).
+
+Se você fechar o programa sem deletar esses objetos, pode causar o que chamamos de *memory leak* (vazamento de memória), onde a placa de vídeo continua achando que aquele espaço está ocupado.
+
+Por isso nós liberamos essa memória depois do laço principal de renderização `(while (!glfwWindowShouldClose))`, logo antes de encerrar o programa.
+
+```cpp
+glDeleteVertexArrays(1, &VAO);
+glDeleteBuffers(1, &VBO);
+glDeleteProgram(shaderProgram);
+````
 
 Como sempre, o código utilizado está disponível na parte de "codigos", então se tudo tiver dado certo 🤞, aparecerá a seguinte imagem quando rodar o código:
 
@@ -189,7 +211,7 @@ Para garantir que tudo ficou claro, vamos recapitular o que nós vimos:
 
 *"Mas pera aí... por que o triângulo é roxo?"*
 
-Você deve ter notado que copiamos e colamos um código "mágico" (os **Shaders**) no início do programa e não falamos muito sobre ele. Por que roxo? Como mudar o tom? Como fazer um degradê?
+Você deve ter notado que colocamos um código "mágico" (os **Shaders**) no início do programa e não falamos muito sobre ele. Por que roxo? Como mudar o tom? Como fazer um degradê?
 
 É exatamente isso que vamos descobrir no próximo capítulo. Vamos deixar de pensar nos Shaders como uma magia obscura e iremos ver como usar a linguagem GLSL para dar vida, cor e movimento a esse triângulo.
 
