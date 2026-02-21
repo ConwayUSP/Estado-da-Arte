@@ -11,7 +11,7 @@ O mundo é muito bonito. Por quê? O motivo é simples: existem emissores de luz
 
 > ❤️ Bilhões devem sorrir! Você importa :) ❤️
 
-Na computação gráfica ocorre a mesma coisa (por isso ela é também é linda), nós podemos simular tantos tipos de emissão de luz quanto pudermos imaginar! Ok, talvez não todos os tipos, mas o céu ainda é o limite. Neste capítulo iremos ver 3 tipos de emissores de luz
+Na computação gráfica ocorre a mesma coisa (por isso ela também é linda), nós podemos simular tantos tipos de emissão de luz quanto pudermos imaginar! Ok, talvez não todos os tipos, mas o céu ainda é o limite. Neste capítulo iremos ver 3 tipos de emissores de luz
 
 1. Luz ponto com atenuação
 2. Luz direcional
@@ -22,7 +22,7 @@ Na computação gráfica ocorre a mesma coisa (por isso ela é também é linda)
 
 ![emissor de luz ponto](../imagens/09_luz_ponto.png)
 
-Nós já temos trabalhado com uma luz ponto até agora. Ela é o tipo de luz que é emitida igualmente em todas as direções a partir de um ponto (a posição do emissor). Contudo, até agora, nossa luz possuia a mesma intensidade independentemente da distância dela para o objeto iluminado. O que vamos fazer aqui é adicionar "atenuação" nela. Ou seja, quanto mais longe um objeto estiver do **ponto**, menos iluminado ele será.
+Nós já temos trabalhado com uma luz ponto até agora. Ela é o tipo de luz que é emitida igualmente em todas as direções a partir de um ponto (a posição do emissor). Contudo, até agora, nossa luz possuía a mesma intensidade independentemente da distância dela para o objeto iluminado. O que vamos fazer aqui é adicionar "atenuação" nela. Ou seja, quanto mais longe um objeto estiver do **ponto**, menos iluminado ele será.
 
 Antes de adicionarmos a atenuação em si, vamos fazer uma modificação para deixar nossas mudanças na iluminação mais visíveis a partir de agora: adicionar mais cubos na cena. No main, defina uma lista de posições para colocarmos nossos cubos:
 
@@ -35,7 +35,7 @@ glm::vec3 posicoesCubos[] = {
     glm::vec3(1.5f, 0.2f, -1.5f),   glm::vec3(-1.5f, 1.0f, -1.5f)};
 ```
 
-E no loop de renderização, aonde atualmente renderizamos o cubo único, escreva um loop interno que crie cubos com essas posições e uma rotação diferenciada. O trecho modificado deve ficar mais ou menos assim:
+E no loop de renderização, onde atualmente renderizamos o cubo único, escreva um loop interno que crie cubos com essas posições e uma rotação diferenciada. O trecho modificado deve ficar mais ou menos assim:
 
 ``` cpp
 glm::mat4 model = glm::mat4(1.0);
@@ -73,7 +73,7 @@ Na vida real, a luz não decai linearmente conforme a distância; na verdade, o 
 
 - `d`: é a distância do fragmento para o ponto de emissão de luz.
 - `Kc`: é a constante **independente**, geralmente definida para ser igual a `1`. Ela impede que o denominador seja menor do que 1, o que faria com que a luz ganhasse intensidade com a distância ao invés de perder.
-- `Kl`: é a constante **linear**, que faz com que a luz. Para distâncias mínimas, ele contrubui mais do que o próximo termo, mas se torna irrelevante rapidamente conforme `d` cresce.
+- `Kl`: é a constante **linear**, que faz com que a luz. Para distâncias mínimas, ele contribui mais do que o próximo termo, mas se torna irrelevante rapidamente conforme `d` cresce.
 - `Kq`: é a constante **quadrática**, que de fato faz com que o efeito de decaimento rápido em longas distâncias prevaleça.
 
 Mas como escolhemos o valor destes termos? Bom, depende muito da escala do seu mundo, do tamanho total da cena e do efeito que você quer gerar naquele emissor específico. No nosso caso, usaremos os valores `1.0`, `0.02` e `0.005`. Se você quiser que sua luz tenha um alcance maior, basta diminuir os componentes linear e quadrático, e se quiser que a luz tenha um alcance menor, basta aumentá-los.
@@ -106,14 +106,14 @@ A luz direcional representa de certa forma uma fonte de luz que está muito long
 
 Implementar uma luz direcional é bem tranquilo, tanto que você provavelmente conseguiria implementá-la com o que já aprendemos na trilha sem sequer ler esta seção, mas aqui estamos... Tudo que precisamos é decidir de qual direção a luz está vindo. Com isso, o resto do nosso modelo de iluminação se mantém o mesmo. Por exemplo, vamos esquecer a luz ponto que implementamos agora pouco e definir uma luz direcional que vem de cima para baixo.
 
-O primeiro passo é definir o vetor de direção. Poderiamos fazer isso no main, mas só por comodidade bora fazer no próprio shader:
+O primeiro passo é definir o vetor de direção. Poderíamos fazer isso no main, mas só por comodidade bora fazer no próprio shader:
 
 ``` glsl
 // substitua a antiga linha que definia luzDir por essa aqui
 vec3 luzDir = vec3(0.0, 1.0, 0.0);
 ```
 
-Pronto... agora nossos cubos estão sendo iluminados por algo que vêm de cima
+Pronto... agora nossos cubos estão sendo iluminados por algo que vem de cima
 
 ## Lanterna
 
@@ -144,7 +144,7 @@ meuShaderInsano.setFloat("luz.abertura", glm::cos(glm::radians(12.5f)));
 
 > Note que a abertura é passada como o cosseno do ângulo de abertura, e não como o ângulo de abertura em si. Daqui a pouco entenderemos o porquê.
 
-Nesse trecho, estamos usando os valores da câmera para definir a posição e a direção da lanterna. Ou seja, estamos assumindo que o "câmera man" está segurando a lanterna e apontando-a sempra para onde ele olha. Isso cria o clássico efeito muito utilizado em jogos de terror:
+Nesse trecho, estamos usando os valores da câmera para definir a posição e a direção da lanterna. Ou seja, estamos assumindo que o "câmera man" está segurando a lanterna e apontando-a sempre para onde ele olha. Isso cria o clássico efeito muito utilizado em jogos de terror:
 
 ![lanternas em jogos](../imagens/09_lanternas_em_jogos.jpeg)
 
@@ -182,7 +182,7 @@ Aqui, os termos significam o seguinte:
 
 - `ϵ`: é a diferença entre o cosseno do arco interno (onde começará o fade-out) e do arco externo (onde o fade-out termina)
 - `θ`: é o cosseno do ângulo entre o fragmento e a lanterna
-- `γ`: é o cosseno do ângulo do argo externo
+- `γ`: é o cosseno do ângulo do arco externo
 
 Ou seja, estamos fazendo uma interpolação linear entre o arco externo e o interno com o parâmetro que controla esta interpolação sendo o `θ`. Em código, isso vai ficar assim:
 
@@ -218,7 +218,7 @@ Pronto! Rodando isso, você verá a iluminação via lanterna mais bonita de sua
 
 ## Combando legal
 
-Por que devemos nos limitar a apenas um tipo de iluminação, afinal? Por incrível que pareça, essa é uma pergunta que a humanidade faz desde o primórdio da luz e dos fragmentos. Contudo, graças a Newton e Charles Darwin, nós podemos nos extravagar e usar vários emissores de luz ao mesmo tempo. Então é isso que faremos aqui.
+Por que devemos nos limitar a apenas um tipo de iluminação, afinal? Por incrível que pareça, essa é uma pergunta que a humanidade faz desde o primórdio da luz e dos fragmentos. Contudo, graças a Newton e Charles Darwin, nós podemos nos extravasar e usar vários emissores de luz ao mesmo tempo. Então é isso que faremos aqui.
 
 Como este será apenas um experimento que será prontamente descartado no próximo capítulo, vou esquecer os bons costumes e definir a maioria das variáveis hard-coded direto no shader. A única parte da iluminação que vou manter direitinha será a da lanterna porque foi a última que a gente implementou.
 
@@ -260,7 +260,7 @@ vec3 CalculaLuzCeu(vec3 normal) {
 vec3 luzCeu = CalculaLuzCeu(normal) * dif * ao * (1 - metal);
 ```
 
-Essa função deverá surtir efeito tanto dentro quanto fora do alcance da lanterna. Ou seja,seu resultado será usado tanto no `if` quanto no `else` (amém).
+Essa função deverá surtir efeito tanto dentro quanto fora do alcance da lanterna. Ou seja, seu resultado será usado tanto no `if` quanto no `else` (amém).
 
 Também adicionarei uma função que calcula a influência de uma luz pontual meio avermelhada com atenuação:
 
