@@ -1,6 +1,6 @@
 # O Primeiro Passo
 
-Olá! Seja muito bem vindo ao primeiro passo nesta jornada pelo mundo do OpenGL. Como você deve ter visto no nosso README, esta trilha é dividida em vários módulos ou capítulos, e este é o primeiro deles.
+Olá! Seja muito bem-vindo ao primeiro passo nesta jornada pelo mundo do OpenGL. Como você deve ter visto no nosso README, esta trilha é dividida em vários módulos ou capítulos, e este é o primeiro deles.
 
 Neste capítulo, iremos estabelecer e nos familiarizar com o ambiente próprio para a criação de um projeto usando OpenGL. Ao fim dele, você terá escrito um programa capaz de criar uma **incrível** e **_fabulosa_** **JANELA EM BRANCOOOOOoooo**oooo..... Calma, só isso? Cadê os gráficos 3D ultra-realistas que me prometeram? Então, acontece que no mundo do OpenGL (e da computação gráfica no geral) nada é tão simples quanto parece. Aqui, nós estaremos lidando com os próprios _sustentáculos_ e _fundamentos_ da renderização! Então, é importante aprendermos com calma até mesmo as coisas que a princípio parecem frívolas.
 
@@ -17,7 +17,7 @@ Dito isso, vamos parar de enrolação e partir para o conteúdo, que neste capí
 
 ## O Que de fato é o OpenGL?
 
-No README, nós temos nos referido ao OpenGL como sendo uma "biblioteca", e de certa forma nós não mentimos. Contudo, o OpenGL está mais para uma **especificação** do que uma biblioteca de fato, tanto é que você pode ler a especificação do OpenGL 4.3 (a versão que usaremos neste curso) [aqui](https://registry.khronos.org/OpenGL/specs/gl/glspec43.core.pdf). Esta especificação é um tijolão de 700 páginas descrevendo em bom detalhe quais são as funções que uma **implementação** do OpenGL deve expor e como elas devem funcionar. Como o objetivo de uma especificação não é ser didática, não é recomendada a sua leitura - existem livros muito mais eficázes neste quesito caso você queira usá-los para complementar esta trilha, como o "OpenGL Programming Guide 8th Edition".
+No README, nós temos nos referido ao OpenGL como sendo uma "biblioteca", e de certa forma nós não mentimos. Contudo, o OpenGL está mais para uma **especificação** do que uma biblioteca de fato, tanto é que você pode ler a especificação do OpenGL 4.3 (a versão que usaremos neste curso) [aqui](https://registry.khronos.org/OpenGL/specs/gl/glspec43.core.pdf). Esta especificação é um tijolão de 700 páginas descrevendo em bom detalhe quais são as funções que uma **implementação** do OpenGL deve expor e como elas devem funcionar. Como o objetivo de uma especificação não é ser didática, não é recomendada a sua leitura - existem livros muito mais eficazes neste quesito caso você queira usá-los para complementar esta trilha, como o "OpenGL Programming Guide 8th Edition".
 
 Tá, mas que diferença faz se o OpenGL é uma biblioteca ou uma especificação? Na verdade, não faz muita diferença não. O fato é que, para nós, o OpenGL não será nem uma biblioteca nem uma especificação. A partir daqui, iremos pensar no OpenGL como sendo uma gigante **Máquina de Estado**!
 
@@ -67,7 +67,7 @@ Obviamente, as palavras em português aí (como "alvo" e "estado do objeto") sã
 - `glGenObjeto(1, &ID_objeto)`: inicializa o ID que criamos na linha anterior para conter de fato um identificador válido e disponível para um objeto.
 - `glBindObjeto(ALVO, ID_objeto)`: define o objeto associado ao ID_objeto como sendo o objeto ativo no `ALVO`. O alvo é basicamente um slot onde podemos encaixar ("_bindar_") um objeto de um tipo específico. Os alvos serão um enum, como `GL_TEXTURE_2D`.
 - `glSetEstadoDoObjeto(ALVO, OPCAO, valor)`: atualiza o valor do estado/atributo `OPCAO` do objeto no slot `ALVO` para um determinado valor. Assim como o alvo, a opção também é um enum, como `GL_TEXTURE_WRAP_S`.
-- `glBindObjeto(ALVO, 0)`: retira o objeto préviamente encaixado no slot `ALVO`, para previnir que não iremos modificá-lo sem querer.
+- `glBindObjeto(ALVO, 0)`: retira o objeto préviamente encaixado no slot `ALVO`, para prevenir que não iremos modificá-lo sem querer.
 
 O OpenGL 4.3 **nunca** nos dá um objeto de fato, toda função que gera um objeto (as `glGen____`) apenas devolve um ID. Além disso, a máquina de estado do OpenGL é cheia desses slots que chamamos de alvo ou target, onde encaixamos um objeto. Sendo assim, nós nunca modificamos um objeto diretamente, nós apenas encaixamos ele em um target próprio (com as funções `glBind____`) e então modificamos o que quer que esteja naquele target usando uma função que altera estado. Este design permite que criemos vários objetos de um mesmo tipo e alternemos qual está atualmente ativo (bindado) de acordo com a lógica do nosso programa, efetivamente mudando a "configuração" da máquina de estado sem muito esforço.
 
@@ -82,7 +82,7 @@ O que nós temos na verdade é:
 2. Colocar ele em uma gaveta
 3. Pedir para ele modificar o que quer que esteja na gaveta
 
-> Esta indireção é possívelmente um dos maiores defeitos da API do OpenGL. Por conta disso, versões mais recentes (da 4.5 para frente) incrementaram a API para incluir funções que modificam diretamente objetos, algo chamado de **_Direct State Access_** (DSA). Contudo, nós não teremos esse luxo todo, pois estamos usando a versão 4.3 por motivos de compatibilidade.
+> Esta indireção é possivelmente um dos maiores defeitos da API do OpenGL. Por conta disso, versões mais recentes (da 4.5 para frente) incrementaram a API para incluir funções que modificam diretamente objetos, algo chamado de **_Direct State Access_** (DSA). Contudo, nós não teremos esse luxo todo, pois estamos usando a versão 4.3 por motivos de compatibilidade.
 
 ## Inicializando um projeto
 
@@ -188,7 +188,7 @@ ou
 make && ./bin/trilha
 ```
 
-## Bibliotecasa amigas: GLFW e GLAD
+## Bibliotecas amigas: GLFW e GLAD
 
 Uma das grandes maldições de aprender OpenGL é que você não pode simplesmente aprender OpenGL por si só. É necessário se familiarizar com pelo menos o básico de um monte de outras bibliotecas.
 
@@ -317,7 +317,7 @@ O primeiro e segundo argumentos da função são a posição do ponto inferior e
 
 Agora, um problema de distorção da imagem aconteceria caso o usuário do nosso programa mudasse o tamanho da janela e nós não alterássemos o viewport para corresponder. Logo, precisamos usar um pouquinho mais do GLFW para lidar com este evento.
 
-Tudo que precizamos fazer é definir uma função de callback. O protótipo dela (para você colocar antes do main) é esse:
+Tudo que precisamos fazer é definir uma função de callback. O protótipo dela (para você colocar antes do main) é esse:
 
 ``` C
 void callback_redimensionamento(GLFWwindow* janela, int largura, int altura);
@@ -365,7 +365,7 @@ Finalmente, depois do loop, nós chamamos o já visto `glfwTerminate` e finaliza
 
 Uhul, lets bora!! Com este programa temos agora a janela em branco que te prometemos! De nada, de nada.
 
-> _Double buffering_ é uma técnica muito comum que se consiste em ter duas "imagens" (buffers) que se alternam nas funções de quem está sendo renderizado na tela e quem está sendo alterado pela aplicação para ser renderizado no próximo frame. Ou seja, temos dois buffers e duas funções: a de **_front buffer_** e a de **_back buffer_**. Quem quer que seja o front buffer no frame atual estará sendo exibido ao usuário, e quem quer que seja o back buffer estará sendo "desenhado" às escondidar para poder trocar de lugar com o front buffer no próximo frame. Sem double buffering, o usuário veria a tela piscando a todo momento, pois a renderização - o processo de desenhar o frame - aconteceria no mesmo buffer que está sendo exibido.
+> _Double buffering_ é uma técnica muito comum que se consiste em ter duas "imagens" (buffers) que se alternam nas funções de quem está sendo renderizado na tela e quem está sendo alterado pela aplicação para ser renderizado no próximo frame. Ou seja, temos dois buffers e duas funções: a de **_front buffer_** e a de **_back buffer_**. Quem quer que seja o front buffer no frame atual estará sendo exibido ao usuário, e quem quer que seja o back buffer estará sendo "desenhado" às escondidas para poder trocar de lugar com o front buffer no próximo frame. Sem double buffering, o usuário veria a tela piscando a todo momento, pois a renderização - o processo de desenhar o frame - aconteceria no mesmo buffer que está sendo exibido.
 
 Para superar suas expectativas, vamos adicionar mais duas linhazinhas que farão com que a nossa janela não seja um mero contêiner do vazio infinito, mas sim uma fenda para o mundo alegre das cores. Digite este código no começo do loop de renderização:
 
@@ -376,7 +376,7 @@ glClear(GL_COLOR_BUFFER_BIT);
 
 Agora, se compilar e rodar o programa novamente, verá que a tela ficou em um tom meio turquesa! **UHUUUUUUUUUUUULLLLLLLLLL!!!!!!!!!!!!!!**
 
-A função `glClearColor` é uma daquelas que mudam estado, ela define qual vai ser a cor utilizada pelo `glClear`, que por sua vez preenche a tela com uma cor só.
+A função `glClearColor` é uma daquelas que mudam estado, ela define qual vai ser a cor utilizada pelo `glClear`, que por sua vez preenche a tela com uma cor só. Já o argumento `GL_COLOR_BUFFER_BIT` é uma flag que dirá à maquina de estados o que queremos que seja limpado a cada frame - neste caso o buffer que guarda as cores de cada pixel.
 
 ![janela colorida](../imagens/00_janela_turquesa.png)
 
@@ -438,7 +438,7 @@ Se você se embananou em algum momento ou não conseguiu seguir o passo a passo 
 
 ## Exercícios propostos
 
-Se você quiser brincar um pouco com o que aprendemos até agora, ente o seguinte:
+Se você quiser brincar um pouco com o que aprendemos até agora, tente o seguinte:
 
 1. Altere os argumentos da função `glClearColor` para chegar em uma cor que você gosta muito
 2. Tente fazer com que quando o usuário aperte alguma tecla (por exemplo espaço), a janela mude de cor - talvez ciclicamente por uma paleta ou até mesmo gerando uma cor aleatória.
