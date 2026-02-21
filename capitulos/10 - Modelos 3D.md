@@ -6,7 +6,7 @@ Cubos podem até ser bem irados, mas você provavelmente não jogaria Dark Souls
 
 Estes modelos são então exportados (juntamente com possíveis texturas/mapas, materiais, animações, etc) em um formato como `.obj`, `.gltf` ou `.glb`. Neste capítulo, veremos como importar e renderizar objetos neste tipo de formato com a biblioteca _Assimp_ (Asset Importer).
 
-1. Instalando o Assimpp
+1. Instalando o Assimp
 2. Uma cena do Assimp
 3. Meshes
 4. Modelos
@@ -35,7 +35,7 @@ Também é possível buildar a partir do código fonte seguindo [estas instruç�
 
 ## Uma cena do Assimp
 
-Como cada formato de arquivo para modelos 3D utiliza um padrão e uma estrutura diferente para representar seus dados, o Assimp nos faz o belo favor de colocá-los em uma estrutura própria e relativamente simples. A ideia geral é que nós teremos um objeto que representa uma **Cena** (_Scene_). A cena possui uma árvore, uma lista de **Meshes** e uma lista de **Materiais**. Cada nó da árvore possui uma lista dos índices dos meshes que o compoẽm. Já os _Meshes_ em si são objetos com informações sobre vértices, materiais, coordenadas de textura e outras informações sobre um objeto 3D da cena. A imagem abaixo demonstra aproximadamente a estrutura de uma cena do Assimp.
+Como cada formato de arquivo para modelos 3D utiliza um padrão e uma estrutura diferente para representar seus dados, o Assimp nos faz o belo favor de colocá-los em uma estrutura própria e relativamente simples. A ideia geral é que nós teremos um objeto que representa uma **Cena** (_Scene_). A cena possui uma árvore, uma lista de **Meshes** e uma lista de **Materiais**. Cada nó da árvore possui uma lista dos índices dos meshes que o compõem. Já os _Meshes_ em si são objetos com informações sobre vértices, materiais, coordenadas de textura e outras informações sobre um objeto 3D da cena. A imagem abaixo demonstra aproximadamente a estrutura de uma cena do Assimp.
 
 ![Cena do Assimp](!TODO)
 
@@ -92,7 +92,7 @@ Mesh::Mesh(vector<Vertice> vertices, vector<unsigned int> indices, vector<Textur
 }
 ```
 
-Ao fim do construtor, chamamos o `setupMesh`, que por sua vez terá a responsabilidade de inicializar os atributos privados. Este método sim interage com a máquina de estados do OpenGL, configurando um VAO e bufferizando os dados que recebemos no construtor. O processo é basicamente o mesmo que já vimos nos capítulos anteriores, com a pequena diferença de que os dados que vamos colocar no VBO não estão diretamente em um array, mas sim em um array de structs (a `struct Vertice` de agora poucos).
+Ao fim do construtor, chamamos o `setupMesh`, que por sua vez terá a responsabilidade de inicializar os atributos privados. Este método sim interage com a máquina de estados do OpenGL, configurando um VAO e bufferizando os dados que recebemos no construtor. O processo é basicamente o mesmo que já vimos nos capítulos anteriores, com a pequena diferença de que os dados que vamos colocar no VBO não estão diretamente em um array, mas sim em um array de structs (a `struct Vertice` de agora há pouco).
 
 ``` cpp
 void Mesh::setupMesh() {
@@ -409,7 +409,7 @@ EBAAAAAA!!! Tudo deu certo e todo mundo está feliz. Nesta nota positiva, iremos
 ## Conclusão
 
 Este foi basicamente o último capítulo da trilha. Se você chegou até aqui, você é um verdadeiro guerreiro, um **dragão guerreiro** até! Parabéns por ter perseverado por todos os desafios e dificuldades que eu sei que você encontrou. Nós não falamos muito sobre isso no início da trilha para não desanimá-lo, mas OpenGL tem uma curva de aprendizado bem íngreme, não é de modo algum uma biblioteca boba de se aprender. Muito do comportamento desta máquina 
-de estados está oculto sob um longo manto de funções crípticas e conceitos estrangeiros. Contudo, esperamos que tenha valido a pena aprender um pouco deste mundo; saiba que muito do que você viu aqui será facilmente transferível para outras APIs gráficas e até mesmo para outros nichos da programação.
+de estados está oculto sob um longo manto de funções crípticas e conceitos alienígenas. Contudo, esperamos que tenha valido a pena aprender um pouco deste mundo; saiba que muito do que você viu aqui será facilmente transferível para outras APIs gráficas e até mesmo para outros nichos da programação.
 
 Parabéns novamente pelo esforço e até a próxima!
 
