@@ -1,6 +1,6 @@
 # Shaders
 
-A maioria das pessoas que conhecem a palavra **shader** passaram a conhecer por conta do bom e velho Minecraft. Se você já jogou um pouco de Mine, provavelmente em algum momento se deparou com vídeos no youtube mostrando o jogo com gráficos "realistas" e foi atrás de conseguir esse upgrade também. Entretanto, seu computador tinha 1GB de RAM e uma placa de vídeo integrada, então deu tudo errado e foi aí que você adquiriu consciência de classe. Neste contexto, shaders são "mods que deixam o jogo mais bonitinho". Aqui em baixo temos uma comparação do visual do Mine sem e com shaders, e a diferença que eles fazem realmente pode ser gigante. Contudo, mesmo entre programadores, muita gente não sabe o que **realmente** é um shader. É isso que vamos entender neste capítulo.
+A maioria das pessoas que conhecem a palavra **shader** passou a conhecer por conta do bom e velho Minecraft. Se você já jogou um pouco de Mine, provavelmente em algum momento se deparou com vídeos no youtube mostrando o jogo com gráficos "realistas" e foi atrás de conseguir esse upgrade também. Entretanto, seu computador tinha 1GB de RAM e uma placa de vídeo integrada, então deu tudo errado e foi aí que você adquiriu consciência de classe. Neste contexto, shaders são "mods que deixam o jogo mais bonitinho". Aqui em baixo temos uma comparação do visual do Mine sem e com shaders, e a diferença que eles fazem realmente pode ser gigante. Contudo, mesmo entre programadores, muita gente não sabe o que **realmente** é um shader. É isso que vamos entender neste capítulo.
 
 ![comparação de shader no mine](../imagens/02_mine_shader.jpg)
 
@@ -61,10 +61,10 @@ Se isso ainda estiver meio abstrato, não precisa se preocupar, mexendo mais com
 
 [GLSL](https://wikis.khronos.org/opengl/Core_Language_(GLSL)) é uma sigla para "**_OpenGL Shading Language_**", ou seja, a linguagem de shaders do OpenGL.
 
-O GLSL é possui uma sintaxe muito parecida com a do C (e de quebra com a do C++), portanto a adaptação para essa linguagem não é muito difícil. Um programa escrito com ele tem mais ou menos essa cara:
+O GLSL possui uma sintaxe muito parecida com a do C (e de quebra com a do C++), portanto a adaptação para essa linguagem não é muito difícil. Um programa escrito com ele tem mais ou menos essa cara:
 
 ``` GLSL
-#version 430
+#version 430 core
 in type input_1;
 in type input_2;
 
@@ -83,7 +83,7 @@ void main()
 
 Na primeira linha, estamos definindo qual versão do GLSL estamos usando com uma diretiva de pré-processamento. As versões do GLSL vão sendo atualizadas para acompanhar as mudanças introduzidas no OpenGL, então neste curso estaremos usando o `GLSL 4.30`, mas provavelmente não usaremos nenhum recurso que não seja compatível também com versões mais antigas até a `3.30`.
 
-Depois, estamos dizendo quais são os **inputs**, **outputs** e **_uniforms_** do nosso programa (explicaremos o que são _uniforms_ em breve). Por fim, definimos a função `main`, assim como em qualquer programa em C(++). No fim do main, depois de vazer todos os cálculos e processamentos necessários, definimos o valor dos outputs que serão passados para os próximos estágios da pipeline.
+Depois, estamos dizendo quais são os **inputs**, **outputs** e **_uniforms_** do nosso programa (explicaremos o que são _uniforms_ em breve). Por fim, definimos a função `main`, assim como em qualquer programa em C(++). No fim do main, depois de fazer todos os cálculos e processamentos necessários, definimos o valor dos outputs que serão passados para os próximos estágios da pipeline.
 
 > Uma coisa bacana do GLSL é que ele vem com algumas variáveis e funções muito úteis embutidas na linguagem. Você pode ver uma lista das variáveis e funções nas páginas 7, 8 e 9 deste [card de referência](https://www.khronos.org/files/opengl43-quick-reference-card.pdf).
 
@@ -141,7 +141,7 @@ vec2 texCoord = vec2(0.5, 0.1);
 vec3 novaTexCoord = vec3(texCoord.ts, 0.6); // Resultado: <0.1, 0.5, 0.6>
 ```
 
-Mucho loco né? Nós podemos combar à vontade o swizzling com o fato de que os construtores de vetores podem receber vetores como argumento, além de sair embaralhando os componentes como quisermos.
+Mucho loco né? Nós podemos combar à vontade o swizzling com o fato de que os construtores de vetores podem receber vetores como argumento, além de sair embaralhando os componentes como quisermos. A única regra que você deve seguir é não misturar duas nomeclaturas de uma só vez. Ou seja, `coord.xyz` é ok, `coord.stp` também, mas `coord.xyp` não é nada ok.
 
 Inicializar matrizes não é muito diferente, o que você precisa saber é que por convenção os elementos passados como argumento formarão a matriz coluna por coluna, da esquerda para a direita:
 
@@ -319,7 +319,7 @@ Outra coisa que não explicamos muito bem no último capítulo (para não sobrec
 2. Definimos o código fonte de shaders com a função `glShaderSource`;
 3. Compilamos shaders com a função `glCompileShader`;
 4. Criamos um programa com a função `glCreateProgram`;
-5. Inserimos shaders no programa com a função `glAttackShader`;
+5. Inserimos shaders no programa com a função `glAttachShader`;
 6. Linkamos os shaders inseridos no programa com a função `glLinkProgram`;
 7. Ativamos/usamos o programa com a função `glUseProgram`;
 8. Por fim, deletamos os shaders com a função `glDeleteShader`
@@ -328,7 +328,7 @@ Os shaders obrigatórios se quisermos ter algum tipo de geometria visível na te
 
 Criar múltiplos programas nos permite alternar entre diferentes conjuntos e combinações de shaders sem precisarmos ficar seguindo todos os passos acima de novo e de novo. Basta criarmos um programa para cada combinação de shaders que queremos usar (claro, sem exagerar no número de programas para não afetar a performance) e então apenas alternar qual está atualmente ativo com o `glUseProgram`.
 
-Apenas para fins ilustrativos e para cementar esse processo na sua memória, aqui está o fluxo padrão da criação de um programa:
+Apenas para fins ilustrativos e para cimentar esse processo na sua memória, aqui está o fluxo padrão da criação de um programa:
 
 ``` GLSL
 // Shader de vértices
@@ -357,7 +357,7 @@ glDeleteShader(shaderFragmentos);
 
 E se nós usássemos nosso conhecimento de OOP com C++ para criar uma classe que abstraísse parte dessa trabalheira? Ótima ideia! você é incrível.
 
-Primeiramente, vamos declarar o esqueleto de uma classe que basicamente cuidará das partes mais chatinhas do gerenciamento de programas, shaders e uniforms. Em nossa pasta `src`, cria uma nova pasta `modules` e coloque esse código em um arquivo de header `shader.hpp`:
+Primeiramente, vamos declarar o esqueleto de uma classe que basicamente cuidará das partes mais chatinhas do gerenciamento de programas, shaders e uniforms. Em nossa pasta `src`, crie uma nova pasta `modules` e coloque esse código em um arquivo de header `shader.hpp`:
 
 ``` cpp
 #ifndef SHADER_H
@@ -483,7 +483,7 @@ void Shader::setFloat(const std::string &nome, float valor) const {
 }
 ```
 
-Como bem estava escrito nos comentários do `.hpp`, a primeira função será utilizada simplemente para ativar o programa associado a uma instância da nossa classe. Já as demais funções apenas definem o valor de um uniform com determinado nome (que é passado como argumento juntamente com o valor).
+Como bem estava escrito nos comentários do `.hpp`, a primeira função será utilizada simplesmente para ativar o programa associado a uma instância da nossa classe. Já as demais funções apenas definem o valor de um uniform com determinado nome (que é passado como argumento juntamente com o valor).
 
 Com essa bela classe em mãos, podemos cortar boa parte do código que havia em nosso main. Primeiramente, inclua nosso header novo no arquivo main:
 
@@ -542,4 +542,4 @@ Enfim, parabéns por ter chegado até aqui!
 ## Exercícios propostos
 
 1. Tente modificar nosso programa e/ou nossos shaders para que a cor do triângulo mude com o tempo de alguma forma interessante.
-2. Extenda nossa classe de shaders para incluir um _setter_ para uniforms dos tipos vec2, vec3 e vec4.
+2. Estenda nossa classe de shaders para incluir um _setter_ para uniforms dos tipos vec2, vec3 e vec4.
