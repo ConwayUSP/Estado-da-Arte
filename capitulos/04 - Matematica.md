@@ -21,6 +21,8 @@ A soma dos ângulos internos de um triângulo é sempre igual a `180°`, ou seja
 
 ### Funções trigonométricas
 
+![Triângulo retângulo](../imagens/04_triangret.png)
+
 Em um triângulo retângulo (triângulo com um ângulo de `90°` ou `π/2 rad`), o lado oposto à este ângulo é chamado de **hipotenusa** (`h`), selecionando um dos outros ângulos como sendo `θ`, temos que o lado oposto a este ângulo se chama **cateto oposto** (`o`), e o lado que sobrou se chama **cateto adjacente** (`a`). Sendo assim, Pitágoras nos dá a seguinte relação entre o tamanho dos três lados:
 
 ```
@@ -79,45 +81,21 @@ E é só isso de trigonometria por aqui, se quiser um recurso para aprender melh
 
 Informalmente, uma matriz é um conjunto de números organizado em linhas e colunas. Uma matriz **N** por **M** possui N linhas e M colunas. Por exemplo, uma matriz 3x2 tem essa cara:
 
-```
-┌    ┐
-│a  b│
-│c  d│
-│e  f│
-└    ┘
-```
+![Primeiro exemplo de matriz](../imagens/04_matriz1.png)
 
 ### Operações com matrizes
 
 Somar duas matrizes envolve somar cada um de seus componentes:
 
-```
-┌    ┐   ┌    ┐   ┌            ┐
-│a  b│   │g  h│   │(a+g)  (b+h)│
-│c  d│ + │i  j│ = │(c+i)  (d+j)│
-│e  f│   │k  l│   │(e+k)  (f+l)│
-└    ┘   └    ┘   └            ┘
-```
+![Exemplo de soma](../imagens/04_soma.png)
 
 Já a conta que tem que ser feita para multiplicar duas matrizes é um pouco mais feia. Primeiro que nem sempre é possível multiplicar duas matrizes, precisamos que o número de colunas na primeira seja igual ao número de linhas na segunda. Segundo que para calcular o elemento na i-ésima linha e j-ésima coluna da matriz resultante, iremos multiplicar todos os elementos da i-ésima linha da primeira matriz por todos os elementos da j-ésima coluna da segunda matriz, obtendo no final uma matriz com o número de linhas da primeira e o número de colunas da segunda. Isso tudo significa também que a multiplicação de matrizes **não é comutativa** - ou seja, `A × B` não necessáriamente é igual a `B × A` (e raramente será).
 
-```
-┌       ┐   ┌    ┐   ┌                              ┐
-│a  b  c│   │g  h│   │(ag + bi + ck)  (ah + bj + cl)│
-│d  e  f│ × │i  j│ = │(dg + ei + fk)  (dh + ej + fl)│
-└       ┘   │k  l│   └                              ┘
-            └    ┘
-```
+![Exemplo de multiplicação](../imagens/04_multiplica.png)
 
 Multiplicar uma matriz com um escalar, por outro lado, é bem simples, basta multiplicar cada componente isoladamente por aquele escalar:
 
-```
-    ┌    ┐   ┌      ┐
-    │a  b│   │2a  2b│
-2 × │c  d│ = │2i  2j│
-    │e  f│   │2k  2l│
-    └    ┘   └      ┘
-```
+![Exemplo de multiplicação por escalar](../imagens/04_multescalar.png)
 
 ### Matrizes especiais
 
@@ -125,52 +103,23 @@ Algumas matrizes possuem características que podem ser interessantes em alguns 
 
 **Matriz quadrada**: é uma matriz com o mesmo número de linhas e colunas, como uma 3x3 por exemplo.
 
-```
-┌       ┐
-│a  b  c│
-│d  e  f│
-│g  h  i│
-└       ┘
-```
+![Exemplo de matriz 3x3](../imagens/04_matriz2.png)
 
 **Matriz transposta**: a transposta de uma matriz A é a matriz que você obtém ao trocar as linhas de A pelas colunas (e vice-versa).
 
-```
-┌    ┐    ┌       ┐
-│a  b│    │a  c  e│
-│c  d│ -> │b  d  f│
-│e  f│    └       ┘
-└    ┘
-```
+![Exemplo de transposição](../imagens/04_transposta.png)
 
 **Matriz diagonal**: é uma matriz cuja diagonal principal (elementos cujo número da linha [`i`] é igual ao número da coluna [`j`]; `i = j`) possui apenas valores diferentes de zero, enquanto o resto da matriz é preenchida com zeros.
 
-```
-┌       ┐
-│a  0  0│
-│0  b  0│
-│0  0  c│
-└       ┘
-```
+![Exemplo de Matriz diagonal](../imagens/04_matrizdiagonal.png)
 
 - **Matriz identidade**: uma matriz identidade de grau N é uma matriz diagonal NxN cujos valores não nulos são todos 1.
 
-```
-┌       ┐
-│1  0  0│
-│0  1  0│
-│0  0  1│
-└       ┘
-```
+![Exemplo de Matriz identidade](../imagens/04_identidade.png)
 
 - **Matriz inversa**: a inversa de uma matriz A é a matriz que quando múltiplicada com A resulta na matriz identidade. Nem toda matriz possui uma inversa.
 
-```
-┌    ┐   ┌         ┐   ┌    ┐
-│4  0│   │ 1/4   0 │   │1  0│
-│1  2│ × │-1/8  1/2│ = │0  1│
-└    ┘   └         ┘   └    ┘
-```
+![Exemplo de Matriz inversa](../imagens/04_inversa.png)
 
 Se quiser aprender mais sobre matrizes, eu recomendo as primeiras 70 e poucas páginas do livro [Álgebra Linear com Aplicações](https://archive.org/details/algebra-linear-com-aplica-10-edi-anton-rorres/mode/2up).
 
@@ -197,17 +146,23 @@ Somar dois vetores é igual somar duas matrizes, é só ir componente por compon
 <x, y, z> + <a, b, c> = <(x+a), (y+b), (z+c)>
 ```
 
+![Soma de vetores](../imagens/04_somavet.png)
+
 Multiplicar um vetor por um escalar também é igual...
 
 ``` 
 2 × <x, y, z> = <2x, 2y, 2z>
 ```
 
+![Multiplicação por escalar](../imagens/04_escalarvet.png)
+
 Temos também uma operação especial chamada **norma** (ou módulo), que se consiste em pegar o comprimento do vetor. A norma de um vetor **u** é escrita desta forma: **|u|**. Para descobrir essa norma nós basicamente fazemos uma versão genérica do teorema de pitágoras:
 
 ``` 
 |<x, y, z>| = √(x² + y² + z²)
 ```
+
+![Norma vetor](../imagens/04_norma.png)
 
 Agora, existem dois tipos de produto entre vetores:
 
@@ -233,6 +188,8 @@ u ⋅ v = |u||y| × cos(θ)
 = <(yc - zb), (za - xc), (xb - ya)>
 ```
 
+![Produto vetorial](../imagens/04_prodvet.png)
+
 ### Conceitos
 
 Ao falarmos de vetores frequentemente surgem alguns termos que no nosso cotidiano possuem um sentido mas na álgebra linear possuem outro. Ao mesmo tempo, existem alguns outros conceitos que são mais exclusivos da matemática mesmo, então bora ver alguns deles:
@@ -255,6 +212,8 @@ Por fim, se você quiser aprender mais formalmente sobre vetores, espaços vetor
 
 ## Interpolação linear e coordenadas baricêntricas
 
+![Interpolação Linear](../imagens/04_interpolacao.png)
+
 Uma interpolação linear entre os pontos/vetores `A` e `B` é basicamente uma função com um parâmetro `t` que passa em A quando `t = 0` e passa em B quando `t = 1`, sendo os coeficientes de A e B polinômios lineares de `t`. Uma interpolação linear (também conhecida como **_lerp_**) possui essa cara: `f(t) = (1 - t)A + tB`.
 
 No caso de pontos bidimensionais, também podemos pensar na fórmula de uma interpolação linear entre `A = <x0, y0>` e `B = <x1, y1>` como sendo:
@@ -268,6 +227,8 @@ Nesse caso, você pode pensar em em `(x - x0)` como assumindo o papel de `t` e e
 Coordenadas baricêntricas são um pouco mais confusas.
 
 Nós vimos em capítulos anteriores que atributos como cores são geralmente passados para o vertex shader como sendo atributos dos vértices de triângulos. Quando nossos triângulos passam pelo rasterizador, eles são transformados em um monte de fragmentos, e vimos que os atributos de cada fragmento são interpolações lineares dos atributos dos vértices do triângulo ao qual ele pertence. Contudo, fazer essa interpolação entre 3 valores não é tão simples quanto fazer a interpolação entre apenas dois :(. Por sorte, 200 anos atrás, um maluco chamado Möbius (sim, o da [fita de Möbius](https://pt.wikipedia.org/wiki/Fita_de_M%C3%B6bius)) inventou as coordenadas baricêntricas.
+
+![Coordenadas baricêntricas](../imagens/04_baricentro.png)
 
 Elas funcionam assim, pense que os vértices do seu triângulo têm os nomes muito criativos `a`, `b` e `c`. Nós definimos `a` como sendo a origem do nosso sistema de coordenadas, e os vetores que vão de `a` até `c` e `a` até `b` como sendo os vetores da base (ou seja, a base é `{c - a, b - a}`). Assim, qualquer ponto `P` que esteja no mesmo plano que o triângulo criativo poderá ser escrito na seguinte forma:
 

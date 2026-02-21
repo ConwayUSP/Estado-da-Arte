@@ -11,7 +11,7 @@ O mundo é muito bonito. Por quê? O motivo é simples: existem emissores de luz
 
 > ❤️ Bilhões devem sorrir! Você importa :) ❤️
 
-Na computação gráfica ocorre a mesma coisa (por isso ela é também é linda), nós podemos simular tantos tipos de emissão de de luz quanto pudermos imaginar! Ok, talvez não qualquer um, mas o céu ainda é o limite. Neste capítulo iremos ver 3 tipos de emissores de luz
+Na computação gráfica ocorre a mesma coisa (por isso ela é também é linda), nós podemos simular tantos tipos de emissão de luz quanto pudermos imaginar! Ok, talvez não todos os tipos, mas o céu ainda é o limite. Neste capítulo iremos ver 3 tipos de emissores de luz
 
 1. Luz ponto com atenuação
 2. Luz direcional
@@ -22,9 +22,9 @@ Na computação gráfica ocorre a mesma coisa (por isso ela é também é linda)
 
 ![emissor de luz ponto](../imagens/09_luz_ponto.png)
 
-Nós já temos trabalhado com uma luz ponto até agora. Ela é o tipo de luz que é emitida igualmente em todas as direções a partir de um ponto (a posição do emissor). Contudo, até agora, nossa luz possuia a mesma intensidade independentemente da distância que ela tinha para o objeto iluminado. O que vamos fazer aqui é adicionar "atenuação" nela. Ou seja, quanto mais longe um objeto estiver do **ponto**, menos iluminado ele será.
+Nós já temos trabalhado com uma luz ponto até agora. Ela é o tipo de luz que é emitida igualmente em todas as direções a partir de um ponto (a posição do emissor). Contudo, até agora, nossa luz possuia a mesma intensidade independentemente da distância dela para o objeto iluminado. O que vamos fazer aqui é adicionar "atenuação" nela. Ou seja, quanto mais longe um objeto estiver do **ponto**, menos iluminado ele será.
 
-Antes de adicionarmos a atenuação em si, vamos fazer uma modificação para deixar nossas mudanças na iluminação mais visíveis a partir de agora - adicionar mais cubos na cena. No main, defina uma lista de posições para colocarmos nossos cubos:
+Antes de adicionarmos a atenuação em si, vamos fazer uma modificação para deixar nossas mudanças na iluminação mais visíveis a partir de agora: adicionar mais cubos na cena. No main, defina uma lista de posições para colocarmos nossos cubos:
 
 ``` cpp
 glm::vec3 posicoesCubos[] = {
@@ -35,7 +35,7 @@ glm::vec3 posicoesCubos[] = {
     glm::vec3(1.5f, 0.2f, -1.5f),   glm::vec3(-1.5f, 1.0f, -1.5f)};
 ```
 
-E no loop de renderização, aonde atualmente renderizamos o cubo único, crie um loop interno que crie cubos com essas posições e uma rotação diferenciada. O trecho modificado deve ficar mais ou menos assim:
+E no loop de renderização, aonde atualmente renderizamos o cubo único, escreva um loop interno que crie cubos com essas posições e uma rotação diferenciada. O trecho modificado deve ficar mais ou menos assim:
 
 ``` cpp
 glm::mat4 model = glm::mat4(1.0);
@@ -88,7 +88,7 @@ float distancia = length(luz.posicao - fragPos);
 float atenuacao = 1.0 / (Kc + Kl * distancia + Kq * (distancia * distancia));
 ```
 
-Com a atenuação em mãos, você pode até escolher em quais componentes (dentre o ambiente, o especular e o difuso) você quer que a atenuação afete. Realisticamente, pelo menos o difuso e o especular devem ser afetados. Contanto, para poupar o esforço de ter que modificar 2 linhas ao invés de uma só, vou aplicar a atenuação direto na cor final do fragmento, o que efetivamente faz ela valer para o componente ambiente também:
+Com a atenuação em mãos, você pode até escolher em quais componentes (dentre o ambiente, o especular e o difuso) você quer que a atenuação afete. Realisticamente, pelo menos o difuso e o especular devem ser afetados. No entanto, para poupar o esforço de ter que modificar 2 linhas ao invés de uma só, vou aplicar a atenuação direto na cor final do fragmento, o que efetivamente faz ela valer para o componente ambiente também:
 
 ``` glsl
 vec3 cor = atenuacao * (ambiente + difuso + especular);
@@ -104,7 +104,7 @@ E simples assim, nós temos nosso desejado efeito:
 
 A luz direcional representa de certa forma uma fonte de luz que está muito longe de todos os objetos, e que é _grande_ e _forte_ o suficiente para ainda assim iluminá-los. Um exemplo disso, como dito na introdução, é o sol - ele está tão longe e é tão grande, que seus raios chegam aqui praticamente paralelos uns aos outros.
 
-Implementar uma luz direcional é bem tranquilo, tanto que você provavelmente conseguiria implementá-la com o que já aprendemos na trilha sem sequer ler esta seção, mas aqui estamos. Tudo que precisamos é decidir de qual direção a luz está vindo. Com isso, o resto do nosso modelo de iluminação se mantém o mesmo. Por exemplo, vamos esquecer a luz ponto que implementamos agora pouco e definir uma luz direcional que vem de cima para baixo.
+Implementar uma luz direcional é bem tranquilo, tanto que você provavelmente conseguiria implementá-la com o que já aprendemos na trilha sem sequer ler esta seção, mas aqui estamos... Tudo que precisamos é decidir de qual direção a luz está vindo. Com isso, o resto do nosso modelo de iluminação se mantém o mesmo. Por exemplo, vamos esquecer a luz ponto que implementamos agora pouco e definir uma luz direcional que vem de cima para baixo.
 
 O primeiro passo é definir o vetor de direção. Poderiamos fazer isso no main, mas só por comodidade bora fazer no próprio shader:
 
@@ -148,14 +148,14 @@ Nesse trecho, estamos usando os valores da câmera para definir a posição e a 
 
 ![lanternas em jogos](../imagens/09_lanternas_em_jogos.jpeg)
 
-O truque para fazer o efeito de lanterna funcionar será garantir que apenas fragmentos que formem um ângulo menor do que nossa abertura (`12.5°`) com a câmera sejam iluminados. Para descobrir o ângulo que o fragmento faz com a câmera, iremos usar o produto escalar entre o vetor de direção da lanterna e o vetor que vai da lanterna até o fragmento:
+O truque para fazer o efeito de lanterna funcionar será garantir que apenas fragmentos que formem um ângulo menor do que nossa abertura (`12.5°`) com a direção da câmera sejam iluminados. Para descobrir o ângulo que o fragmento faz com a câmera, iremos usar o produto escalar entre o vetor de direção da lanterna e o vetor que vai da lanterna até o fragmento:
 
 ``` glsl
 vec3 luzDir = normalize(luz.posicao - fragPos);
 float angulo = dot(luzDir, normalize(-luz.direcao));
 ```
 
-Mas na verdade o produto escala entre vetores normais não nos dá o ângulo em si, mas sim o cosseno dele - por isso que definimos nossa abertura como um cosseno também. Agora, podemos saber se o fragmento será iluminado ou não; se o cosseno `angulo` for maior do que o cosseno `luz.abertura`, então o fragmento está iluminado. Nós podemos afirmar isso pois o cosseno é uma função decrescente entre 0 e π (0° e 180°), então nesta faixa de valores quanto menor o ângulo, maior seu cosseno.
+Mas na verdade o produto escalar entre vetores normais não nos dá o ângulo em si, mas sim o cosseno dele - por isso que definimos nossa abertura como um cosseno também. Agora, podemos saber se o fragmento será iluminado ou não. Se o cosseno `angulo` for maior do que o cosseno `luz.abertura`, então o fragmento está iluminado. Nós podemos afirmar isso pois o cosseno é uma função decrescente entre 0 e π (0° e 180°), então nesta faixa de valores quanto menor o ângulo, maior seu cosseno.
 
 > Também temos a garantia que nossos ângulos estão entre 0 e 180° pois o campo de visão (FOV) que definimos para nossa câmera possui uma abertura menor do que essa. Logo, todo fragmento poderia formar um ângulo de 180°+ com a câmera já foi descartado pela pipeline.
 
@@ -227,8 +227,8 @@ A partir de agora, tomarei um monte de decisões arbitrárias, então você pode
 Para começar, vou mudar a cor da lanterna para um tom mais alaranjado:
 
 ``` cpp
-meuShaderInsano.setVec3("luz.difuso", glm::vec3(0.62f, 0.62f, 0.25f));
 meuShaderInsano.setVec3("luz.difuso", glm::vec3(1.0f, 0.8f, 0.6f));
+meuShaderInsano.setVec3("luz.especular", glm::vec3(1.0f, 1.0f, 0.8f));
 ```
 
 Também irei mudar a cor da iluminação ambiente para um tom mais azulado:
