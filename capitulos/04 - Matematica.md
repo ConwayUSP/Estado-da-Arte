@@ -23,7 +23,7 @@ A soma dos ângulos internos de um triângulo é sempre igual a `180°`, ou seja
 
 ![Triângulo retângulo](../imagens/04_triangret.png)
 
-Em um triângulo retângulo (triângulo com um ângulo de `90°` ou `π/2 rad`), o lado oposto à este ângulo é chamado de **hipotenusa** (`h`), selecionando um dos outros ângulos como sendo `θ`, temos que o lado oposto a este ângulo se chama **cateto oposto** (`o`), e o lado que sobrou se chama **cateto adjacente** (`a`). Sendo assim, Pitágoras nos dá a seguinte relação entre o tamanho dos três lados:
+Em um triângulo retângulo (triângulo com um ângulo de `90°` ou `π/2 rad`), o lado oposto a este ângulo é chamado de **hipotenusa** (`h`), selecionando um dos outros ângulos como sendo `θ`, temos que o lado oposto a este ângulo se chama **cateto oposto** (`o`), e o lado que sobrou se chama **cateto adjacente** (`a`). Sendo assim, Pitágoras nos dá a seguinte relação entre o tamanho dos três lados:
 
 ```
          _\|/_
@@ -64,7 +64,7 @@ Outra coisa que Pitágoras deixou como legado são as **identidades pitagóricas
 
 ### Leis dos senos, cossenos e cálculo da área
 
-Agora, se tivermos um triângulo qualque com ângulos internos `a`, `b` e `c`, e lados `A`, `B` e `C`, sendo `A` o lado oposto ao ângulo `a` e assim em diante, temos as seguintes leis:
+Agora, se tivermos um triângulo qualquer com ângulos internos `a`, `b` e `c`, e lados `A`, `B` e `C`, sendo `A` o lado oposto ao ângulo `a` e assim em diante, temos as seguintes leis:
 
 - Lei dos senos: `sen(A)/a = sen(B)/b = sen(C)/c`
 - Lei dos cossenos: `c² = a² + b² - 2ab × cos(C)`
@@ -89,7 +89,7 @@ Somar duas matrizes envolve somar cada um de seus componentes:
 
 ![Exemplo de soma](../imagens/04_soma.png)
 
-Já a conta que tem que ser feita para multiplicar duas matrizes é um pouco mais feia. Primeiro que nem sempre é possível multiplicar duas matrizes, precisamos que o número de colunas na primeira seja igual ao número de linhas na segunda. Segundo que para calcular o elemento na i-ésima linha e j-ésima coluna da matriz resultante, iremos multiplicar todos os elementos da i-ésima linha da primeira matriz por todos os elementos da j-ésima coluna da segunda matriz, obtendo no final uma matriz com o número de linhas da primeira e o número de colunas da segunda. Isso tudo significa também que a multiplicação de matrizes **não é comutativa** - ou seja, `A × B` não necessáriamente é igual a `B × A` (e raramente será).
+Já a conta que tem que ser feita para multiplicar duas matrizes é um pouco mais feia. Primeiro que nem sempre é possível multiplicar duas matrizes, precisamos que o número de colunas na primeira seja igual ao número de linhas na segunda. Segundo que para calcular o elemento na i-ésima linha e j-ésima coluna da matriz resultante, iremos multiplicar todos os elementos da i-ésima linha da primeira matriz por todos os elementos da j-ésima coluna da segunda matriz, obtendo no final uma matriz com o número de linhas da primeira e o número de colunas da segunda. Isso tudo significa também que a multiplicação de matrizes **não é comutativa** - ou seja, `A × B` não necessariamente é igual a `B × A` (e raramente será).
 
 ![Exemplo de multiplicação](../imagens/04_multiplica.png)
 
@@ -117,7 +117,7 @@ Algumas matrizes possuem características que podem ser interessantes em alguns 
 
 ![Exemplo de Matriz identidade](../imagens/04_identidade.png)
 
-- **Matriz inversa**: a inversa de uma matriz A é a matriz que quando múltiplicada com A resulta na matriz identidade. Nem toda matriz possui uma inversa.
+- **Matriz inversa**: a inversa de uma matriz A é a matriz que quando multiplicada com A resulta na matriz identidade. Nem toda matriz possui uma inversa.
 
 ![Exemplo de Matriz inversa](../imagens/04_inversa.png)
 
@@ -127,7 +127,7 @@ Se quiser aprender mais sobre matrizes, eu recomendo as primeiras 70 e poucas p�
 
 O conceito do que é um vetor é bastante abrangente e abstrato, então iremos tomar aqui uma visão mais intuitiva e geométrica do que é um vetor.
 
-Para nós, um vetor de dimensão N é um conjunto de números que indica uma de duas coisas (na verdade indica as duas coisas simultâneamente, mas dependendo da situação uma interpretação será mais útil do que a outra):
+Para nós, um vetor de dimensão N é um conjunto de números que indica uma de duas coisas (na verdade indica as duas coisas simultaneamente, mas dependendo da situação uma interpretação será mais útil do que a outra):
 
 - Uma posição em um espaço N-dimensional
 - Um comprimento e uma direção
@@ -175,7 +175,7 @@ Agora, existem dois tipos de produto entre vetores:
 Existe outra forma de se calcular o produto escalar de dois vetores, para isso utilizamos o cosseno do ângulo entre eles e seus módulos:
 
 ```
-u ⋅ v = |u||y| × cos(θ)
+u ⋅ v = |u||v| × cos(θ)
 ```
 
 - **Produto vetorial**: resolve-se o determinante de uma matriz cuja primeira linha são os vetores da base do espaço  (`i`, `j` e `k`), a segunda linha é o primeiro vetor e a terceira linha é o segundo vetor. O resultado é um vetor ortogonal aos dois que estão sendo multiplicados (veremos a definição de vetor ortogonal daqui a pouco). Como não te ensinamos a calcular o determinante de uma matriz, você também pode usar a fórmula abaixo, que é a mesma coisa. Para representar o produto vetorial, usamos o símbolo `×` mesmo, então `u × v`.
@@ -194,18 +194,18 @@ u ⋅ v = |u||y| × cos(θ)
 
 Ao falarmos de vetores frequentemente surgem alguns termos que no nosso cotidiano possuem um sentido mas na álgebra linear possuem outro. Ao mesmo tempo, existem alguns outros conceitos que são mais exclusivos da matemática mesmo, então bora ver alguns deles:
 
-- **Normal**: um vetor `u` é dito normal quando `|u| = 1`. Geralmente vetores normais são escritos com um chapéuzinho circunflexo, tipo assim: `û`.
+- **Unitário**: um vetor `u` é dito unitário quando `|u| = 1`. Geralmente vetores normais são escritos com um chapéuzinho circunflexo, tipo assim: `û`.
 - **Espaço vetorial**: um espaço vetorial é um conjunto de vetores que segue algumas propriedades. Para nós essas propriedades não vão importar muito, mas algo que é relevante sim para nós é saber que espaços vetoriais possuem _dimensão_ e _base_.
 - **Base**: uma base de um espaço vetorial `V` é um conjunto mínimo de vetores capaz de gerar `V`. A base canônica do espaço tridimensional é `{<1, 0, 0>, <0, 1, 0>, <0, 0, 1>}`.
 - **Dimensão**: a dimensão de um espaço vetorial `V` é o número de vetores em sua base.
 - **Ortogonalidade**: dois vetores são ditos ortogonais se o produto escalar entre eles é igual a **zero**. Geometricamente isso nos diz que eles estão a um ângulo de `90°` um do outro, o que pode ser facilmente verificado se nós observarmos a fórmula `u ⋅ v = |u||y| × cos(θ)` e lembrarmos que o cosseno de `θ` vale zero quando `θ = π/2`.
-- **Base ortonormal**: é uma base formada apenas por vetores normais e ortogonais entre si.
+- **Base ortonormal**: é uma base formada apenas por vetores unitários e ortogonais entre si.
 
 > Para normalizar um vetor, basta dividir ele pelo seu módulo; assim, sua direção será mantida, mas seu comprimento se tornará 1.
 
 Por fim, se você quiser aprender mais formalmente sobre vetores, espaços vetoriais e algebra linear no geral, esses recursos abaixo são altamente recomendados:
 
-- A playlist "[Excência da Algebra Linear](https://www.youtube.com/watch?v=fNk_zzaMoSs&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab)", do 3Blue1Brown.
+- A playlist "[Essência da Algebra Linear](https://www.youtube.com/watch?v=fNk_zzaMoSs&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab)", do 3Blue1Brown.
 - O livro já citado anteriormente, [Álgebra Linear com Aplicações](https://archive.org/details/algebra-linear-com-aplica-10-edi-anton-rorres/mode/2up), do Howard Anton e do Chris Rorres.
 - O livro [Álgebra Linear e Aplicações](https://sites.icmc.usp.br/frasson/aled/material/Algebra%20Linear%20e%20Aplicacoes%206ed%20-%20Callioli,%20Domingues,%20Costa.pdf), do Callioli.
 - O livro [Álgebra Linear](https://archive.org/details/algebralinearboldrini_201908/mode/2up), do Boldrini.
@@ -222,7 +222,7 @@ No caso de pontos bidimensionais, também podemos pensar na fórmula de uma inte
 y = y0 + (x - x0) × (y1 - y0)/(x1 - x0)
 ```
 
-Nesse caso, você pode pensar em em `(x - x0)` como assumindo o papel de `t` e em `(y1 - y0)/(x1 - x0)` como sendo a declividade entre os pontos A e B. No geral, pense que quando `t` vai crescendo, A vai perdendo sua influência no valor resultante, enquanto B vai proporcionalmente ganhando influência. Relativamente simples, né?
+Nesse caso, você pode pensar em `(x - x0)` como assumindo o papel de `t` e em `(y1 - y0)/(x1 - x0)` como sendo a declividade entre os pontos A e B. No geral, pense que quando `t` vai crescendo, A vai perdendo sua influência no valor resultante, enquanto B vai proporcionalmente ganhando influência. Relativamente simples, né?
 
 Coordenadas baricêntricas são um pouco mais confusas.
 
