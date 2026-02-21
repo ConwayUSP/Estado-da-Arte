@@ -48,7 +48,7 @@ glm::vec3 cima = glm::vec3(0.0f, 1.0f, 0.0f);
 glm::vec3 direitaCamera = glm::normalize(glm::cross(cima, direcaoCamera));
 ```
 
-É um pouco difícil ilustrar o por quê deste truque funcionar, mas o motivo basicamente é que - como vimos no capítulo de matemática - o produto vetorial gera um vetor ortogonal a ambos os operandos. Ou seja, mesmo que o vetor que aponta para "cima" aqui não seja ortogonal ao vetor de direção (não faça 90° com ele), o vetor da direita irá fazer 90° com **ambos**, que é o que importa nesse caso.
+É um pouco difícil ilustrar o porquê deste truque funcionar, mas o motivo basicamente é que - como vimos no capítulo de matemática - o produto vetorial gera um vetor ortogonal a ambos os operandos. Ou seja, mesmo que o vetor que aponta para "cima" aqui não seja ortogonal ao vetor de direção (não faça 90° com ele), o vetor da direita irá fazer 90° com **ambos**, que é o que importa nesse caso.
 
 > Inverter a ordem dos operandos aqui no produto vetorial faria com que o nosso sistema de coordenadas deixasse de ser destro, pois `u × v = -(v × u)`.
 
@@ -63,12 +63,12 @@ glm::vec3 cimaCamera = glm::cross(direcaoCamera, direitaCamera);
 Tendo construído o espaço de visão da nossa câmera, podemos usar os vetores da base desse espaço e a posição da câmera (`P`) para formar uma matriz que traduz qualquer vetor para este espaço - a matriz _view_. Essa matriz é formada assim:
 
 ``` 
-┌             ┐   ┌           ┐
-│Rx  Ry  Rz  0│   │1  0  0  Px│
-│Cx  Cy  Cz  0│ × │0  1  0  Py│
-│Dx  Dy  Dz  0│   │0  0  1  Pz│
-│0   0   0   1│   │0  0  0  1 │
-└             ┘   └           ┘
+┌             ┐   ┌            ┐
+│Rx  Ry  Rz  0│   │1  0  0  -Px│
+│Cx  Cy  Cz  0│ × │0  1  0  -Py│
+│Dx  Dy  Dz  0│   │0  0  1  -Pz│
+│0   0   0   1│   │0  0  0   1 │
+└             ┘   └            ┘
 ```
 
 Contudo, para nossa alergia, basicamente tudo que vimos até agora é resolvido pela função `lookAt` do GLM. Esta função recebe como argumentos a posição da câmera, a posição do alvo para o qual ela está olhando, e aquele vetor que aponta para cima no world space que nós usamos no truque. Ou seja, podemos construir nossa matriz view dessa forma:
@@ -109,7 +109,7 @@ glm::vec3 posCamera = glm::vec3(0.0f, 0.0f,  3.0f);
 glm::vec3 direcaoCamera = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cima = glm::vec3(0.0f, 1.0f,  0.0f);
 
-// aonde estávamos definindo nosso vetor view
+// onde estávamos definindo nosso vetor view
 view = glm::lookAt(posCamera, posCamera + direcaoCamera, cima);
 ```
 
@@ -132,7 +132,7 @@ void processaInput(GLFWwindow *window)
 }
 ```
 
-Contudo, tratando o movimento da forma que estamos tratando agora, sua velocidade estará atrelada à **_framerate_** do nosso programa, ou seja, a quantos **fps** ele está rodando. Esse é um erro bem manjado no desenvolvimento de jogos, e ocorre pois nós estamos atualizando a posição por um valor fixo a cada frame, independentemente do quanto ele demorou para renderizar. Logo, em um computador mais potente - que renderiza mais frames por segundo - a câmera se moverá mais vezes, e portanto terá maior velocidade.
+Contudo, tratando o movimento da forma que estamos tratando agora, sua velocidade estará atrelada ao **_framerate_** do nosso programa, ou seja, a quantos **fps** ele está rodando. Esse é um erro bem manjado no desenvolvimento de jogos, e ocorre pois nós estamos atualizando a posição por um valor fixo a cada frame, independentemente do quanto ele demorou para renderizar. Logo, em um computador mais potente - que renderiza mais frames por segundo - a câmera se moverá mais vezes, e portanto terá maior velocidade.
 
 Para corrigir este erro, vamos ter que criar uma variável de **_delta time_** (`dt`) para armazenar quanto tempo se passou entre o último frame e o atual. Com isso, simplesmente multiplicaremos a velocidade da nossa câmera por `dt` antes de movê-la.
 
@@ -217,9 +217,9 @@ void callback_mouse(GLFWwindow* janela, double posX, double posY)
     ultimoX = posX;
     ultimoY = posY;
 
-    float sensitividade = 0.1f;
-    offsetX *= sensitividade;
-    offsetY *= sensitividade;
+    float sensibilidade = 0.1f;
+    offsetX *= sensibilidade;
+    offsetY *= sensibilidade;
 
     yaw   += offsetX;
     pitch += offsetY;
@@ -302,7 +302,7 @@ enum Camera_Movement { FRENTE, TRAS, ESQUERDA, DIREITA };
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
 const float VELOCIDADE = 2.5f;
-const float SENSITIVIDADE = 0.05f;
+const float SENSIBILIDADE = 0.05f;
 const float ZOOM = 45.0f;
 
 class Camera {
@@ -315,7 +315,7 @@ public:
   float Yaw;
   float Pitch;
   float Velocidade;
-  float Sensitividade;
+  float Sensibilidade;
   float Zoom;
 
   // Construtor com alguns valores padrões
@@ -346,7 +346,7 @@ Já no outro arquivo, coloque a definição dos métodos:
 
 Camera::Camera(glm::vec3 posicao, glm::vec3 cima, float yaw, float pitch)
     : Direcao(glm::vec3(0.0f, 0.0f, -1.0f)), Velocidade(VELOCIDADE),
-      Sensitividade(SENSITIVIDADE), Zoom(ZOOM) {
+      Sensibilidade(SENSIBILIDADE), Zoom(ZOOM) {
   Posicao = posicao;
   CimaMundo = cima;
   Yaw = yaw;
@@ -372,8 +372,8 @@ void Camera::ProcessaTeclado(Camera_Movement direcao, float deltaTime) {
 
 void Camera::ProcessaMovimentoMouse(float offsetX, float offsetY,
                                     GLboolean limitarPitch) {
-  offsetX *= Sensitividade;
-  offsetY *= Sensitividade;
+  offsetX *= Sensibilidade;
+  offsetY *= Sensibilidade;
 
   Yaw += offsetX;
   Pitch += offsetY;

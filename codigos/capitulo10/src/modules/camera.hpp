@@ -11,7 +11,7 @@ enum Camera_Movement { FRENTE, TRAS, ESQUERDA, DIREITA };
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
 const float VELOCIDADE = 2.5f;
-const float SENSITIVIDADE = 0.05f;
+const float SENSIBILIDADE = 0.05f;
 const float ZOOM = 45.0f;
 
 class Camera {
@@ -24,7 +24,7 @@ public:
   float Yaw;
   float Pitch;
   float Velocidade;
-  float Sensitividade;
+  float Sensibilidade;
   float Zoom;
 
   // Construtor com alguns valores padrões

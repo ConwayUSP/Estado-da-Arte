@@ -2,7 +2,7 @@
 
 Camera::Camera(glm::vec3 posicao, glm::vec3 cima, float yaw, float pitch)
     : Direcao(glm::vec3(0.0f, 0.0f, -1.0f)), Velocidade(VELOCIDADE),
-      Sensitividade(SENSITIVIDADE), Zoom(ZOOM) {
+      Sensibilidade(SENSIBILIDADE), Zoom(ZOOM) {
   Posicao = posicao;
   CimaMundo = cima;
   Yaw = yaw;
@@ -28,8 +28,8 @@ void Camera::ProcessaTeclado(Camera_Movement direcao, float deltaTime) {
 
 void Camera::ProcessaMovimentoMouse(float offsetX, float offsetY,
                                     GLboolean limitarPitch) {
-  offsetX *= Sensitividade;
-  offsetY *= Sensitividade;
+  offsetX *= Sensibilidade;
+  offsetY *= Sensibilidade;
 
   Yaw += offsetX;
   Pitch += offsetY;
