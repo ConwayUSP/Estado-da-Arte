@@ -165,3 +165,32 @@ Mova para o diretório de inclusão local (opcional, mas útil para acesso globa
 ```sh
 sudo cp -r glm/glm /usr/local/include/
 ```
+
+## Espaços
+
+### Local Space
+
+O Local Space (ou Espaço Local) é o espaço de coordenadas que "parte" do seu objeto, que é local para ele, i.e. onde seu objeto começa.
+Imagine que você está construindo um modelo 3D de uma casa. O espaço local da casa seria o espaço onde você começa a construir a casa, onde a origem (0,0,0) está no chão do primeiro andar, e os eixos X e Z são paralelos ao chão. Isso significa que qualquer ponto dentro da casa pode ser descrito em relação a essa origem, a partir de suas coordenadas locais. 
+Todos os vértices do seu modelo estão no espaço local: todos são locais para o seu objeto.
+
+### World Space
+
+Se nós importássemos todos os nossos objetos diretamente na nossa aplicação, eles provavelmente ficariam se sobrepondo no centro do nosso mundo, com origem em (0, 0, 0), o que não é o que queremos. Geralmente, é preferível definir uma posição específica para cada um dos nossos modelos dentro da nossa simulação.
+As coordenadas no World Space (ou Espaço do Mundo) são exatamente o que parecem ser: as coordenadas de todos os seus vértices em relação ao mundo simulado.
+As coordenadas do seu objeto são transformados do Local para o World Space; isso acontece através da _Matriz de Modelo_.
+
+A Matriz de Modelo é uma matriz de transformação que translada, redimensiona e/ou rotaciona seu objeto para um lugar no mundo para uma localização/orientação a qual ele pertence. Você pode pensar na matriz do capítulo anterior para posicionar o contêiner em toda a cena como uma espécie de matriz de modelo também; transformamos as coordenadas locais do contêiner para algum lugar diferente na cena/mundo.
+
+### View Space
+
+O View Space (Espaço de Vista) é o que as pessoas normalmente se referem como sendo a câmera do _OpenGL_ (às vezes, também é conhecido como _Camera Space_ ou _Eye Space_).
+O View Space é o resultado da transformação das coordenadas de seu World Space para coordenadas as quais estão na frente da perspectiva do usuário. No caso, o View Space é, então, o espaço visto a partir da perspectiva da câmera. Isso é, normalmente, realizado com a combinação de translações e rotações para que certos itens sejam transformados para frente da câmera. Essa combinação normalmente é guardada dentro de uma _Matriz de Visão_, que transforma coordenadas do mundo para o View Space.
+
+### Clip Space
+
+No fim da rodagem de cada vertex shader, o _OpenGL_ espera que as coordenadas estejam em um intervalo específico e que cada uma que não esteja seja cortada (clipada, ou "clipped" do inglês). Coordenadas cortadas são descartadas para que as remanescentes se tornem fragmentos visíveis na sua tela. É daí que o _Clip Space_ recebe seu nome.
+
+Para transformar coordendas de vértices de _View_ para _Clip Space_, nós definimos a _Matriz de Projeção_, que especifica um intervalo de coordenadas, e.g. -1000 e 1000 para cada dimensão. A matriz de projeção
+transforma então as coordenadas dentro desse intervalo especificado em coordenadas de dispositivo normalizadas
+(-1.0, 1.0). Todas as coordenadas fora desse intervalo serão cortadas. Com este intervalo que especificamos na matriz de projeção, uma coordenada de (1250, 500, 750) não seria visível, uma vez que a coordenada x está fora do intervalo e, portanto, é convertida para uma coordenada maior que 1,0 em NDC e, consequentemente, é cortada.
