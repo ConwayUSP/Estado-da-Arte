@@ -168,6 +168,12 @@ sudo cp -r glm/glm /usr/local/include/
 
 ## Espaços
 
+O OpenGL espera que todos os vértices que queremos tornar visíveis estejam em coordenadas normalizadas após cada execução do _vertex shader_. Ou seja, as coordenadas x, y e z de cada vértice devem estar entre -1,0 e 1,0; coordenadas fora desse intervalo não serão visíveis.
+
+O que normalmente fazemos é especificar as coordenadas em um intervalo (ou espaço) que determinamos e, no shader de vértices, transformar essas coordenadas em coordenadas de dispositivo normalizadas (normalized device coordinates - NDC). Esses NDC são, então, fornecidos ao rasterizador para transformá-los em coordenadas/pixels 2D na sua tela.
+
+A transformação de coordenadas para NDC geralmente é realizada passo a passo, onde transformamos os vértices de um objeto em vários sistemas de coordenadas antes de finalmente transformá-los em NDC.
+
 ### Local Space
 
 O Local Space (ou Espaço Local) é o espaço de coordenadas que "parte" do seu objeto, que é local para ele, i.e. onde seu objeto começa.
@@ -194,3 +200,7 @@ No fim da rodagem de cada vertex shader, o _OpenGL_ espera que as coordenadas es
 Para transformar coordendas de vértices de _View_ para _Clip Space_, nós definimos a _Matriz de Projeção_, que especifica um intervalo de coordenadas, e.g. -1000 e 1000 para cada dimensão. A matriz de projeção
 transforma então as coordenadas dentro desse intervalo especificado em coordenadas de dispositivo normalizadas
 (-1.0, 1.0). Todas as coordenadas fora desse intervalo serão cortadas. Com este intervalo que especificamos na matriz de projeção, uma coordenada de (1250, 500, 750) não seria visível, uma vez que a coordenada x está fora do intervalo e, portanto, é convertida para uma coordenada maior que 1,0 em NDC e, consequentemente, é cortada.
+
+#### Projeção Ortográfica
+
+![Projeção Ortográfica](../imagens/05_projorto.png)
