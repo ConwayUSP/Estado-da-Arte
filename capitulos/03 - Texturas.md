@@ -26,7 +26,9 @@ Além de imagens visuais, texturas também podem armazenar dados arbitrários pa
 
 Abaixo está a textura de parede de tijolos que usaremos de exemplo:
 
-![Textura de parede de tijolos](../imagens/03_parede_tijolos.jpg)
+<div align="center">
+  <img src="../imagens/03_parede_tijolos.jpg" alt="Textura de parede de tijolos">
+</div>
 
 ## Coordenadas de Textura
 
@@ -34,7 +36,9 @@ Para o OpenGL saber qual parte da imagem vai em qual parte do triângulo, usamos
 
 O ponto $(0,0)$ é o canto inferior esquerdo da imagem, e $(1,1)$ é o canto superior direito. Se você tem um triângulo e quer que ele exiba a imagem inteira, você atribui $(0,0)$ ao vértice inferior esquerdo, $(1,0)$ ao inferior direito e $(0.5, 1.0)$ ao topo.
 
-![Triangulo rotulado](../imagens/03_triangulo_mapeado.png)
+<div align="center">
+  <img src="../imagens/03_triangulo_mapeado.png" alt="Triangulo rotulado">
+</div>
 
 No capítulo anterior, cada vértice tinha posição (3 floats) + cor (4 floats) = 7 floats. A partir de agora, como as cores virão da textura, vamos trocar o atributo de cor pelas coordenadas UV (2 floats). Cada linha do array de vértices passa a ter 5 floats:
 
@@ -149,7 +153,9 @@ Imagine um plano com uma textura de alta resolução muito longe da câmera. Ten
 
 **Mipmaps** são basicamente versões menores da sua textura (metade do tamanho, depois um quarto, e assim por diante) que o OpenGL gera para usar quando o objeto está longe.
 
-![mipmapped texture](../imagens/03_niveis_mipmap.png)
+<div align="center">
+  <img src="../imagens/03_niveis_mipmap.png" alt="mipmapped texture">
+</div>
 
 A boa notícia é que você não precisa criar essas versões manualmente:
 
@@ -302,7 +308,9 @@ A função mix(a, b, t) interpola linearmente entre a e b: quando t = 0.0 você 
 
 Abaixo está um resultado da mistura de texturas:
 
-![Uso de duas texturas simultaneamente](../imagens/03_texturas_misturadas.png)
+<div align="center">
+  <img src="../imagens/03_texturas_misturadas.png" alt="Uso de duas texturas simultaneamente">
+</div>
 
 ## Conclusão
 
