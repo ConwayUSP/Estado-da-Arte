@@ -201,12 +201,52 @@ Para transformar coordendas de vértices de _View_ para _Clip Space_, nós defin
 transforma então as coordenadas dentro desse intervalo especificado em coordenadas de dispositivo normalizadas
 (-1.0, 1.0). Todas as coordenadas fora desse intervalo serão cortadas. Com este intervalo que especificamos na matriz de projeção, uma coordenada de (1250, 500, 750) não seria visível, uma vez que a coordenada x está fora do intervalo e, portanto, é convertida para uma coordenada maior que 1,0 em NDC e, consequentemente, é cortada.
 
+> Observe que se apenas uma parte de uma primitiva, por exemplo, um triângulo, estiver fora do volume de recorte,
+o OpenGL reconstruirá o triângulo como um ou mais triângulos para caber dentro do intervalo.
+
+A caixa de visualização que uma matriz de projeção cria é chamada de _frustrum_ (ou tronco de cone) e cada coordenada dentro desse _frustrum_ vai aparecer na tela do usuário.
+
+O processo completo de conversão de coordenadas dentro de um intervalo específico para NDC, que podem ser facilmente mapeadas para coordenadas 2D de _View Space_, é chamado de _projeção_, visto que a matriz projeta coordendas 3D para 2D normalizadas.
+
+Uma vez que todos os vértices são transformados para clip space, ocorre a _divisão de perspectiva_. No caso, as componentes _(x, y, z)_ dos vetores de posição são divididas pela componente homogênea _w_; essa divisão faz a transformação de coordenadas 4D do _Clip Space_ para coordenadas 3D normalizadas. Esse último passo é feito automaticamente ao fim da etapa do _vertex shader_.
+
+_É após esta etapa que as coordenadas resultantes são mapeadas para coordenadas de tela (usando as
+configurações do glViewport) e transformadas em fragmentos._
+
+A matriz de projeção para transformar coordenadas de visualização em coordenadas de recorte geralmente assume duas formas diferentes, onde cada forma define seu próprio tronco de cone exclusivo: projeção ortográfica ou projeção em perspectiva.
+
 #### Projeção Ortográfica
+
+Uma matriz de _Projeção Ortográfica_ define um espaço de visualização em pixels e não distorce as proporções. Além disso, ela não projeta objetos em perspectiva, mantendo suas dimensões constantes ao longo da profundidade. Por fim, ela define uma caixa de frustrum em forma de paralelepípedo, onde os objetos são projetados diretamente. Observe:
 
 ![Projeção Ortográfica](../imagens/05_projorto.png)
 
+O tronco de cone define as coordenadas visíveis e é especificado por uma largura, uma altura e um plano próximo e distante. Qualquer coordenada à frente do plano próximo é cortada e o mesmo se aplica às coordenadas
+atrás do plano distante.
 
-### Projeção Perspectiva
+Uma matriz de _Projeção Ortográfica_ pode ser criada com GLM da seguinte maneira:
+
+```cpp
+glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
+```
+
+Os primeiros quatro parâmetros definem o espaço de visualização em pixels (esquerda, direita, baixo, topo), enquanto os últimos dois definem o intervalo de profundidade (near, far).
+
+Uma matriz de _Projeção Ortográfica_ faz um mapeamento para o plano 2D que é a sua tela, mas essa projeção direta produz resultados não realistas, visto que a perspectiva não é considerada. Por isso, é comum usar uma matriz de projeção em perspectiva em vez disso.
+
+
+### Projeção em Perspectiva
+
+Você sabe (eu espero) que na vida real objetos mais distantes aparecem menores do que objetos mais próximos. Isso é chamado de perspectiva e é uma das características que tornam a visão humana tão poderosa.
+
+![Exemplo de Projeção em Perspectiva](../imagens/05_exemploperspectiva.jpg)
+> Imagem do jogo Sonic Mania: observe como aquelas montanhas atrás do Sonic e do Tails aparentam estar distantes e menores do que os personagens próximos. Isso é um exemplo de perpectiva aplicada em computação gráfica para jogos.
+
+Uma matriz de projeção em perspectiva pode ser criada com GLM da seguinte maneira:
+
+```cpp
+glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width/(float)height, 0.1f, 100.0f);
+```
 
 ![Projeção Perspectiva](../imagens/05_projpers.png)
 
