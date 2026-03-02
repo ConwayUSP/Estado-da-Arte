@@ -169,11 +169,11 @@ Para o filtering entre os níveis de mipmap, usamos constantes combinadas:
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 ```
 
-## Carregando imagens com stb_image.h
+## Carregando imagens com `stb_image`
 
-O OpenGL não sabe ler arquivos .jpg ou .png. Ele espera um array de bytes com os dados brutos de cor de cada pixel. Para não escrever um decodificador de JPEG na mão (o que é um convite a um colapso nervoso), usamos a biblioteca `stb_image`
+O OpenGL não sabe ler arquivos `.jpg` ou `.png`. Ele espera um array de bytes com os dados brutos de cor de cada pixel. Para não escrever um decodificador de JPEG na mão (o que é um convite a um colapso nervoso), usamos a biblioteca `stb_image`
 
-Ela é uma biblioteca header-only: basta baixar o arquivo stb_image.h e colocá-lo na nossa pasta src/modules/. Depois, crie um arquivo src/modules/stb_image.cpp com apenas essas duas linhas:
+Ela é uma biblioteca header-only: basta baixar o arquivo [stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h) e colocá-lo na nossa pasta `src/modules/`. Depois, crie um arquivo `src/modules/stb_image.cpp` com apenas essas duas linhas:
 
 ```cpp
 // src/modules/stb_image.cpp
@@ -181,9 +181,9 @@ Ela é uma biblioteca header-only: basta baixar o arquivo stb_image.h e colocá-
 #include "stb_image.h"
 ```
 
-O #define diz para a biblioteca incluir sua implementação neste arquivo. Nos demais arquivos do projeto (como o main.cpp), basta incluir o header normalmente, sem o `define`.
+O #define diz para a biblioteca incluir sua implementação neste arquivo. Nos demais arquivos do projeto (como o `main.cpp`), basta incluir o header normalmente, sem o `define`.
 
-Agora adicione o include no topo do main.cpp:
+Agora adicione o include no topo do `main.cpp`:
 
 Depois, carregar uma imagem é moleza:
 
@@ -319,16 +319,16 @@ Texturas dão vida ao cenário. Sem elas, estaríamos presos a um mundo de cores
 Se sua textura aparecer preta, 90% das vezes é porque você esqueceu o `glBindTexture` ou o caminho do arquivo estava errado.
 
 ```
-(0,1) T _____________________ (1,1)
-      ^ |                   |
-      | |      _\|/_        |
-      | |      (o o)        |
-      | |---oOO-{_}-OOo---  |
-      | | Que suas UVs nunca|
-      | |   se sobreponham  |
-      | |-------------------|
-      +-------------------> S
-(0,0)                       (1,0)
+(0,1) T _______________________ (1,1)
+      ^ |                     |
+      | |        _\|/_        |
+      | |        (o o)        |
+      | |  ---oOO-{_}-OOo---  |
+      | | A vida é muito curta|
+      | | para usar GL_NEAREST|
+      | |---------------------|
+      +---------------------> S
+(0,0)                          (1,0)
 ```
 
 ## Exercícios propostos
