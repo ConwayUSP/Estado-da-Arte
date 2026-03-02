@@ -2,7 +2,7 @@
 
 Se você já jogou algum jogo antigo ou um título indie em desenvolvimento, provavelmente já se deparou com o famoso "quadrado roxo e preto" (o pesadelo de todo jogador de Garry's Mod ou Counter-Strike). Isso acontece quando o motor gráfico tenta aplicar uma **textura** e não a encontra. Até agora, nós pintamos nossos triângulos com cores sólidas ou degradês básicos, mas para dar realismo e detalhes (como madeira, pedra ou o rosto de um personagem), precisamos das **texturas**.
 
-!!!Pegar imagem: https://pt.egw.news/gaming/news/28885/garrys-mod-fixes-missing-textures-with-built-in-cs-mwhMxySpP
+![Meme de falta de textura no CS](../imagens/03_cstexture.png)
 
 Neste capítulo, vamos transformar nossos triângulos sem graça em objetos que realmente pareçam ter uma superfície.
 
@@ -24,7 +24,9 @@ Uma **textura** é basicamente uma imagem que você "cola" em cima de uma geomet
 
 Além de imagens visuais, texturas também podem armazenar dados arbitrários para serem enviados aos shaders: normal maps, height maps, e outros recursos que veremos mais para frente.
 
-!!!Colocar imagem do triangulo com tijolos
+Abaixo está a textura de parede de tijolos que usaremos de exemplo:
+
+![Textura de parede de tijolos](../imagens/03_parede_tijolos.jpg)
 
 ## Coordenadas de Textura
 
@@ -32,7 +34,7 @@ Para o OpenGL saber qual parte da imagem vai em qual parte do triângulo, usamos
 
 O ponto $(0,0)$ é o canto inferior esquerdo da imagem, e $(1,1)$ é o canto superior direito. Se você tem um triângulo e quer que ele exiba a imagem inteira, você atribui $(0,0)$ ao vértice inferior esquerdo, $(1,0)$ ao inferior direito e $(0.5, 1.0)$ ao topo.
 
-!!!Imagem do triangulo com os cantos rotulados
+![Triangulo rotulado](../imagens/03_triangulo_mapeado.png)
 
 No capítulo anterior, cada vértice tinha posição (3 floats) + cor (4 floats) = 7 floats. A partir de agora, como as cores virão da textura, vamos trocar o atributo de cor pelas coordenadas UV (2 floats). Cada linha do array de vértices passa a ter 5 floats:
 
@@ -108,7 +110,7 @@ O que acontece se a gente definir uma coordenada como $(2.0, 2.0)$? O OpenGL pre
 - `GL_CLAMP_TO_EDGE`: Qualquer valor fora de [0,1] é travado na cor da borda. O pixel da borda se estica até o infinito.
 - `GL_CLAMP_TO_BORDER`: O que estiver fora ganha uma cor sólida definida por você.
 
-!!! Imagem dos 4 modelos de wrapping
+![Opções de texture wrapping](../imagens/03_modelos_wrapping.png)
 
 Você configura isso por eixo separadamente, usando `glTexParameteri`:
 
@@ -132,9 +134,10 @@ As texturas têm uma resolução fixa, mas os triângulos na tela podem ter qual
 
 2. `GL_LINEAR` (Bilinear):  Faz uma média ponderada entre os 4 pixels mais próximos. O resultado é um visual mais suave, mas pode parecer levemente embaçado de perto.
 
-!!! Colocar imagem de exemplo que está no site
+![Opções de texture filtering](../imagens/03_modelos_filtering.png)
 
 Você configura o filtering separadamente para cada situação:
+
 ```cpp
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // ao reduzir
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  // ao ampliar
@@ -146,7 +149,7 @@ Imagine um plano com uma textura de alta resolução muito longe da câmera. Ten
 
 **Mipmaps** são basicamente versões menores da sua textura (metade do tamanho, depois um quarto, e assim por diante) que o OpenGL gera para usar quando o objeto está longe.
 
-!!!COlocar imagem dos níveis de mipmap
+![mipmapped texture](../imagens/03_niveis_mipmap.png)
 
 A boa notícia é que você não precisa criar essas versões manualmente:
 
@@ -297,7 +300,9 @@ void main() {
 
 A função mix(a, b, t) interpola linearmente entre a e b: quando t = 0.0 você tem 100% de a; quando t = 1.0, 100% de b.
 
-!!! Colocar imagem com as texturas misturadas
+Abaixo está um resultado da mistura de texturas:
+
+![Uso de duas texturas simultaneamente](../imagens/03_texturas_misturadas.png)
 
 ## Conclusão
 
