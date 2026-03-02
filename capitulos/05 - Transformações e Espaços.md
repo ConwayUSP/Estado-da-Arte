@@ -204,3 +204,11 @@ transforma então as coordenadas dentro desse intervalo especificado em coordena
 #### Projeção Ortográfica
 
 ![Projeção Ortográfica](../imagens/05_projorto.png)
+
+
+### Projeção Perspectiva
+
+![Projeção Perspectiva](../imagens/05_projpers.png)
+
+
+###
