@@ -185,19 +185,125 @@ unsigned char *dados = stbi_load("texturas/XXXXXXXX", &largura, &altura, &nCanai
 
 A função retorna um ponteiro para os pixels e preenche as variáveis com a largura, altura e número de canais (3 para RGB, 4 para RGBA com transparência).
 
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+## Criando e configurando Objetos de Textura
 
-## Criando a Textura
+O processo de criação de uma textura segue o padrão clássico do OpenGL que você já conhece: gerar → vincular → configurar → enviar dados. Vamos adicionar esse bloco no main.cpp, logo após a configuração do VAO e antes do loop de renderização.
 
+- Passo 1 — Gerar e vincular:
+  
+```cpp
+unsigned int textura;
+glGenTextures(1, &textura);
+glBindTexture(GL_TEXTURE_2D, textura);
+```
 
+- Passo 2 — Configurar wrapping e filtering:
+  
+```cpp
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+```
 
-## Usando no Shader
+- Passo 3 — Carregar a imagem e enviar para a GPU:
 
+```cpp
+stbi_set_flip_vertically_on_load(true);
+int largura, altura, nCanais;
+unsigned char *dados = stbi_load("texturas/container.jpg", &largura, &altura, &nCanais, 0);
 
+if (dados) {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, largura, altura, 0, GL_RGB, GL_UNSIGNED_BYTE, dados);
+    glGenerateMipmap(GL_TEXTURE_2D);
+} else {
+    std::cout << "Falha ao carregar a textura!" << std::endl;
+}
+
+stbi_image_free(dados); // Libera da RAM — os dados já estão na GPU
+````
+
+Vamos entender os parâmetros do `glTexImage2D`, que costumam confundir na primeira vez:
+
+- `GL_TEXTURE_2D`: Tipo de textura que estamos enviando.
+- `0`: Nível de mipmap base (resolução máxima).
+- `GL_RGB`: Como a GPU deve armazenar os dados internamente.
+- `largura, altura`: Dimensões da imagem carregada.
+- `0`: Sempre zero (ignorado pelo OpenGL moderno).
+- `GL_RGB`: Formato dos dados que estamos enviando.
+- `GL_UNSIGNED_BYTE`: Tipo de cada valor (cada canal é um unsigned char, de 0 a 255).
+- `dados`: Ponteiro para os pixels carregados pelo stbi_load.
+
+!!! COlocar imagem esperada até esse ponto.
+
+## Usando Texturas nos Shaders
+
+No GLSL, texturas são acessadas por um tipo especial de uniforme chamado sampler. Para texturas 2D, usamos sampler2D, como já escrevemos no nosso fragment shader lá atrás:
+
+```cpp
+uniform sampler2D textura1;
+
+void main() {
+    FragColor = texture(textura1, TexCoord);
+}
+```
+
+A função `texture()` recebe o sampler e as coordenadas UV e devolve a cor interpolada daquele ponto da imagem, já levando em conta o filtering configurado.
+
+## Texture Units
+
+Mas como o OpenGL sabe qual textura o sampler2D deve usar? Através das Texture Units — slots de textura disponíveis simultaneamente. O OpenGL garante pelo menos 16 deles, numerados de `GL_TEXTURE0` a `GL_TEXTURE15`.
+
+Para conectar uma textura a um sampler, ativamos o slot desejado, vinculamos a textura nele, e informamos ao sampler qual slot usar:
+
+```cpp
+// No loop de renderização, antes do glDrawArrays:
+glActiveTexture(GL_TEXTURE0);          // Ativa o slot 0
+glBindTexture(GL_TEXTURE_2D, textura); // Vincula nossa textura ao slot ativo
+
+// Diz ao sampler 'textura1' do shader que ele deve usar o slot 0
+meuShaderInsano.setInt("textura1", 0);
+```
+
+Note que estamos usando o setInt da nossa classe Shader — o sampler recebe um inteiro que indica o índice do slot, não um ponteiro ou ID direto. 
+
+### Usando duas texturas ao mesmo tempo
+
+Um caso muito comum: você tem a textura de um caixote e quer sobrepor outra imagem por cima. Para isso, basta usar dois slots diferentes e dois samplers no shader.
+
+No C++, vincule cada textura ao seu respectivo slot:
+
+```cpp
+glActiveTexture(GL_TEXTURE0);
+glBindTexture(GL_TEXTURE_2D, textura1);
+meuShaderInsano.setInt("textura1", 0);
+
+glActiveTexture(GL_TEXTURE1);
+glBindTexture(GL_TEXTURE_2D, textura2);
+meuShaderInsano.setInt("textura2", 1);
+```
+
+E no Fragment Shader, combine as duas com a função mix():
+
+```cpp
+uniform sampler2D textura1;
+uniform sampler2D textura2;
+
+void main() {
+    // 0.2 = 80% da textura1 + 20% da textura2
+    FragColor = mix(texture(textura1, TexCoord), texture(textura2, TexCoord), 0.2);
+}
+```
+
+A função mix(a, b, t) interpola linearmente entre a e b: quando t = 0.0 você tem 100% de a; quando t = 1.0, 100% de b.
+
+!!! Colocar imagem com as texturas misturadas
 
 ## Conclusão
 
-Texturas dão vida ao cenário. Sem elas, estaríamos presos a um mundo de cores sólidas e matemáticas. O segredo aqui é entender o mapeamento UV e como o OpenGL lida com a memória da GPU. Se sua textura aparecer preta, 90% das vezes é porque você esqueceu o glBindTexture ou o caminho do arquivo estava errado.
+Texturas dão vida ao cenário. Sem elas, estaríamos presos a um mundo de cores sólidas e matemáticas. O segredo aqui é entender o mapeamento UV e como o OpenGL lida com a memória da GPU. 
+
+Se sua textura aparecer preta, 90% das vezes é porque você esqueceu o `glBindTexture` ou o caminho do arquivo estava errado.
 
 ```
 (0,1) T _____________________ (1,1)
@@ -214,5 +320,6 @@ Texturas dão vida ao cenário. Sem elas, estaríamos presos a um mundo de cores
 
 ## Exercícios propostos
 
-1. Mude as coordenadas UV do triângulo para valores acima de 1.0 (ex: 2.0) e experimente os 4 modos de wrapping.
-2. 
+1. Substitua o atributo de cor do triângulo por coordenadas UV e aplique uma textura à sua escolha sobre ele. Atualize a estrutura do VAO, os shaders e carregue a imagem com `stb_image`. A imagem deve cobrir o triângulo inteiro sem distorções 
+2. Usando um quadrado com coordenadas UV que ultrapassem o intervalo [0, 1] (por exemplo, de 0.0 até 2.0), experimente os quatro modos de wrapping: `GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE e GL_CLAMP_TO_BORDER`. Para o último, defina uma cor de borda que não seja preto nem branco.
+3. Use uma textura com padrão bem definido (xadrez, tijolos) com repetição alta (10.0 ou mais) e compare visualmente três configurações de filtering: `GL_NEAREST/GL_NEAREST, GL_LINEAR/GL_LINEAR e GL_LINEAR_MIPMAP_LINEAR/GL_LINEAR` (com mipmaps gerados apenas nessa última). Analise qual configuração produziu o resultado mais estável e sem ruído.
