@@ -247,8 +247,17 @@ Uma matriz de projeção em perspectiva pode ser criada com GLM da seguinte mane
 ```cpp
 glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width/(float)height, 0.1f, 100.0f);
 ```
+No caso, o primeiro parâmetro é o ângulo de campo de visão em graus, o segundo é o aspect ratio (largura dividido por altura), o terceiro é a distância do plano de corte próximo e o quarto é a distância do plano de corte distante.
+
+O que o glm::perspective faz no exemplo acima é definir uma projeção em perspectiva com um campo de visão de 45 graus, aspect ratio igual à proporção da tela, e distâncias de corte de 0.1 a 100 unidades. Os valores exatos dependem do cenário e podem ser ajustados conforme necessário.
+
+A imagem de um tronco de cone (_frustrum_) em perspectiva pode ser vista abaixo:
 
 ![Projeção Perspectiva](../imagens/05_projpers.png)
 
+> Sempre que o valor do plano próximo da sua matriz de perspectiva for definido muito alto (como 10,0), o OpenGL
+cortará todas as coordenadas próximas à câmera (entre 0,0 e 10,0), o que pode dar um
+resultado visual que você talvez já tenha visto em videogames, onde era possível ver através
+de certos objetos ao se aproximar desconfortavelmente deles.
 
 ###
