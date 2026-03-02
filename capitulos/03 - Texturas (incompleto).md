@@ -103,7 +103,7 @@ void main() {
     FragColor = texture(textura1, TexCoord);
 }
 ```
-O tipo sampler2D e a função texture() vão fazer sentido nas próximas seções. Por enquanto, só registre que é assim que o Fragment Shader acessa uma textura.
+O tipo `sampler2D` e a função `texture()` vão fazer sentido nas próximas seções. Por enquanto, só registre que é assim que o Fragment Shader acessa uma textura.
 
 ## Texture Wrapping
 
@@ -119,6 +119,7 @@ O que acontece se a gente definir uma coordenada como $(2.0, 2.0)$? O OpenGL pre
 Você configura isso por eixo separadamente, usando `glTexParameteri`:
 
 ```cpp
+// Exemplo:
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 ```
@@ -126,23 +127,25 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 Se você escolher `GL_CLAMP_TO_BORDER`, pode definir a cor da borda assim:
 
 ```cpp
+// Exemplo:
 float corDaBorda[] = { 1.0f, 0.5f, 0.0f, 1.0f }; // laranja
 glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, corDaBorda);
 ```
 
 ## Texture Filtering
 
-As texturas têm uma resolução fixa, mas os triângulos na tela podem ter qualquer tamanho. O Texture Filtering decide como o OpenGL calcula a cor de um pixel quando a textura precisar ser ampliada (magnification) ou reduzida (minification).
+As texturas têm uma resolução fixa, mas os triângulos na tela podem ter qualquer tamanho. O Texture Filtering decide como o OpenGL calcula a cor de um pixel quando a textura precisar ser ampliada (*magnification*) ou reduzida (*minification*).
 
 1. `GL_NEAREST` (Nearest Neighbor): Escolhe o pixel da textura mais próximo da coordenada UV. O resultado é um visual pixelado e nítido. É o preferido para jogos de Pixel Art e é mais rápido computacionalmente.
 
-2. `GL_LINEAR` (Bilinear):  Faz uma média ponderada entre os 4 pixels mais próximos. O resultado é um visual mais suave, mas pode parecer levemente embaçado de perto.
+2. `GL_LINEAR` (Bilinear): Faz uma média ponderada entre os 4 pixels mais próximos. O resultado é um visual mais suave, mas pode parecer levemente embaçado de perto.
 
 ![Opções de texture filtering](../imagens/03_modelos_filtering.png)
 
 Você configura o filtering separadamente para cada situação:
 
 ```cpp
+// Exemplo:
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // ao reduzir
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  // ao ampliar
 ```
@@ -156,10 +159,12 @@ Imagine um plano com uma textura de alta resolução muito longe da câmera. Ten
 <div align="center">
   <img src="../imagens/03_niveis_mipmap.png" alt="mipmapped texture">
 </div>
+> Exemplo de como uma textura fica.
 
 A boa notícia é que você não precisa criar essas versões manualmente:
 
 ```cpp
+// A seguinte função gera mipmaps para um objeto de textura especificado.
 glGenerateMipmap(GL_TEXTURE_2D);
 ```
 
@@ -168,6 +173,8 @@ Para o filtering entre os níveis de mipmap, usamos constantes combinadas:
 ```cpp
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 ```
+
+----------------------------------------------------------------------------------------------------------------
 
 ## Carregando imagens com `stb_image`
 
