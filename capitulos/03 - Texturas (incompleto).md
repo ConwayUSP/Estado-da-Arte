@@ -243,6 +243,8 @@ Vamos entender os parâmetros do `glTexImage2D`, que costumam confundir na prime
 - `GL_UNSIGNED_BYTE`: Tipo de cada valor (cada canal é um unsigned char, de 0 a 255).
 - `dados`: Ponteiro para os pixels carregados pelo stbi_load.
 
+Caso ainda reste dúvidas ou queira aprofundar mais, consulte este [site](https://docs.gl/gl4/glTexImage2D) que contém a documentação das funções de OpenGL.
+
 !!! COlocar imagem esperada até esse ponto.
 
 ## Usando Texturas nos Shaders
@@ -327,7 +329,7 @@ Se sua textura aparecer preta, 90% das vezes é porque você esqueceu o `glBindT
       | | A vida é muito curta|
       | | para usar GL_NEAREST|
       | |---------------------|
-      +---------------------> S
+      +-----------------------> S
 (0,0)                          (1,0)
 ```
 
