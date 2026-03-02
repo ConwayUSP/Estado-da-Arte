@@ -32,7 +32,7 @@ Abaixo está a textura de parede de tijolos que usaremos de exemplo:
 
 ## Coordenadas de Textura
 
-Para o OpenGL saber qual parte da imagem vai em qual parte do triângulo, usamos as coordenadas de textura. Elas variam de $0.0$ a $1.0$ nos eixos $x$ e $y$ (que no contexto de texturas chamamos de $s$ e $t$).
+Para o OpenGL saber qual parte da imagem vai em qual parte do triângulo, usamos as **coordenadas de textura**, também **chamadas de coordenadas UV**. Elas variam de $0.0$ a $1.0$ nos eixos $x$ e $y$ (que no contexto de OpenGL chamamos de $s$ e $t$).
 
 O ponto $(0,0)$ é o canto inferior esquerdo da imagem, e $(1,1)$ é o canto superior direito. Se você tem um triângulo e quer que ele exiba a imagem inteira, você atribui $(0,0)$ ao vértice inferior esquerdo, $(1,0)$ ao inferior direito e $(0.5, 1.0)$ ao topo.
 
@@ -40,7 +40,7 @@ O ponto $(0,0)$ é o canto inferior esquerdo da imagem, e $(1,1)$ é o canto sup
   <img src="../imagens/03_triangulo_mapeado.png" alt="Triangulo rotulado">
 </div>
 
-No capítulo anterior, cada vértice tinha posição (3 floats) + cor (4 floats) = 7 floats. A partir de agora, como as cores virão da textura, vamos trocar o atributo de cor pelas coordenadas UV (2 floats). Cada linha do array de vértices passa a ter 5 floats:
+No capítulo anterior, cada vértice tinha posição (3 floats) + cor (4 floats) = 7 floats. A partir de agora, como as cores virão da textura, vamos trocar o atributo de cor pelas **coordenadas UV** (2 floats). Cada linha do array de vértices passa a ter 5 floats:
 
 No array de vértices, cada linha ficaria algo assim:
 
@@ -74,7 +74,7 @@ glEnableVertexAttribArray(1);
 
 Com a mudança nos atributos, os shaders também precisam ser atualizados. No Vertex Shader, trocamos o aCor pelo aTexCoord e passamos as coordenadas adiante para o Fragment Shader:
 
-```
+```GLSL
 // shaders/vertex.vert
 #version 430 core
 layout (location = 0) in vec3 aPos;
@@ -90,7 +90,7 @@ void main() {
 
 No Fragment Shader, recebemos as coordenadas e... por enquanto, deixamos ele parado, pois precisamos entender mais algumas coisas antes de usar uma textura de verdade:
 
-```
+```GLSL
 // shaders/fragment.frag
 #version 430 core
 in vec2 TexCoord;
@@ -103,7 +103,7 @@ void main() {
     FragColor = texture(textura1, TexCoord);
 }
 ```
-O tipo sampler2D e a função texture() vão fazer sentido nas próximas seções. Por enquanto, só registre que é assim que o Fragment Shader acessa uma textura.
+O tipo `sampler2D` e a função `texture()` vão fazer sentido nas próximas seções. Por enquanto, só registre que é assim que o Fragment Shader acessa uma textura.
 
 ## Texture Wrapping
 
@@ -119,6 +119,7 @@ O que acontece se a gente definir uma coordenada como $(2.0, 2.0)$? O OpenGL pre
 Você configura isso por eixo separadamente, usando `glTexParameteri`:
 
 ```cpp
+// Exemplo:
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 ```
@@ -126,23 +127,25 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 Se você escolher `GL_CLAMP_TO_BORDER`, pode definir a cor da borda assim:
 
 ```cpp
+// Exemplo:
 float corDaBorda[] = { 1.0f, 0.5f, 0.0f, 1.0f }; // laranja
 glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, corDaBorda);
 ```
 
 ## Texture Filtering
 
-As texturas têm uma resolução fixa, mas os triângulos na tela podem ter qualquer tamanho. O Texture Filtering decide como o OpenGL calcula a cor de um pixel quando a textura precisar ser ampliada (magnification) ou reduzida (minification).
+As texturas têm uma resolução fixa, mas os triângulos na tela podem ter qualquer tamanho. O Texture Filtering decide como o OpenGL calcula a cor de um pixel quando a textura precisar ser ampliada (*magnification*) ou reduzida (*minification*).
 
 1. `GL_NEAREST` (Nearest Neighbor): Escolhe o pixel da textura mais próximo da coordenada UV. O resultado é um visual pixelado e nítido. É o preferido para jogos de Pixel Art e é mais rápido computacionalmente.
 
-2. `GL_LINEAR` (Bilinear):  Faz uma média ponderada entre os 4 pixels mais próximos. O resultado é um visual mais suave, mas pode parecer levemente embaçado de perto.
+2. `GL_LINEAR` (Bilinear): Faz uma média ponderada entre os 4 pixels mais próximos. O resultado é um visual mais suave, mas pode parecer levemente embaçado de perto.
 
 ![Opções de texture filtering](../imagens/03_modelos_filtering.png)
 
 Você configura o filtering separadamente para cada situação:
 
 ```cpp
+// Exemplo:
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // ao reduzir
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  // ao ampliar
 ```
@@ -156,10 +159,12 @@ Imagine um plano com uma textura de alta resolução muito longe da câmera. Ten
 <div align="center">
   <img src="../imagens/03_niveis_mipmap.png" alt="mipmapped texture">
 </div>
+> Exemplo de como uma textura fica.
 
 A boa notícia é que você não precisa criar essas versões manualmente:
 
 ```cpp
+// A seguinte função gera mipmaps para um objeto de textura especificado.
 glGenerateMipmap(GL_TEXTURE_2D);
 ```
 
@@ -168,6 +173,8 @@ Para o filtering entre os níveis de mipmap, usamos constantes combinadas:
 ```cpp
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 ```
+
+----------------------------------------------------------------------------------------------------------------
 
 ## Carregando imagens com `stb_image`
 
@@ -251,7 +258,7 @@ Caso ainda reste dúvidas ou queira aprofundar mais, consulte este [site](https:
 
 No GLSL, texturas são acessadas por um tipo especial de uniforme chamado sampler. Para texturas 2D, usamos sampler2D, como já escrevemos no nosso fragment shader lá atrás:
 
-```cpp
+```GLSL
 uniform sampler2D textura1;
 
 void main() {
@@ -296,7 +303,7 @@ meuShaderInsano.setInt("textura2", 1);
 
 E no Fragment Shader, combine as duas com a função mix():
 
-```cpp
+```GLSL
 uniform sampler2D textura1;
 uniform sampler2D textura2;
 
