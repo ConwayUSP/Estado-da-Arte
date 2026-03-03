@@ -240,7 +240,14 @@ Uma matriz de _Projeção Ortográfica_ faz um mapeamento para o plano 2D que é
 Você sabe (eu espero) que na vida real objetos mais distantes aparecem menores do que objetos mais próximos. Isso é chamado de perspectiva e é uma das características que tornam a visão humana tão poderosa.
 
 ![Exemplo de Projeção em Perspectiva](../imagens/05_exemploperspectiva.jpg)
-> Imagem do jogo Sonic Mania: observe como aquelas montanhas atrás do Sonic e do Tails aparentam estar distantes e menores do que os personagens próximos. Isso é um exemplo de perpectiva aplicada em computação gráfica para jogos.
+> Imagem do jogo Sonic Mania: observe como aquelas montanhas atrás do Sonic e do Tails aparentam estar distantes e menores do que os personagens próximos. Isso é um exemplo de perpectiva em jogos.
+
+A matriz de projeção em perspectiva manipula o valor _w_ de cada coordenada homogênea dos vértices, fazendo com que objetos mais distantes sejam projetados com menor profundidade na tela. A divisão por _w_ é o que dá a ilusão de perspectiva:
+
+![Ilusão de Perspectiva](../imagens/05_saidadividew.png)
+> A divisão por _w_ faz os objetos mais distantes aparecerem menores na tela, criando a ilusão de perspectiva.
+
+
 
 Uma matriz de projeção em perspectiva pode ser criada com GLM da seguinte maneira:
 
@@ -255,9 +262,16 @@ A imagem de um tronco de cone (_frustrum_) em perspectiva pode ser vista abaixo:
 
 ![Projeção Perspectiva](../imagens/05_projpers.png)
 
-> Sempre que o valor do plano próximo da sua matriz de perspectiva for definido muito alto (como 10,0), o OpenGL
-cortará todas as coordenadas próximas à câmera (entre 0,0 e 10,0), o que pode dar um
+> Sempre que o valor do plano próximo da sua matriz de perspectiva for definido muito alto (como 10,0), o OpenGL cortará todas as coordenadas próximas à câmera (entre 0,0 e 10,0), o que pode dar um
 resultado visual que você talvez já tenha visto em videogames, onde era possível ver através
 de certos objetos ao se aproximar desconfortavelmente deles.
 
-###
+### Unificando tudo
+
+Nós criamos uma matriz de transformação para: modelagem, vista e projeção. Uma coordenada de vértice é, então, transformada pela matriz de modelagem para colocá-la no espaço do modelo, pela matriz de vista para colocá-la no espaço da câmera, e pela matriz de projeção para colocá-la no espaço da tela. A transformação é dada da seguinte forma:
+
+![Vértice transformado](../imagens/05_vcorte.png)
+
+Perceba que a ordem da multiplicação de matrizes está invertida em relação à ordem das transformações (por quê?).
+
+Esse tópico é um pouco difícil de entender, mas é essencial para a renderização 3D. Porém, não se preocupe se não entender completamente — o importante é saber como usar essas transformações corretamente. Vamos colocar a mão na massa com código:
