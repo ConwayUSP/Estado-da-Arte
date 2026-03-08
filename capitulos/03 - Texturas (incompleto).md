@@ -124,6 +124,10 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 ```
 
+O primeiro parâmetro especifica o alvo da textura; estamos trabalhando com texturas 2D, então o alvo da textura é `GL_TEXTURE_2D`. O segundo parâmetro exige que especifiquemos qual opção queremos definir e para qual eixo da textura; queremos configurá-la para os eixos S e T. 
+
+O último parâmetro exige que informemos o modo de repetição de textura desejado e, neste caso, o OpenGL definirá sua opção de repetição de textura na textura atualmente ativa com `GL_MIRRORED_REPEAT`.
+
 Se você escolher `GL_CLAMP_TO_BORDER`, pode definir a cor da borda assim:
 
 ```cpp
@@ -168,17 +172,29 @@ A boa notícia é que você não precisa criar essas versões manualmente:
 glGenerateMipmap(GL_TEXTURE_2D);
 ```
 
-Para o filtering entre os níveis de mipmap, usamos constantes combinadas:
+Ao alternar entre níveis de mipmap durante a renderização, o OpenGL pode exibir alguns artefatos, como bordas nítidas visíveis entre as duas camadas de mipmap. 
+
+Assim como na filtragem de textura normal, também é possível filtrar entre níveis de mipmap usando os métodos *NEAREST* e *LINEAR* para alternar entre eles. Para especificar o método de filtragem entre os níveis de mipmap, podemos substituir os métodos de filtragem originais por uma das quatro opções a seguir:
+
+- `GL_NEAREST_MIPMAP_NEAREST`: seleciona o mipmap mais próximo que corresponda ao tamanho do pixel e usa interpolação do vizinho mais próximo para amostragem de textura.
+
+- `GL_LINEAR_MIPMAP_NEAREST`: seleciona o nível de mipmap mais próximo e realiza uma amostragem desse nível usando interpolação linear.
+
+- `GL_NEAREST_MIPMAP_LINEAR`: interpola linearmente entre os dois mipmaps que mais se aproximam do tamanho de um pixel e amostra o nível interpolado por meio de interpolação do vizinho mais próximo.
+  
+- `GL_LINEAR_MIPMAP_LINEAR`: interpola linearmente entre os dois mipmaps mais próximos e amostra o nível interpolado por meio de interpolação linear.
+
+Assim como na filtragem de textura, podemos definir o método de filtragem para um dos 4 métodos mencionados anteriormente, usando `glTexParameteri`:
 
 ```cpp
+// Exemplos
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 ```
-
-----------------------------------------------------------------------------------------------------------------
 
 ## Carregando imagens com `stb_image`
 
-O OpenGL não sabe ler arquivos `.jpg` ou `.png`. Ele espera um array de bytes com os dados brutos de cor de cada pixel. Para não escrever um decodificador de JPEG na mão (o que é um convite a um colapso nervoso), usamos a biblioteca `stb_image`
+O OpenGL não sabe ler arquivos `.jpg` ou `.png`. Ele espera um array de bytes com os dados brutos de cor de cada pixel. Para não escrever um decodificador de imagens na mão (o que é um convite a um colapso nervoso), usamos a biblioteca `stb_image`
 
 Ela é uma biblioteca header-only: basta baixar o arquivo [stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h) e colocá-lo na nossa pasta `src/modules/`. Depois, crie um arquivo `src/modules/stb_image.cpp` com apenas essas duas linhas:
 
@@ -190,27 +206,27 @@ Ela é uma biblioteca header-only: basta baixar o arquivo [stb_image.h](https://
 
 O #define diz para a biblioteca incluir sua implementação neste arquivo. Nos demais arquivos do projeto (como o `main.cpp`), basta incluir o header normalmente, sem o `define`.
 
-Agora adicione o include no topo do `main.cpp`:
+Para as seguintes seções de textura, vamos usar uma imagem de um [container de madeira](https://github.com/ConwayUSP/Estado-da-Arte/blob/main/imagens/03_container.jpg). Para carregar uma imagem usando `stb_image.h`, utilizamos sua função `stbi_load`.
 
 Depois, carregar uma imagem é moleza:
 
 ```cpp
 int largura, altura, nCanais;
-unsigned char *dados = stbi_load("texturas/XXXXXXXX", &largura, &altura, &nCanais, 0);
+unsigned char *dados = stbi_load("textures/container.jpg", &largura, &altura, &nCanais, 0);
 ```
 
-A função retorna um ponteiro para os pixels e preenche as variáveis com a largura, altura e número de canais (3 para RGB, 4 para RGBA com transparência).
+A função usada retorna um ponteiro para os pixels e preenche as variáveis com a largura, altura e número de canais (3 para RGB, 4 para RGBA com transparência).
 
 ## Criando e configurando Objetos de Textura
 
-O processo de criação de uma textura segue o padrão clássico do OpenGL que você já conhece: gerar → vincular → configurar → enviar dados. Vamos adicionar esse bloco no main.cpp, logo após a configuração do VAO e antes do loop de renderização.
+O processo de criação de uma textura segue o padrão clássico do OpenGL que você já conhece: gerar → vincular → configurar → enviar dados. Vamos adicionar esse bloco no `main.cpp`, logo após a configuração do VAO e antes do loop de renderização.
 
 - Passo 1 — Gerar e vincular:
   
 ```cpp
 unsigned int textura;
-glGenTextures(1, &textura);
-glBindTexture(GL_TEXTURE_2D, textura);
+glGenTextures(1, &textura);  // recebe como entrada a quantidade de texturas que queremos gerar e as armazena em um 'unsigned int array' fornecido como segundo argumento
+glBindTexture(GL_TEXTURE_2D, textura);  // vincula a textura
 ```
 
 - Passo 2 — Configurar wrapping e filtering:
@@ -225,9 +241,9 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 - Passo 3 — Carregar a imagem e enviar para a GPU:
 
 ```cpp
-stbi_set_flip_vertically_on_load(true);
+stbi_set_flip_vertically_on_load(true);  // Inverte a imagem verticalmente ao carregar
 int largura, altura, nCanais;
-unsigned char *dados = stbi_load("texturas/container.jpg", &largura, &altura, &nCanais, 0);
+unsigned char *dados = stbi_load("textures/container.jpg", &largura, &altura, &nCanais, 0);
 
 if (dados) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, largura, altura, 0, GL_RGB, GL_UNSIGNED_BYTE, dados);
@@ -236,7 +252,7 @@ if (dados) {
     std::cout << "Falha ao carregar a textura!" << std::endl;
 }
 
-stbi_image_free(dados); // Libera da RAM — os dados já estão na GPU
+stbi_image_free(dados); // Libera da RAM (boa prática) — os dados já estão na GPU 
 ````
 
 Vamos entender os parâmetros do `glTexImage2D`, que costumam confundir na primeira vez:
@@ -251,8 +267,6 @@ Vamos entender os parâmetros do `glTexImage2D`, que costumam confundir na prime
 - `dados`: Ponteiro para os pixels carregados pelo stbi_load.
 
 Caso ainda reste dúvidas ou queira aprofundar mais, consulte este [site](https://docs.gl/gl4/glTexImage2D) que contém a documentação das funções de OpenGL.
-
-!!! COlocar imagem esperada até esse ponto.
 
 ## Usando Texturas nos Shaders
 
