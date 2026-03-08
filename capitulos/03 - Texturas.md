@@ -18,6 +18,8 @@ Aqui está o que vamos ver:
 8. Usando Texturas nos Shaders
 9. Texture Units (Usando mais de uma imagem)
 
+Para melhor compreensão, tente acompanhar o capítulo com o [código](https://github.com/ConwayUSP/Estado-da-Arte/tree/main/codigos/capitulo03) do capítulo 3 aberto também.
+
 ## O que é uma Textura
 
 Uma **textura** é basicamente uma imagem que você "cola" em cima de uma geometria. Pense assim: você tem uma caixa de papelão, e quer que ela pareça uma caixa de madeira. Em vez de modelar cada veio e nó da madeira com vértices (o que seria uma loucura), você simplesmente imprime uma foto de madeira e cola por fora. É exatamente isso que o OpenGL faz com texturas.
@@ -42,15 +44,47 @@ O ponto $(0,0)$ é o canto inferior esquerdo da imagem, e $(1,1)$ é o canto sup
 
 No capítulo anterior, cada vértice tinha posição (3 floats) + cor (4 floats) = 7 floats. A partir de agora, como as cores virão da textura, vamos trocar o atributo de cor pelas **coordenadas UV** (2 floats). Cada linha do array de vértices passa a ter 5 floats:
 
-No array de vértices, cada linha ficaria algo assim:
+Além disso, em vez de um triângulo, vamos usar um retângulo para que a textura caiba sem distorção. Um retângulo é formado por dois triângulos, e para não repetir vértices desnecessariamente, usaremos um **EBO** (*Element Buffer Object*) — um buffer que armazena índices indicando quais vértices compõem cada triângulo.
+
+Com isso, em vez de repetir os vértices compartilhados pelos dois triângulos, definimos cada vértice uma única vez e dizemos ao OpenGL a ordem em que usá-los:
 
 ```cpp
 float vertices[] = {
-    // posicoes         // coords de textura
+    // posicoes          // coords de textura
+     0.5f,  0.5f, 0.0f,  1.0f, 1.0f,  // superior direito
      0.5f, -0.5f, 0.0f,  1.0f, 0.0f,  // inferior direito
     -0.5f, -0.5f, 0.0f,  0.0f, 0.0f,  // inferior esquerdo
-     0.0f,  0.5f, 0.0f,  0.5f, 1.0f   // topo
+    -0.5f,  0.5f, 0.0f,  0.0f, 1.0f   // superior esquerdo
 };
+
+unsigned int indices[] = {
+    0, 1, 3, // primeiro triângulo  (superior dir → inferior dir → superior esq)
+    1, 2, 3  // segundo triângulo   (inferior dir → inferior esq → superior esq)
+};
+```
+
+Para registrar o EBO, criamos e vinculamos ele da mesma forma que o VBO, mas com o tipo `GL_ELEMENT_ARRAY_BUFFER`. O VAO automaticamente guarda o EBO vinculado enquanto ele estiver ativo, então basta fazer isso uma vez na configuração:
+
+```cpp
+unsigned int VBO, VAO, EBO;
+glGenVertexArrays(1, &VAO);
+glGenBuffers(1, &VBO);
+glGenBuffers(1, &EBO);
+
+glBindVertexArray(VAO);
+
+glBindBuffer(GL_ARRAY_BUFFER, VBO);
+glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+```
+
+E na hora de desenhar, trocamos o `glDrawArrays` pelo `glDrawElements`, passando o número total de índices (6, pois são dois triângulos de 3 vértices cada):
+
+```cpp
+// Dentro do loop de renderização:
+glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 ```
 
 ### Atualizando o `glVertexAttribPointer`:
@@ -286,18 +320,23 @@ A função `texture()` recebe o sampler e as coordenadas UV e devolve a cor inte
 
 Mas como o OpenGL sabe qual textura o sampler2D deve usar? Através das Texture Units — slots de textura disponíveis simultaneamente. O OpenGL garante pelo menos 16 deles, numerados de `GL_TEXTURE0` a `GL_TEXTURE15`.
 
-Para conectar uma textura a um sampler, ativamos o slot desejado, vinculamos a textura nele, e informamos ao sampler qual slot usar:
+Para conectar uma textura a um sampler, precisamos fazer duas coisas em momentos diferentes. Primeiro, informamos ao sampler qual slot ele deve usar — isso é feito uma única vez, antes do loop, pois os samplers não mudam entre frames:
 
 ```cpp
-// No loop de renderização, antes do glDrawArrays:
-glActiveTexture(GL_TEXTURE0);          // Ativa o slot 0
-glBindTexture(GL_TEXTURE_2D, textura); // Vincula nossa textura ao slot ativo
-
-// Diz ao sampler 'textura1' do shader que ele deve usar o slot 0
-meuShaderInsano.setInt("textura1", 0);
+// Fora do loop, após criar as texturas:
+meuShaderInsano.use();
+meuShaderInsano.setInt("textura1", 0); // o sampler 'textura1' usará o slot 0
 ```
 
-Note que estamos usando o setInt da nossa classe Shader — o sampler recebe um inteiro que indica o índice do slot, não um ponteiro ou ID direto. 
+Note que estamos usando o setInt da nossa classe Shader — o sampler recebe um inteiro que indica o índice do slot, não um ponteiro ou ID direto.
+
+Já a vinculação das texturas aos slots precisa acontecer dentro do loop, antes do draw call, pois é aí que o OpenGL precisa saber quais texturas usar no frame atual:
+
+```cpp
+// Dentro do loop, antes do glDrawElements:
+glActiveTexture(GL_TEXTURE0);          // Ativa o slot 0
+glBindTexture(GL_TEXTURE_2D, textura); // Vincula nossa textura ao slot ativo
+```
 
 ### Usando duas texturas ao mesmo tempo
 
@@ -306,13 +345,16 @@ Um caso muito comum: você tem a textura de um caixote e quer sobrepor outra ima
 No C++, vincule cada textura ao seu respectivo slot:
 
 ```cpp
+// Fora do loop — configura os samplers uma única vez com vimos acima:
+meuShaderInsano.use();
+meuShaderInsano.setInt("textura1", 0);
+meuShaderInsano.setInt("textura2", 1);
+
+// Dentro do loop, antes do glDrawElements — vincula as texturas aos slots como tínhamos visto acima:
 glActiveTexture(GL_TEXTURE0);
 glBindTexture(GL_TEXTURE_2D, textura1);
-meuShaderInsano.setInt("textura1", 0);
-
 glActiveTexture(GL_TEXTURE1);
 glBindTexture(GL_TEXTURE_2D, textura2);
-meuShaderInsano.setInt("textura2", 1);
 ```
 
 E no Fragment Shader, combine as duas com a função mix():
