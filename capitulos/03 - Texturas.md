@@ -42,7 +42,7 @@ O ponto $(0,0)$ é o canto inferior esquerdo da imagem, e $(1,1)$ é o canto sup
   <img src="../imagens/03_triangulo_mapeado.png" alt="Triangulo rotulado">
 </div>
 
-No capítulo anterior, cada vértice tinha posição (3 floats) + cor (4 floats) = 7 floats. A partir de agora, como as cores virão da textura, vamos trocar o atributo de cor pelas **coordenadas UV** (2 floats). Cada linha do array de vértices passa a ter 5 floats:
+No capítulo anterior, cada vértice tinha posição (3 floats) + cor (4 floats) = 7 floats. A partir de agora, como as cores virão da textura, vamos trocar o atributo de cor pelas **coordenadas UV** (2 floats). Cada linha do array de vértices passa a ter 5 floats.
 
 Além disso, em vez de um triângulo, vamos usar um retângulo para que a textura caiba sem distorção. Um retângulo é formado por dois triângulos, e para não repetir vértices desnecessariamente, usaremos um **EBO** (*Element Buffer Object*) — um buffer que armazena índices indicando quais vértices compõem cada triângulo.
 
@@ -248,6 +248,8 @@ Depois, carregar uma imagem é moleza:
 int largura, altura, nCanais;
 unsigned char *dados = stbi_load("textures/container.jpg", &largura, &altura, &nCanais, 0);
 ```
+
+> O OpenGL espera que o pixel (0,0) esteja no canto inferior esquerdo, mas a maioria dos formatos de imagem começa pelo canto superior esquerdo. Sem correção, sua textura aparecerá de cabeça para baixo. Antes de qualquer `stbi_load`, chame: `stbi_set_flip_vertically_on_load(true);`.
 
 A função usada retorna um ponteiro para os pixels e preenche as variáveis com a largura, altura e número de canais (3 para RGB, 4 para RGBA com transparência).
 
