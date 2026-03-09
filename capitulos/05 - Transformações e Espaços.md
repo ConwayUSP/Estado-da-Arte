@@ -166,6 +166,123 @@ Mova para o diretório de inclusão local (opcional, mas útil para acesso globa
 sudo cp -r glm/glm /usr/local/include/
 ```
 
+### Mão na massa
+
+Agora, que você já fez a instalação, podemos começar a brincar um pouco com as nossas ferramentas. Vamos começar fazendo os includes genéricos necessários:
+
+```cpp
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+```
+
+A maioria das funcionalidades que precisamos é encontrada nos headers acima.
+
+(i) O primeiro include `<glm/glm.hpp>` fornece os tipos e funções básicas do GLM, como vetores e matrizes.
+
+(ii) O segundo include `<glm/gtc/matrix_transform.hpp>` fornece funções para criar matrizes de transformação, como translação, rotação e escala.
+
+(iii) O terceiro include `<glm/gtc/type_ptr.hpp>` fornece funções para obter ponteiros para os dados das matrizes, o que é útil para passar para funções OpenGL.
+
+Caso você queira se aprofundar na documentação do GLM, ela possui uma [referência de API](https://glm.g-truc.net/0.9.9/api/index.html) e um [manual](https://github.com/g-truc/glm/blob/master/manual.md).
+
+Que tal fazer um código simples para ver o que aprendemos com o capítulo anterior e este até agora? Vamos aplicar uma translação.
+
+Para começar, vamos declarar os nossos vetores:
+
+```cpp
+glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+glm::mat4 trans = glm::mat4(1.0f);
+```
+
+No caso, para representar a posição de um determinado objeto no nosso mundo, declaramos um vetor com quatro dimensiões (o que aquela quarta componente representa, mesmo?) e os valores para cada uma.
+
+Também, nós definimos uma matriz de transformação como uma matriz identidade (1.0f em todas as diagonais).
+
+Agora, vamos aplicar uma translação à matriz de transformação:
+
+```cpp
+trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
+```
+
+Essa linha de código aplica uma translação à matriz `trans`, deslocando o objeto em 1.0 unidades no eixo x e 1.0 unidades no eixo y.
+
+Finalmente, vamos multiplicar o vetor pelo vetor de transformação:
+
+```cpp
+vec = trans * vec;
+```
+
+Isso transforma o vetor `vec` aplicando a matriz de transformação `trans`.
+
+```cpp
+std::cout << vec.x << vec.y << vec.z << std::endl;
+```
+
+E finalmente, imprimimos os valores do vetor transformado.
+
+O código completo fica assim:
+
+```cpp
+#include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+int main(){
+    glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+    glm::mat4 trans = glm::mat4(1.0f);
+    trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
+    vec = trans * vec;
+    std::cout << vec.x << vec.y << vec.z << std::endl;
+}
+```
+
+Ao compilar e rodar, vamos ter a saída:
+
+```sh
+210
+```
+
+O vetor resultante daquela multiplicação é _(1+1, 0+1, 0+0)_, gerando _(2, 1, 0)_. Então, aquela nossa saída felizmente está correta.
+
+Agora, vamos fazer algo um pouco mais legal e visual: escalar e rotacionar um objeto dos capítulos anteriores:
+
+```cpp
+    #include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+int main(){
+    glm::mat4 trans = glm::mat4(1.0f);
+    trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+    trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+    return 0;
+}
+```
+
+No código acima, começamos declarando uma matriz de transformação `trans` com valores padrão (identidade) e, em seguida, aplicamos uma rotação de 90 graus no eixo Z e uma escala de 0.5 em todos os eixos.
+
+A função `glm::radians()` é usada para converter graus em radianos, uma vez que o GLM trabalha com radianos.
+
+A `glm::rotate` e `glm::scale`, seguindo a intuição dos nomes, são funções do GLM que retornam uma matriz de transformação para rotação e escala, respectivamente.
+
+Agora, como passamos a matriz de transformação para os shaders? Vamos adaptar o vertex shader:
+
+```glsl
+#version 430 core
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec2 aTexCoord;
+
+uniform mat4 transform;
+void main(){
+  gl_position = transform * vec4(aPos, 1.0f);
+  TexCoord = vec2(aTexCoord.x, aTexCoord.y)
+}
+
+```
+
 ## Espaços
 
 O OpenGL espera que todos os vértices que queremos tornar visíveis estejam em coordenadas normalizadas após cada execução do _vertex shader_. Ou seja, as coordenadas x, y e z de cada vértice devem estar entre -1,0 e 1,0; coordenadas fora desse intervalo não serão visíveis.
