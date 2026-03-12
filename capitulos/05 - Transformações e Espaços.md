@@ -249,7 +249,7 @@ O vetor resultante daquela multiplicação é _(1+1, 0+1, 0+0)_, gerando _(2, 1,
 Agora, vamos fazer algo um pouco mais legal e visual: escalar e rotacionar um objeto dos capítulos anteriores:
 
 ```cpp
-    #include <iostream>
+#include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -268,20 +268,57 @@ A função `glm::radians()` é usada para converter graus em radianos, uma vez q
 
 A `glm::rotate` e `glm::scale`, seguindo a intuição dos nomes, são funções do GLM que retornam uma matriz de transformação para rotação e escala, respectivamente.
 
-Agora, como passamos a matriz de transformação para os shaders? Vamos adaptar o vertex shader:
+Agora, como passamos a matriz de transformação para os shaders? Vamos adaptar o vertex shader no GLSL:
 
 ```glsl
 #version 430 core
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec2 aTexCoord;
+layout(location = 0) in vec3 aPos;
+layout(location = 1) in vec2 aTexCoord;
 
+out vec2 TexCoord;
 uniform mat4 transform;
-void main(){
-  gl_position = transform * vec4(aPos, 1.0f);
-  TexCoord = vec2(aTexCoord.x, aTexCoord.y)
-}
 
+void main() {
+    gl_Position = transform * vec4(aPos, 1.0);
+    TexCoord = aTexCoord;
+}
 ```
+
+Basicamente, o que fizemos foi adicionar uma variável uniforme `transform` que recebe uma matriz 4x4 e a multiplicamos pelo vetor de posição do vértice para obter as coordenadas normalizadas finais.
+
+O nosso container agora deve ser duas vezes menor e rotacionado em 90 graus.
+
+Nós ainda precisamos passar a matriz de transformação para o shader. Vamos lá:
+
+```cpp
+unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+```
+
+O código acima, basicamente, é enviar os dados da matriz para os shaders através da `glUniform` com `Matrix4fv` como posfixo. 
+
+O primeiro argumento de `glUniformMatrix4fv` é o local da variável uniforme no shader, obtido com `glGetUniformLocation`. O segundo argumento é o número de matrizes a serem enviadas (1, neste caso). O terceiro argumento é um booleano que indica se a matriz deve ser transposta antes de ser enviada. O quarto argumento é um ponteiro para os dados da matriz.
+
+Assim, teremos como resultado:
+
+![Resultado da nossa aplicação](../imagens/05_resultadoaplicacao.png)
+
+Simples, mas bacana, né?
+
+Podemos pirar o cabeção, também, e fazer uma translação junto com rotação:
+
+```cpp
+trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+trans = glm::rotate(trans, (float)glfwGetTime(),glm::vec3(0.0f,0.0f, 1.0f));
+```
+
+O que fizemos foi aplicar duas funções: uma de translação e uma de rotação à matriz de transformação. A translação move o objeto para a direita e para baixo, enquanto a rotação faz o objeto girar ao redor do eixo z.
+
+Resultado:
+
+![Resultado da nossa segunda aplicação](../imagens/05_resultadosegaplica.png)
+
+Bem daora, né? Não deixe de verficar o código completo na nossa pasta de códigos.
 
 ## Espaços
 
