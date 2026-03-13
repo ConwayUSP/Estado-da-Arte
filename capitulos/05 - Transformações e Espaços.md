@@ -401,8 +401,6 @@ A matriz de projeção em perspectiva manipula o valor _w_ de cada coordenada ho
 ![Ilusão de Perspectiva](../imagens/05_saidadividew.png)
 > A divisão por _w_ faz os objetos mais distantes aparecerem menores na tela, criando a ilusão de perspectiva.
 
-
-
 Uma matriz de projeção em perspectiva pode ser criada com GLM da seguinte maneira:
 
 ```cpp
@@ -428,4 +426,250 @@ Nós criamos uma matriz de transformação para: modelagem, vista e projeção. 
 
 Perceba que a ordem da multiplicação de matrizes está invertida em relação à ordem das transformações (por quê?).
 
-Esse tópico é um pouco difícil de entender, mas é essencial para a renderização 3D. Porém, não se preocupe se não entender completamente — o importante é saber como usar essas transformações corretamente. Vamos colocar a mão na massa com código:
+Esse tópico é um pouco difícil de entender, mas é essencial para a renderização 3D. Porém, não se preocupe se não entender completamente — o importante é saber como usar essas transformações corretamente. Vamos colocar a mão na massa com código!
+
+### Mão na massa
+
+Agora, temos as ferramentas e o conhecimento necessário para romper a barreira da segunda dimensão e entrar no mundo tridimensional!
+
+Primeiro, vamos criar uma matriz de modelagem para nossa geometria. A matriz de modelagem define a posição, escala e orientação do objeto no espaço do mundo.
+
+Vamos transformar o nosso plano um pouco ao rotacionar ele em torno do eixo X:
+
+```cpp
+glm::mat4 model = glm::mat4(1.0f);
+model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+```
+
+Também, vamos fazer uma matriz de vista (View-Space):
+
+```cpp
+glm::mat4 view = glm::mat4(1.0f);
+view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+```
+
+Além disso, vamos criar uma matriz de projeção:
+
+```cpp
+glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+```
+
+Então, vamos passar tudo para o nosso shader:
+
+```cpp
+unsigned int modelLoc = glGetUniformLocation(meuShaderInsano.ID, "model");
+glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+unsigned int viewLoc = glGetUniformLocation(meuShaderInsano.ID, "view");
+glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+unsigned int projectionLoc = glGetUniformLocation(meuShaderInsano.ID, "projection");
+glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+```
+
+Finalmente, vamos configurar o shader no GLSL:
+
+```glsl
+// shaders/vertex.vert
+#version 430 core
+layout(location = 0) in vec3 aPos;
+layout(location = 1) in vec2 aTexCoord;
+
+out vec2 TexCoord;
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
+void main() {
+    //Repare na ordem de multiplicação abaixo
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    TexCoord = aTexCoord;
+}
+```
+
+E, voilá:
+
+![Imagem inclinada](../imagens/05_terceiraaplicacao.png)
+
+Um dever de casa para você é experimentar alterar a ordem de multiplicação das matrizes (`projection * view * model`) e ver como isso afeta o resultado final. Além disso, você pode tentar alterar os parâmetros das matrizes de vista e projeção para ver como eles afetam a imagem final.
+
+Uma coisa (talvez) engraçada que dá pra fazer é adicionar as seguintes linhas no seu loop de renderização:
+
+```cpp
+model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+unsigned int modelLoc = glGetUniformLocation(meuShaderInsano.ID, "model");
+glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+```
+
+Tente fazer isso e veja o que acontece!
+
+Podemos, também, criar um cubo! 
+
+Para renderizar um cubo, precisamos de um total de 36 vertices (6 faces X 2 triângulos X 3 vértices).
+
+Vamos fazer isso no código. Comecemos apagando o array de vertices atual e o array de indices. Vamos colocar esse novo array, não se assuste:
+
+```cpp
+float vertices[] = {
+    // posições          // coords de textura
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+};
+```
+
+Ele já contém as posições 3D e as coordenadas de textura para cada face do cubo. 
+
+Além disso, vamos atualizar o `glBufferData` para usar os 36 vértices:
+
+```cpp
+glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+```
+
+E que tal se o cubo também rodasse com o passar do tempo? Coloque isso aqui dentro do loop de renderização:
+
+```cpp
+model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f),
+glm::vec3(0.5f, 1.0f, 0.0f));
+```
+
+Perceba o uso da função `glfwGetTime()` acima.
+
+Também, vamos desenhar o cubo com `glDrawArrays`, só que com 36 vertices. Substitua `glDrawElements` por `glDrawArrays`:
+
+```cpp
+glDrawArrays(GL_TRIANGLES, 0, 36);
+```
+
+É isso. Resultado:
+
+![Cubo girando com o tempo](../imagens/05_cuborodando.png)
+
+Estamos no caminho para fazer um cubo. Mas, perceba que ainda não temos exatamente um. Alguns lados dele estão sendo desenhados sobre outros lados, o que não é o esperado.
+
+Para resolver isso, vamos utilizar o `z-buffer` do OpenGL, que serve para guardar a profundidade de cada pixel.
+
+Para habilitar o `z-buffer`, adicione isso antes do loop de renderização:
+
+```cpp
+glEnable(GL_DEPTH_TEST);
+```
+
+E precisaremos limpar o `z-buffer` antes de cada iteração do loop. Então, vamos substituir `glClear(GL_COLOR_BUFFER_BIT)` por:
+
+```cpp
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+```
+
+Com isso, o OpenGL irá desenhar os pixels na ordem correta, evitando que os lados do cubo sejam desenhados sobre outros.
+
+Veja:
+
+![Cubo girando com o tempo e z-buffer](../imagens/05_cuborodando_zbuffer.png)
+
+
+E se a gente quiser pirar o cabeção mais ainda e colocar 10 cubos rodando simultaneamente? Vejamos:
+
+Primeiro, definir um vetor para armazenar as posições dos cubos. Façamos a seguinte declaração antes do loop de renderização:
+
+```cpp
+glm::vec3 cubePositions[] = {
+    glm::vec3( 0.0f, 0.0f, 0.0f),
+    glm::vec3( 2.0f, 5.0f, -15.0f),
+    glm::vec3(-1.5f, -2.2f, -2.5f),
+    glm::vec3(-3.8f, -2.0f, -12.3f),
+    glm::vec3( 2.4f, -0.4f, -3.5f),
+    glm::vec3(-1.7f, 3.0f, -7.5f),
+    glm::vec3( 1.3f, -2.0f, -2.5f),
+    glm::vec3( 1.5f, 2.0f, -2.5f),
+    glm::vec3( 1.5f, 0.2f, -1.5f),
+    glm::vec3(-1.3f, 1.0f, -1.5f)
+};
+```
+
+Agora, dentro do loop de renderização, vamos iterar sobre os cubos e aplicar a transformação de rotação:
+
+```cpp
+(...)
+glBindVertexArray(VAO);
+
+for (int i = 0; i < 10; i++) {
+    
+    // Cria uma matriz de modelo e aplica a rotação com base no tempo e no índice do cubo
+    
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, cubePositions[i]);
+    
+    float angle = 20.0f * i;
+    float timeAngle = (float)glfwGetTime() * 50.0f;
+    
+    // Aplica a rotação ao modelo, somando o ângulo do cubo e o ângulo do tempo 
+    model = glm::rotate(model, (glm::radians(angle) + timeAngle), glm::vec3(1.0f, 0.3f, 0.5f));
+    modelLoc = glGetUniformLocation(meuShaderInsano.ID, "model");
+
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+```
+
+Temos, então, o nosso resultado final:
+
+![10 cubos girando com o tempo](../imagens/05_10cubosrodando.png)
+
+Catapimbas, 10 cubos girando com o tempo!
+
+## Conclusão
+
+Neste capítulo, fizemos um passeio por todas as transformações e espaços que o OpenGL nos oferece. Essas ferramentas são muito importantes para criar e animar objetos 3D em um ambiente gráfico. Elas vão nos acompanhar a partir de agora na estruturação dos nossos objetos em projetos.
+
+Você sabe: obrigado por ler até aqui :)
+
+```
+         _\|/_
+         (o o)
+ +----oOO-{_}-OOo---------------------------+
+ |                                          |
+ | Se necessário, leia o capítulo novamente |
+ |       ou tire dúvidas com alguém.        |
+ |       Não precisa ter vergonha ;^]       |
+ |                                          |
+ +------------------------------------------+
+```
