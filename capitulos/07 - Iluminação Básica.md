@@ -13,7 +13,7 @@ Tendo em vista esse ponto, neste capítulo nós veremos:
 7. Definindo materiais para o modelo Phong
 8. Modificando as propriedades da fonte de luz
 
-## Armazenando e misturando cores
+## Armazenando e Misturando Cores
 
 Na sua infância (ou qualquer outra fase da sua vida), possivelmente você brincou com tintas. O que acontecia quando você misturava algumas? Uma "nova" cor surgia, certo? Além disso, dependendo da quantidade de cada tinta que você colocasse na mistura, a tonalidade da nova cor era alterada.
 
@@ -61,7 +61,7 @@ glm::vec3 result = lightColor * toyColor; // = (0.33f, 0.21f, 0.06f);
 
 Enfim. Podemos fazer um objeto refletir diferentes tonalidades de cor a partir do uso de diferentes iluminações.
 
-## Iluminando uma cena
+## Iluminando Uma Cena
 
 Para criar a iluminação de uma cena, a primeira coisa que precisamos é de uma fonte de luz. Aqui, para fins de simplificação, ela será um cubo. Além disso, também usaremos um dos benditos contêiner de cubo.
 
@@ -169,4 +169,130 @@ Qualquer dúvida, não deixe de consultar o código completo na pasta de código
 
 ## Iluminação Básica
 
-(...)
+O funcionamento da luz no mundo real é extremamente complexo e existem diversos fatores que podem alterar a sua disposição e se alcance até nossas retinas. Obviamente, precisamos nos limitar a certas coisas específicas pois, normalmente, não possuímos poder computacional ilimitado ou algo nesse sentido.
+
+A iluminação no OpenGL é baseada em modelos simplificados, mas que produzem resultados bem realistas e interessantes para nós. 
+
+Um desses modelos é o `Modelo de Iluminação de Phong` e a construção a partir desse pilar consiste em três componentes: _iluminação ambiente, difusa e especular_.
+
+![Cubos com exemplos de iluminação](../imagens/07_combinaphong.png)
+
+> Imagem retirada do livro Learn OpenGL. Nela, você consegue perceber como cada uma das componentes atua individualmente e como fica quando todas são combinadas.
+
+i) Iluminação Ambiente: no mundo real, mesmo quando estamos em um local bem escuro, sempre existe algum resquício de iluminação, então os objetos nunca estão completamente escuros. Para simular isso, vamos usar uma _iluminação ambiente_ que sempre dê alguma cor para os objetos.
+
+ii) Iluminação Difusa: simula o impacto direto da luz em um objeto.
+
+iii) Iluminação Especular: simula o ponto de uma luz que aparece em objetos brilhantes.
+
+### Luz Ambiente
+
+Adicionar uma iluminação ambiente no nosso projeto é bem simples. Nós pegamos a cor da luz, multiplicamos ela por uma constante pequena de "fator ambiente", multiplicamos pela cor do objeto e usamos isso como a cor do fragmento no shader do cubo do objeto. Em outras palavras:
+
+```glsl
+void main(){
+    float ambientStrength = 0.1;
+    vec3 ambient = ambientStrength * lightColor;
+    
+    vec3 result = ambient * objectColor;
+    FragColor = vec4(result, 1.0);
+}
+```
+
+Ao rodar o programa, você vai perceber que já estará funcionando e terá mais ou menos algo nesse sentido:
+
+(imagem)
+> O objeto está meio escuro, mas não completamente. Além disso, o cubo de luz não foi afetado (por quê?).
+
+### Luz Difusa
+
+Se a primeira aplicação de iluminação não te animou tanto, é aqui que começamos a ter resultados mais interessantes. 
+
+A iluminação difusa dá ao objeto maior clareza conforme os fragmentos são mais alinhados com os raios da fonte de luz. Para você ter uma noção melhor, observe a seguinte imagem:
+
+(imagem)
+
+À esquerda, encontramos uma fonte de iluminação com um raio de luz coincidindo com um ponto específico do nosso objeto. No caso, é necessário estimar o ângulo de incidência para definir a iluminação final. Se o raio de luz é perpendicular, tal como um solzão de meio-dia, temos a maior quantidade de reflexão possível. 
+
+Para mensurar esse ângulo, utilizamos uma coisa chamada de _vetor normal_, que é um vetor perpendicular à superfície do fragmento. O ângulo entre os dois vetores pode ser calculado usando o produto escalar. Caso você não se lembre a respeito do produto escalar, nós abordamos ele no nosso [capítulo de revisão de conceitos matemáticos](https://github.com/ConwayUSP/Estado-da-Arte/blob/main/capitulos/04%20-%20Matematica.md). Vale à pena dar uma conferida.
+
+> Perceba que, para conseguirmos o cosseno do ângulo entre dois vetores, trabalharemos com vetores unitários (vetores com comprimento igual a 1). Então, precisamos ter certeza de que todos os vetores estejam normalizados, se não o produto escalar vai retornar valores que vão além do cosseno.
+
+O produto escalar resultante vai retornar que usaremos para calcular o impacto da luz na cor do fragmento, fazendo com que tenhamos resultados diferentes em função dos diferentes posicionamentos do objeto diante da fonte de luz.
+
+Então, para calcular isso, vamos precisar do _vetor normal_ e do raio de luz direcionado. Para este último, um vetor de direção que é um vetor resultante da diferença a posição da luz e do fragmento.
+
+### Vetores Normais
+
+Conforme acabamos de falar, um vetor normal é um vetor (unitário neste caso) que é perpendicular à superfície de um vértice. Mas, ora, um vértice é só um ponto, então não tem uma "superfície", certo? Sim, por isso vamos pegar um vetor normal utilizando os vértices ao redor dele para definir essa superfície.
+
+Podemos calcular os vetores normais para todos os vértices do cubo ao utilizar o produto vetorial (caso você não lembre, novamente indicamos o [Capítulo 4](https://github.com/ConwayUSP/Estado-da-Arte/blob/main/capitulos/04%20-%20Matematica.md) desta trilha).
+
+Porém, já que um cubo não é uma forma muito complicada, podemos adicionar eles manualmente (ou não) nos dados do vertex. Observe (e não se assuste):
+
+```cpp
+// Dados dos vértices
+float vertices[] = {
+    // positions          // normals           // texture coords
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+};
+```
+```glsl
+// Vertex Shader
+out vec3 Normal;
+
+void main()
+{
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    Normal = aNormal;
+}
+```
+
+Assim, o que falta fazer é declarar a variável de entrada no fragment shader:
+
+```glsl
+in vec3 Normal;
+```
+
+### Calculando a Cor Difusa
+
+Agora que temos o vetor normal para cada vértice, precisamos da posição da luz e do fragmento, ambas na forma de vetores.
+
+Declarando a posição da luz como um uniform no fragment shader:
+
+```glsl
+uniform vec3 lightPos;
+```
+
+E, também, atualizar o uniform no loop de renderização (por quê?). Vamos utilizar o `lightPos` declarado no capítulo passado como sendo a fonte da luz difusa:
+
+```cpp
+lightningShader.setVec3("lightPos", lightPos);
+```
+
+Por fim, precisamos da posição atual do fragmento. 
+
+### Um detalhe a mais
+
+### Luz especular
+
+## Conclusão
