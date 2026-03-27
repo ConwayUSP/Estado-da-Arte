@@ -63,9 +63,9 @@ Enfim. Podemos fazer um objeto refletir diferentes tonalidades de cor a partir d
 
 ## Iluminando uma cena
 
-Para criar a iluminação de uma cena, a primeira coisa que precisamos é de uma fonte de luz. Aqui, para fins de simplificação, ela será um cubo. Além disso, também usaremos um dos benditos container de cubo.
+Para criar a iluminação de uma cena, a primeira coisa que precisamos é de uma fonte de luz. Aqui, para fins de simplificação, ela será um cubo. Além disso, também usaremos um dos benditos contêiner de cubo.
 
-Inicialmente, vamos precisar de um vertex shader para desenhar o container. As posições dos vértices do container devem continuar as mesmas, então nenhuma novidade por aqui.
+Inicialmente, vamos precisar de um vertex shader para desenhar o contêiner. As posições dos vértices do contêiner devem continuar as mesmas, então nenhuma novidade por aqui.
 
 ```glsl
 #version 430 core
@@ -79,3 +79,94 @@ void main(){
     gl_Position = projection * view * model * vec4(aPos, 1.0);
 }
 ```
+
+Já que queremos renderizar uma fonte de luz na forma de um cubo, vamos querer gerar um novo VAO especificamente para a fonte de luz:
+
+```cpp
+unsigned int lightVAO;
+glGenVertexArrays(1, &lightVAO);
+glBindVertexArray(lightVAO);
+// Precisamos apenas fazer o binding com o VBO, os dados do VBO do contêiner
+// já contêm os dados.
+glBindBuffer(GL_ARRAY_BUFFER, VBO);
+// set the vertex attribute
+// Definindo o atributo do vértice
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),(void*)0);
+glEnableVertexAttribArray(0);
+```
+
+Ok! Agora que criamos os cubos, vamos definir o shader de fragmento para ambos:
+
+```glsl
+#version 430 core
+out vec4 FragColor;
+uniform vec3 objectColor;
+uniform vec3 lightColor;
+void main(){
+    FragColor = vec4(lightColor * objectColor, 1.0);
+}
+```
+
+O shader de fragmento aceita uma cor de objeto e de luz de uma variável uniforme. Aqui, novamente, nós multiplicamos a cor da luz com a do objeto. 
+
+Vamos definir a cor do objeto como sendo a mesma do coral e da luz como sendo branca
+
+```glsl
+lightningShader.use();
+lightningShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+lightningShader.setVec3("lightColor", 1.0f, 1.00f, 1.00f);
+```
+
+Em um projeto real, conforme formos ajustando os shaders de iluminação no avanço do nosso código, o nosso querido cubo luminoso seria afetado, e isso não é algo que queremos. Aqui, queremos que ele mantenha uma cor e um brilho constante.
+
+Para isso, vamos criar um outro conjunto de shaders que usaremos para desenhar a nossa fonte de luz e manter ela segura de eventuais mudanças nos shaders de iluminação.
+
+O vertex shader que vamos criar é o mesmo que o vertex shader de iluminação, então é só dar copy-paste do código:
+
+```glsl
+#version 430 core
+out vec4 FragColor;
+
+void main(){
+    FragColor = vec4(1.0);
+}
+```
+
+Quando quisermos renderizar, vamos querer rederizar o objeto contêiner usando o shader de iluminação que acabamos de definir. Quando quisermos desenhar a fonte de luz, usaremos os shaders da fonte de luz em si. 
+
+A ideia do cubo é só mostrar de onde a luz da cena vem. Por isso, renderizamos ele na mesma posição que a fonte de luz. 
+
+Então, vamos declarar um `vec3` global para representar a localização da fonte de luz nas coordenadas do word-space:
+
+```c++
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+```
+
+E, depois, transladar o cubo de fonte de luz para a posição da fonte de luz em si e encolhê-lo antes de renderizar:
+
+```c++
+model = glm::mat4(1.0f);
+model = glm::translate(model, lightPos);
+model = glm::scale(model, glm::vec3(0.2f);
+```
+
+O código de renderização final deve ficar mais ou menos assim:
+
+```cpp
+lightCubeShader.use();
+// Nas próximas linhas, defina o modelo e a matriz de visão e de projeção
+// (...)
+// Desenhando o objeto "cubo luminoso" 
+glBindVertexArray(lightCubeVAO);
+glDrawArrays(GL_TRIANGLES, 0, 36);
+```
+
+Enfim. Desenvolvendo o seu código em `C++` para OpenGL corretamente, compilando e rodando, teremos o seguinte:
+
+(Imagem aqui)
+
+Qualquer dúvida, não deixe de consultar o código completo na pasta de códigos da nossa trilha!
+
+## Iluminação Básica
+
+(...)
