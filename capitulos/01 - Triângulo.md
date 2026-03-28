@@ -4,7 +4,7 @@ Olá, de volta! Se você sobreviveu ao capítulo anterior e conseguiu criar aque
 
 Agora, está na hora de colocarmos o primeiro ator nesse palco. E não, não vai ser um modelo 3D do *Tralalero Tralala* (apesar de ser um ótima ideia). Vamos começar com o *Hello World* da computação gráfica: **O Triângulo**.
 
-![triangulo de Zelda](../imagens/01_triangulo_dancante.png)
+<img src="../imagens/01_triangulo_dancante.png" width=800>
 
 > Ops, não era esse...
 
