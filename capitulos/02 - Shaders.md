@@ -263,7 +263,7 @@ float vertices[] = {
 
 Lembra que antes nós estavamos assumindo que os dados das posições estavam perfeitamente agrupados? Bom, agora não estão mais, as posições dos vértices e as cores estão intercaladas, como nessa imagem:
 
-<img ser="../imagens/02_espacamento_VAO.png" width=700>
+<img src="../imagens/02_espacamento_VAO.png" width=700>
 
 Logo, precisaremos dizer isso para o OpenGL usando a função `glVertexAttribPointer`, modificando nossa chamada antiga dessa função para essas duas chamadas aqui (uma para cada atributo):
 
