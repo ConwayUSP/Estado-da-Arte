@@ -20,7 +20,7 @@ Na computação gráfica ocorre a mesma coisa (por isso ela também é linda), n
 
 ## Luz ponto com atenuação
 
-![emissor de luz ponto](../imagens/09_luz_ponto.png)
+<img src="../imagens/09_luz_ponto.png" width=500>
 
 Nós já temos trabalhado com uma luz ponto até agora. Ela é o tipo de luz que é emitida igualmente em todas as direções a partir de um ponto (a posição do emissor). Contudo, até agora, nossa luz possuía a mesma intensidade independentemente da distância dela para o objeto iluminado. O que vamos fazer aqui é adicionar "atenuação" nela. Ou seja, quanto mais longe um objeto estiver do **ponto**, menos iluminado ele será.
 
@@ -67,7 +67,7 @@ for (unsigned int i = 0; i < 10; i++) {
 
 Beleza, agora vamos ao que interessa. Para que a luz perca intensidade conforme a distância, precisaremos apenas fazer uma pequena alteração em nosso shader atual. A alteração se baseia nessa fórmula para decidir o fator de atenuação para um dado fragmento (`Fatt`):
 
-![Fórmula da atenuação](../imagens/09_formula_atenuacao.png)
+<img src="../imagens/09_formula_atenuacao.png" width=300>
 
 Na vida real, a luz não decai linearmente conforme a distância; na verdade, o decaimento se assemelha mais a um decaimento quadrático. Por conta disso, essa fórmula é feita para criar um fator entre 0 e 1 que multiplicará a intensidade da luz seguindo este efeito realista. O significado dos termos é o seguinte:
 
@@ -96,11 +96,11 @@ vec3 cor = atenuacao * (ambiente + difuso + especular);
 
 E simples assim, nós temos nosso desejado efeito:
 
-![visualização da luz atenuada](../imagens/09_luz_atenuada.png)
+<img src="../imagens/09_luz_atenuada.png" width=640>
 
 ## Luz direcional
 
-![luz direcional](../imagens/09_luz_direcional.png)
+<img src="../imagens/09_luz_direcional.png" width=400>
 
 A luz direcional representa de certa forma uma fonte de luz que está muito longe de todos os objetos, e que é _grande_ e _forte_ o suficiente para ainda assim iluminá-los. Um exemplo disso, como dito na introdução, é o sol - ele está tão longe e é tão grande, que seus raios chegam aqui praticamente paralelos uns aos outros.
 
@@ -117,7 +117,7 @@ Pronto... agora nossos cubos estão sendo iluminados por algo que vem de cima
 
 ## Lanterna
 
-![luz de lanterna](../imagens/09_luz_lanterna.png)
+<img src="../imagens/09_luz_lanterna.png" width=400>
 
 A luz de lanterna é parecida com a luz de ponto no sentido de que ambas tem uma posição no espaço. Contudo, a luz de lanterna possui uma **direção** (para onde a lanterna está "olhando") e um **ângulo de abertura** (o quão aberto é o cone iluminado pela lanterna).
 
@@ -172,11 +172,11 @@ Resumindo: vamos sempre considerar o componente ambiente, mas iremos calcular os
 
 Rodando este código, você verá algo assim:
 
-![demonstração da lanterna funcionando](../imagens/09_demonstracao_lanterna.png)
+<img src="../imagens/09_demonstracao_lanterna.png" width=640>
 
 No entanto, tem algo de errado com essa lanterna: as bordas delas são muito rígidas. Em um pixel o bloco está todo iluminado, e no pixel do lado não está nem um pouco iluminado... não é assim que lanternas funcionam. Para corrigir isso, vamos adicionar um efeito de suavização nessa borda, que será regido por esta fórmula:
 
-![formula de suavização das bordas](../imagens/09_formula_suavizacao_lanterna.png)
+<img src="../imagens/09_formula_suavizacao_lanterna.png width="300">
 
 Aqui, os termos significam o seguinte:
 
@@ -214,7 +214,7 @@ if (angulo > luz.arcoExterno) {
 
 Pronto! Rodando isso, você verá a iluminação via lanterna mais bonita de sua vida inteira, e nunca mais se esquecerá deste momento:
 
-![resultado da adição de suavização na lanterna](../imagens/09_lanterna_com_suavizacao.png)
+<img src="../imagens/09_lanterna_com_suavizacao.png" width=640>
 
 ## Combando legal
 
