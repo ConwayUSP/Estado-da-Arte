@@ -2,7 +2,7 @@
 
 Se você já jogou algum jogo antigo ou um título indie em desenvolvimento, provavelmente já se deparou com o famoso "quadrado roxo e preto" (o pesadelo de todo jogador de Garry's Mod ou Counter-Strike). Isso acontece quando o motor gráfico tenta aplicar uma **textura** e não a encontra. Até agora, nós pintamos nossos triângulos com cores sólidas ou degradês básicos, mas para dar realismo e detalhes (como madeira, pedra ou o rosto de um personagem), precisamos das **texturas**.
 
-![Meme de falta de textura no CS](../imagens/03_cstexture.png)
+<img src="../imagens/03_cstexture.png" width=600>
 
 Neste capítulo, vamos transformar nossos triângulos sem graça em objetos que realmente pareçam ter uma superfície.
 
@@ -29,7 +29,7 @@ Além de imagens visuais, texturas também podem armazenar dados arbitrários pa
 Abaixo está a textura de parede de tijolos que usaremos de exemplo:
 
 <div align="center">
-  <img src="../imagens/03_parede_tijolos.jpg" alt="Textura de parede de tijolos">
+  <img src="../imagens/03_parede_tijolos.jpg" width="600" alt="Textura de parede de tijolos">
 </div>
 
 ## Coordenadas de Textura
