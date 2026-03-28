@@ -44,9 +44,13 @@ O ponto $(0,0)$ é o canto inferior esquerdo da imagem, e $(1,1)$ é o canto sup
 
 No capítulo anterior, cada vértice tinha posição (3 floats) + cor (4 floats) = 7 floats. A partir de agora, como as cores virão da textura, vamos trocar o atributo de cor pelas **coordenadas UV** (2 floats). Cada linha do array de vértices passa a ter 5 floats.
 
-Além disso, em vez de um triângulo, vamos usar um retângulo para que a textura caiba sem distorção. Um retângulo é formado por dois triângulos, e para não repetir vértices desnecessariamente, usaremos um **EBO** (*Element Buffer Object*) — um buffer que armazena índices indicando quais vértices compõem cada triângulo.
+Além disso, em vez de um triângulo, vamos usar um retângulo para que a textura caiba sem distorção. 
 
-Com isso, em vez de repetir os vértices compartilhados pelos dois triângulos, definimos cada vértice uma única vez e dizemos ao OpenGL a ordem em que usá-los:
+Um retângulo é formado por dois triângulos, e esses triângulos compartilham dois vértices. Sem nenhuma otimização, você teria que repetir esses vértices no array, desperdiçando memória.
+
+Então, para resolver esse problema, usaremos um **EBO** (*Element Buffer Object*), um buffer que armazena índices que apontam para os vértices que compõem cada triângulo. Pense que o **EBO** diz ao OpenGl o modo de como "ligar os pontos" para ter os triângulos, como verá mais abaixo.
+
+Com isso, em outras palavras, em vez de repetir os vértices compartilhados pelos dois triângulos, você define cada vértice uma única vez e armazena no EBO apenas os índices que indicam ao OpenGL quais vértices usar, e em que ordem, para formar cada triângulo:
 
 ```cpp
 float vertices[] = {
@@ -73,9 +77,11 @@ glGenBuffers(1, &EBO);
 
 glBindVertexArray(VAO);
 
+// Envia os vértices (Dados)
 glBindBuffer(GL_ARRAY_BUFFER, VBO);
 glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+// Envia os índices (Ordem de desenho)
 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 ```
@@ -197,6 +203,7 @@ Imagine um plano com uma textura de alta resolução muito longe da câmera. Ten
 <div align="center">
   <img src="../imagens/03_niveis_mipmap.png" alt="mipmapped texture">
 </div>
+
 > Exemplo de como uma textura fica.
 
 A boa notícia é que você não precisa criar essas versões manualmente:
