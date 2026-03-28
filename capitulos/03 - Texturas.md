@@ -29,7 +29,7 @@ Além de imagens visuais, texturas também podem armazenar dados arbitrários pa
 Abaixo está a textura de parede de tijolos que usaremos de exemplo:
 
 <div align="center">
-  <img src="../imagens/03_parede_tijolos.jpg" width="600" alt="Textura de parede de tijolos">
+  <img src="../imagens/03_parede_tijolos.jpg" width="400" alt="Textura de parede de tijolos">
 </div>
 
 ## Coordenadas de Textura
