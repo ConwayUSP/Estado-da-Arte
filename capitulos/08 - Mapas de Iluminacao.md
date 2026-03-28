@@ -146,7 +146,7 @@ FragColor = vec4(cor, 1.0);
 
 O que temos aqui é basicamente o de sempre, com a excessão de que ao invés de multiplicarmos os coeficientes difuso e ambiente por uma cor sólida padrão, multiplicamos por uma amostra da textura (`texture(material.difuso, texCoords)`). O resultado é o seguinte:
 
-![superfície de pedra com mapa difuso](../imagens/08_pedra_mapa_difuso.png)
+<img src="../imagens/08_pedra_mapa_difuso.png" width=640>
 
 Ainda não está muito realista né? Essa luz branca sendo jogada em cima do cubo quebra muito qualquer ilusão de profundidade que estejamos tentando criar. Obviamente, para resolver isso, teremos que brincar com o componente especular, que nessa versão do shader ainda não é afetada pela textura ( • ᴖ • ｡)
 
@@ -204,7 +204,7 @@ O que mudou foi:
 
 O resultado é uma superfície com muito mais profundidade e sem aquele componente especular tenebroso de antes:
 
-![textura de pedra com mapa ARM](../imagens/08_pedra_mapa_ARM.png)
+<img src="../imagens/08_pedra_mapa_ARM.png" width=640>
 
 Bem mais bonito e formoso né? E tudo isso alcançado com uma técnica bem tranquila de ser implementada - a parte mais difícil chega a ser encontrar ou fazer os mapas.
 
