@@ -2,7 +2,7 @@
 
 A maioria das pessoas que conhecem a palavra **shader** passou a conhecer por conta do bom e velho Minecraft. Se você já jogou um pouco de Mine, provavelmente em algum momento se deparou com vídeos no youtube mostrando o jogo com gráficos "realistas" e foi atrás de conseguir esse upgrade também. Entretanto, seu computador tinha 1GB de RAM e uma placa de vídeo integrada, então deu tudo errado e foi aí que você adquiriu consciência de classe. Neste contexto, shaders são "mods que deixam o jogo mais bonitinho". Aqui em baixo temos uma comparação do visual do Mine sem e com shaders, e a diferença que eles fazem realmente pode ser gigante. Contudo, mesmo entre programadores, muita gente não sabe o que **realmente** é um shader. É isso que vamos entender neste capítulo.
 
-![comparação de shader no mine](../imagens/02_mine_shader.jpg)
+<img src="../imagens/02_mine_shader.jpg" width=640>
 
 No fim deste capítulo, você saberá o beabá do **GLSL**: a linguagem que usamos para escrever shaders. A lista mais completa do que vamos ver é:
 
@@ -263,7 +263,7 @@ float vertices[] = {
 
 Lembra que antes nós estavamos assumindo que os dados das posições estavam perfeitamente agrupados? Bom, agora não estão mais, as posições dos vértices e as cores estão intercaladas, como nessa imagem:
 
-![espaçamento dos atributos de vértice](../imagens/02_espacamento_VAO.png)
+<img ser="../imagens/02_espacamento_VAO.png" width=700>
 
 Logo, precisaremos dizer isso para o OpenGL usando a função `glVertexAttribPointer`, modificando nossa chamada antiga dessa função para essas duas chamadas aqui (uma para cada atributo):
 
