@@ -291,7 +291,60 @@ lightningShader.setVec3("lightPos", lightPos);
 
 Por fim, precisamos da posição atual do fragmento. 
 
-### Um detalhe a mais
+Os cálculos para iluminação serão feitos no _world space_, então precisaremos de uma posição de vértice que eseja, à princípio, no _world space_.
+
+Dá para fazer isso ao multiplicar o atributo de posição do vértice apenas com a matriz modelo para transformar ele em coordenadas de _world space_. Isso é tranquilo de fazer no vertex shader, então vamos declarar uma variável de saída e calcular suas coordenadas:
+
+```glsl
+out vec3 FragPos;
+out vec3 Normal;
+void main(){
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    FragPos = vec3(model * vec4(aPos, 1.0));
+    Normal = aNormal;
+}
+```
+
+E, por fim, vamos adicionar a variável de entrada para o nosso fragment shader:
+
+```glsl
+in vec3 FragPos;
+```
+
+Agora, podemos começar a fazer os cálculos para iluminação!
+
+Primeiro, vamos pegar o vetor de direção, entre a fonte de luz e a posição do fragmento, que mencionamos anteriormente. Isso pode ser feito, simplesmente, a partir da subtração entre os vetores de cada um.
+
+Além disso, é importante que todos os vetores relevantes se tornem unitários, então precisamos normalizar tanto o vetor normal quanto o de direção resultante:
+
+```glsl
+vec3 norm = normalize(Normal);
+vec3 lightDir = normalize(lightPos - FragPos);
+```
+
+Depois, precisamos calcular o impacto difuso da luz no fragmento atual a partir do produto escalar entre o `norm` e o `lightDir`. O resultado vai ser mutiplicado com a cor da luz para que possamos obter a componente de difusão, resultando em uma componente de difusão mais escura na medida em que o ângulo entre os dois vetores aumenta:
+
+```glsl
+float diff = max(dot(norm, lightDir), 0.0);
+vec3 diffuse = diff * lightColor;
+```
+
+Eventualmente, talvez o ângulo entre os dois acabe se tornando negativo. Por isso, utilizamos a função `max` entre o produto escalar e `0.0`. Não queremos trabalhar com ângulos negativos.
+
+Agora, que temos um componente de ambiente e um difuso, nós adicionamos ambas as cores para cada um e, então, multiplicamos o resultado pela cor do objeto para obter a cor de saída:
+
+```glsl
+vec3 result = (ambient + diffuse) * objectColor;
+FragColor = vec4(result, 1.0);
+```
+
+Se tudo der certo e você conseguir compilar o projeto (esperamos que sim), você vai ter algo assim:
+
+(Imagem)
+
+Temos um grande avanço em comparação ao ponto em que paramos anteriormente, não é? 
+
+### Um Detalhe a Mais
 
 ### Luz especular
 
