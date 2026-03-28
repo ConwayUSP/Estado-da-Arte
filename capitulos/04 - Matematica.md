@@ -87,15 +87,15 @@ Informalmente, uma matriz é um conjunto de números organizado em linhas e colu
 
 Somar duas matrizes envolve somar cada um de seus componentes:
 
-<img src="../imagens/04_soma.png" width=600>
+<img src="../imagens/04_soma.png" width=400>
 
 Já a conta que tem que ser feita para multiplicar duas matrizes é um pouco mais feia. Primeiro que nem sempre é possível multiplicar duas matrizes, precisamos que o número de colunas na primeira seja igual ao número de linhas na segunda. Segundo que para calcular o elemento na i-ésima linha e j-ésima coluna da matriz resultante, iremos multiplicar todos os elementos da i-ésima linha da primeira matriz por todos os elementos da j-ésima coluna da segunda matriz, obtendo no final uma matriz com o número de linhas da primeira e o número de colunas da segunda. Isso tudo significa também que a multiplicação de matrizes **não é comutativa** - ou seja, `A × B` não necessariamente é igual a `B × A` (e raramente será).
 
-<img src="../imagens/04_multiplica.png" width=650>
+<img src="../imagens/04_multiplica.png" width=600>
 
 Multiplicar uma matriz com um escalar, por outro lado, é bem simples, basta multiplicar cada componente isoladamente por aquele escalar:
 
-<img src="../imagens/04_multescalar.png" width=500>
+<img src="../imagens/04_multescalar.png" width=440>
 
 ### Matrizes especiais
 
@@ -107,7 +107,7 @@ Algumas matrizes possuem características que podem ser interessantes em alguns 
 
 **Matriz transposta**: a transposta de uma matriz A é a matriz que você obtém ao trocar as linhas de A pelas colunas (e vice-versa).
 
-<img src="../imagens/04_transposta.png" width=500>
+<img src="../imagens/04_transposta.png" width=440>
 
 **Matriz diagonal**: é uma matriz cuja diagonal principal (elementos cujo número da linha [`i`] é igual ao número da coluna [`j`]; `i = j`) possui apenas valores diferentes de zero, enquanto o resto da matriz é preenchida com zeros.
 
@@ -119,7 +119,7 @@ Algumas matrizes possuem características que podem ser interessantes em alguns 
 
 - **Matriz inversa**: a inversa de uma matriz A é a matriz que quando multiplicada com A resulta na matriz identidade. Nem toda matriz possui uma inversa.
 
-<img src="../imagens/04_inversa.png" width=650>
+<img src="../imagens/04_inversa.png" width=460>
 
 Se quiser aprender mais sobre matrizes, eu recomendo as primeiras 70 e poucas páginas do livro [Álgebra Linear com Aplicações](https://archive.org/details/algebra-linear-com-aplica-10-edi-anton-rorres/mode/2up).
 
@@ -188,7 +188,7 @@ u ⋅ v = |u||v| × cos(θ)
 = <(yc - zb), (za - xc), (xb - ya)>
 ```
 
-<img src="../imagens/04_prodvet.png" width=720>
+<img src="../imagens/04_prodvet.png" width=600>
 
 ### Conceitos
 
