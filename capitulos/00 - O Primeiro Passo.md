@@ -23,7 +23,7 @@ Tá, mas que diferença faz se o OpenGL é uma biblioteca ou uma especificação
 
 Uma máquina de estado é basicamente um robozão cheio de alavancas e botões cujo comportamento é determinado pela configuração atual dessas alavancas e botões. Ou seja, podemos girar e apertar os botões e alavancas disponíveis no robozão para mudar o **estado** interno dele. Estas mudanças de estado podem ser regidas/limitadas por algum mecanismo que impeça que o robô entre em um estado ilegal (sem nexo). O OpenGL em especial é um robozão artista, então definir o seu estado interno é definir como ele vai desenhar.
 
-![Desenhozinho de um robô artista](../imagens/00_robo_artista.png)
+<img src="../imagens/00_robo_artista.png" width="50%">
 
 > O estado interno do OpenGL é geralmente chamado de **_Contexto_**
 
