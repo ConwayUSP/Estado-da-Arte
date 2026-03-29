@@ -346,6 +346,27 @@ Temos um grande avanço em comparação ao ponto em que paramos anteriormente, n
 
 ### Um Detalhe a Mais
 
+Vamos tratar aqui, em três tópicos, sobre alguns problemas que aparecem neste contexto e como podemos resolver utilizando um pouco mais de conceitos sobre vetores.
+
+(Imagem aqui)
+
+1. O Problema da Translação
+
+Vetores normais representam direções, não posições. Como não possuem a coordenada homogênea (w), eles não devem ser afetados por translações. Para evitar isso, usa-se apenas a parte superior esquerda 3×3 da matriz de modelo.
+
+2. O Problema da Escala Não-Uniforme
+
+Se um objeto for redimensionado de forma desigual (ex: esticado apenas no eixo X), os vértices mudam de posição de tal forma que a normal original deixa de ser perpendicular à superfície. Isso causa distorções graves na iluminação.
+
+3. A Solução: Matriz Normal
+
+Para corrigir essa distorção, utiliza-se a Matriz Normal, que é calculada como: _A transposta da inversa da parte 3×3 superior esquerda da matriz de modelo._
+
+Em código (GLSL), a aplicação no Vertex Shader ficaria assim:
+```glsl
+Normal = mat3(transpose(inverse(model))) * aNormal;
+```
+
 ### Luz especular
 
 Para começarmos a finalizar o modelo de iluminação de Phong, vamos adicionar a iluminação especular.
@@ -440,7 +461,7 @@ Como você pode ver, definimos um vetor de cor para cada um dos componentes da i
 
 Com essas quatro componentes, podemos simular muitos materiais do mundo real. 
 
-Existe uma tabela em devernay.free.fr que mostra uma lista de propriedades materiais que simulam materiais reais encontrados no mundo. A imagem a seguir, retirada do livro Learn OpenGL, mostra alguns exemplos:
+Existe uma tabela em [devernay.free.fr](http://devernay.free.fr/cours/opengl/materials.html) que mostra uma lista de propriedades que simulam materiais reais encontrados no mundo. A imagem a seguir, retirada do livro Learn OpenGL, mostra alguns exemplos:
 
 ![Exemplos de iluminação de diferentes materiais](../imagens/07_exemplosmateriais.png)
 
@@ -483,8 +504,115 @@ lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
 lightingShader.setFloat("material.shininess", 32.0f);
 ```
 
-Definimos os componentes de luz ambiente e difusa para a cor desejada para o objeto e o componente especular para uma cor de brilho médio; não queremos que o componente especular seja muito forte. Também mantemos o brilho em 32.
+Definimos os componentes de luz ambiente e difusa para a cor desejada para o objeto e o componente especular para uma cor de brilho médio; novamente, como falamos anteriormente, não queremos que o componente especular seja muito forte. Também mantemos o brilho em 32, pela mesma razão.
+
+Enfim, compilando e rodando, teremos o seguinte:
+
+(Imagem)
+
+O que achou? Ficou um pouco esquisito ainda, né?
 
 ## Modificando as propriedades da fonte de luz
 
+O objeto tava brilhante demais. Isso aconteceu porque as cores ambiente, difusa e especular são refletidas com potência máxima de qualquer fonte de luz no estado em que deixamos a nossa programação.
+
+Fontes de luz também exibem diferentes comportamentos/intensidades para as componentes ambientais, difusas e especulares respectivamente.
+
+Anteriormente, resolvemos isso ao variar as intensidades de cada um com um valor para isso. Queremos fazer algo parecido, mas, dessa vez, especificando vetores de intensidade para cada uma das componentes.
+
+Vamos visualizar `lightColor` como sendo um `vec3(1.0)`. O código, então, fica assim:
+
+```glsl
+vec3 ambient = vec3(1.0) * material.ambient;
+vec3 diffuse = vec3(1.0) * (diff * material.diffuse);
+vec3 specular = vec3(1.0) * (spec * material.specular);
+```
+
+Então, cada propriedade material do objeto é retornada com intensidade máxima para cada uma das componentes de luz.
+
+A cor ambiente, por exemplo, não deveria ter muito impacto na cor final. Então, poderíamos reduzir a potência dela:
+
+```glsl
+vec3 ambient = vec3(0.1) * material.ambient;
+```
+
+E poderíamos fazer algo semelhante para a difusa e especular também.
+
+Para facilitar, vamos criar uma estrutura parecida com a que criamos anteriomente, só que desta vez vai ser para as propriedades da luz:
+
+```glsl
+struct Light {
+    vec3 position;
+  
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+uniform Light light; 
+```
+
+Uma fonte de luz possui intensidades diferentes para seus componentes ambiente, difuso e especular. 
+
+(i) A luz ambiente geralmente é configurada com baixa intensidade, pois não queremos que a cor ambiente seja muito dominante;
+(ii) O componente difuso de uma fonte de luz geralmente é configurado com a cor exata que desejamos para a luz; frequentemente, um branco brilhante; 
+(iii) O componente especular geralmente é mantido em vec3(1.0), brilhando com intensidade máxima. 
+
+Observe que também adicionamos o vetor de posição da luz à estrutura.
+
+Precisamos atualizar o fragment shader:
+
+```glsl
+vec3 ambient  = light.ambient * material.ambient;
+vec3 diffuse  = light.diffuse * (diff * material.diffuse);
+vec3 specular = light.specular * (spec * material.specular); 
+```
+
+E, também, definir as intensidades da luz na aplicação:
+
+```cpp
+lightingShader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
+lightingShader.setVec3("light.diffuse",  0.5f, 0.5f, 0.5f); 
+lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
+```
+
+E, voilá:
+
+(imagem aqui)
+
+Agora, alterar os aspectos visuais dos objetos é relativamente mais simples!
+
+Inclusive, nós também podemos alterar a cor da luz com o decorrer do tempo no nosso projeto! Já que deixamos tudo correto lá no fragment shader, fazer isso é tranquilo e gera uns efeitos bem massa:
+
+Podemos utilizar `seno` e `glfwGetTime`:
+
+```cpp
+glm::vec3 lightColor;
+lightColor.x = sin(glfwGetTime() * 2.0f);
+lightColor.y = sin(glfwGetTime() * 0.7f);
+lightColor.z = sin(glfwGetTime() * 1.3f);
+  
+glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); 
+glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); 
+  
+lightingShader.setVec3("light.ambient", ambientColor);
+lightingShader.setVec3("light.diffuse", diffuseColor);
+```
+
+Convidamos você a fazer essa implementação e tentar compilar e rodar. Veja o resultado com seus olhos! Além disso, tente exercitar a criatividade mexendo no código com suas próprias ideias!
+
+
 ## Conclusão
+
+Neste capítulo, tivemos uma abordagem relativamente extensa acerca de cores e iluminação. Ambas são fundamentais e alteram com muita nitidez o resultado final das nossas aplicações gráficas, aprimorando o realismo da computação e simulação.
+
+No próximo, daremos continuidade a essa parte utilizando mapas de iluminação. Não deixe de conferir!
+
+```
+         _\|/_
+         (o o)
+ +----oOO-{_}-OOo--+
+ |                 |
+ | Hasta la vista, |
+ |       baby.     |
+ +-----------------+
+```
