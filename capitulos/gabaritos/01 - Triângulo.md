@@ -12,14 +12,18 @@ glDrawArrays(GL_POINTS, 0, 3);
 glPointSize(5.0f);
 ```
 
-![triangulo com vertices roxo](../imagens/01_triangulo_vertices_roxo.png)
+<div align="center">
+  <img src="/imagens/01_triangulo_vertices_roxo.png" width="700" alt="triangulo com vertices roxo">
+</div>
 
 ```cpp
 // Alteração para o uso de GL_LINE_LOOP
 glDrawArrays(GL_LINE_LOOP, 0, 3);
 ```
 
-![triangulo com arestas roxas](../imagens/01_triangulo_arestas_roxo.png)
+<div align="center">
+  <img src="/imagens/01_triangulo_arestas_roxo.png" width="700" alt="triangulo com arestas roxas">
+</div>
 
 ## Exercício 2
 
@@ -31,7 +35,9 @@ glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 glDrawArrays(GL_TRIANGLES, 0, 3);
 ```
 
-![triangulo com arestas roxas](../imagens/01_triangulo_arestas_roxo.png)
+<div align="center">
+  <img src="/imagens/01_triangulo_arestas_roxo.png" width="700" alt="triangulo com arestas roxas">
+</div>
 
 Perceba que visualmente a ultilização do parâmetro `GL_LINE_LOOP` e da função `glPolygonMode` com `GL_LINE` resultou no mesmo triângulo somente com as arestas presentes, porém há diferenças na lógica por trás deles:
 
