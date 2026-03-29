@@ -409,5 +409,5 @@ Até o próximo capítulo!
 
 ## Exercícios propostos
 
-1. Substitua o atributo de cor do triângulo por coordenadas UV e aplique uma textura à sua escolha sobre ele. Atualize a estrutura do VAO, os shaders e carregue a imagem com `stb_image`. A imagem deve cobrir o triângulo inteiro sem distorções.
+1. Comente a linha com stbi_set_flip_vertically_on_load. Modifique apenas as coordenadas UV dos vértices do retângulo para exibir a textura invertida verticalmente e, em seguida, espelhada horizontalmente. Para cada caso, explique quais valores UV mudaram e o que isso revela sobre a origem do sistema de coordenadas UV no OpenGL.
 2. Usando um quadrado com coordenadas UV que ultrapassem o intervalo [0, 1] (por exemplo, de 0.0 até 2.0), experimente os quatro modos de wrapping: `GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE e GL_CLAMP_TO_BORDER`. Para o último, defina uma cor de borda que não seja preto nem branco.
