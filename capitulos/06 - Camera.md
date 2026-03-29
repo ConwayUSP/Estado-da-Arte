@@ -163,11 +163,11 @@ Rode o programa novamente e você perceberá... nada, provavelmente. Mas acredit
 
 Como nós temos 3 eixos no view space, podemos pensar em 3 tipos de rotação, uma em cada eixo. Cada uma dessas rotações é representada por um **ângulo de Euler**: o **_pitch_**, o **_yaw_** e o **_roll_**, que rotacionam um objeto ao redor dos eixos X, Y e Z, respectivamente.
 
-![visualização dos ângulos de Euler](TODO)
+<img src="../imagens/06_pitch_yaw_roll.png" width=600>
 
 Tendo estes ângulos, conseguimos com relativa facilidade construir o vetor de direção da nossa câmera. Na imagem abaixo, a figura à esquerda é uma visão olhando de cima para baixo o plano XZ, nos mostrando que os componentes `x` e `z` do vetor de direção são proporcionais ao cosseno e o seno do ângulo _yaw_, respectivamente. Já a figura à direita nos mostra que o componente `y` é o seno do ângulo _pitch_, e que o cosseno deste ângulo também afeta os componentes `x` e `y`.
 
-![construindo o vetor de direção](TODO)
+<img src="../imagens/06_xyz_via_pitch_e_yaw.png" width=700>
 
 Sendo assim, a fórmula para calcular nosso vetor de direção é a seguinte:
 
