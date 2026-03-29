@@ -411,4 +411,3 @@ Até o próximo capítulo!
 
 1. Substitua o atributo de cor do triângulo por coordenadas UV e aplique uma textura à sua escolha sobre ele. Atualize a estrutura do VAO, os shaders e carregue a imagem com `stb_image`. A imagem deve cobrir o triângulo inteiro sem distorções 
 2. Usando um quadrado com coordenadas UV que ultrapassem o intervalo [0, 1] (por exemplo, de 0.0 até 2.0), experimente os quatro modos de wrapping: `GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE e GL_CLAMP_TO_BORDER`. Para o último, defina uma cor de borda que não seja preto nem branco.
-3. Use uma textura com padrão bem definido (xadrez, tijolos) com repetição alta (10.0 ou mais) e compare visualmente três configurações de filtering: `GL_NEAREST/GL_NEAREST, GL_LINEAR/GL_LINEAR e GL_LINEAR_MIPMAP_LINEAR/GL_LINEAR` (com mipmaps gerados apenas nessa última). Analise qual configuração produziu o resultado mais estável e sem ruído.
