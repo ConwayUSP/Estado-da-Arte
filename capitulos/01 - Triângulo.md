@@ -13,10 +13,11 @@ Neste capítulo, vamos entender como a informação sai do seu código C++ e che
 O que vamos cobrir nesse capítulo:
 
 1. O que é o Pipeline Gráfico?
-2. Vértices: muito mais que apenas pontos  
-3. VBO: O balde de dados  
-4. VAO: O manual de instruções  
-5. O triângulo finalmente aparece!
+2. Shaders embutidos
+3. Vértices: muito mais que apenas pontos  
+4. VBO: O balde de dados  
+5. VAO: O manual de instruções  
+6. O triângulo finalmente aparece!
 
 ## O que é o Pipeline Gráfico?
 
@@ -47,6 +48,52 @@ Lembrando que como o OpenGL é uma 'Máquina de Estado', nós não "enviamos um 
 Let's go construir nosso primeiro triângulo agora? 
 
 Todas as alterações abaixo serão feitas em cima do código **main.cpp** feito no último capítulo.
+
+## Shaders embutidos
+
+Antes de desenhar qualquer coisa na tela, o OpenGL precisa saber como processar os vértices que você vai enviar e qual cor pintar cada fragmento. Esse trabalho é feito pelos shaders: pequenos programas que rodam diretamente na GPU.
+
+Por enquanto, não se preocupe em entender cada linha deles. No próximo capítulo vamos destrinchar os shaders com calma, criar arquivos dedicados para eles e organizar tudo direito. Aqui, o objetivo é apenas fazer o triângulo aparecer na tela, então vamos tratar os shaders como uma "magia temporária".
+
+Coloque o código abaixo antes do int main():
+
+```cpp
+// Shaders embutidos (Abordaremos de maneira elegante no próximo capítulo)
+const char* vertexShaderSource = "#version 330 core\n"
+    "layout (location = 0) in vec3 aPos;\n"
+    "void main() {\n"
+    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    "}\0";
+
+const char* fragmentShaderSource = "#version 330 core\n"
+    "out vec4 FragColor;\n"
+    "void main() {\n"
+    "   FragColor = vec4(0.5f, 0.0f, 0.5f, 1.0f);\n" // Roxo 
+    "}\n\0";
+```
+
+Agora, dentro do int main(), precisamos compilar esses shaders e vinculá-los em um shader program, que é o que a GPU efetivamente vai usar na hora de renderizar:
+
+```cpp
+// Setup dos shaders ( É uma magia temporária)
+unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+glCompileShader(vertexShader);
+
+unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+glCompileShader(fragmentShader);
+
+unsigned int shaderProgram = glCreateProgram();
+glAttachShader(shaderProgram, vertexShader);
+glAttachShader(shaderProgram, fragmentShader);
+glLinkProgram(shaderProgram);
+
+glDeleteShader(vertexShader);
+glDeleteShader(fragmentShader);
+```
+
+> Depois de ler o capítulo 02 sobre Shaders, recomendo voltar aqui para ver se compreendeu o que foi feito nessa parte.
 
 ## Vértices: muito mais que apenas pontos
 
