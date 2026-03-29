@@ -95,6 +95,17 @@ mkdir src
 touch src/main.cpp
 ```
 
+Se você estiver no Windows, rode os comandos na ordem abaixo:
+
+``` Bash
+mkdir trilha_opengl
+cd trilha_opengl
+mkdir src
+ni src/main.cpp
+```
+
+> Usuários Windows: recomendamos utilizar o WSL (Windows Subsystem for Linux) para acompanhar a trilha. Veja as instruções de configuração logo abaixo na próxima seção.
+
 E, é claro, abrir o projeto com seu editor de texto preferido.
 
 Dentro do `main.cpp`, você pode só definir o main por enquanto (e incluir headers básicos se quiser).
@@ -108,6 +119,53 @@ int main() {
 }
 ```
 
+### Configurando OpenGL no Windows via WSL
+
+Se você estiver no Windows, a maneira mais tranquila de acompanhar a trilha é usando o WSL2 com uma distribuição Ubuntu. Siga os passos abaixo para deixar tudo pronto.
+
+1. Pré-requisito: WSL2 com Ubuntu
+
+Certifique-se de que você tem o WSL2 instalado com uma distribuição Ubuntu. Caso ainda não tenha, abra o PowerShell como administrador e rode:
+
+```powershell
+wsl --install
+```
+
+Após a instalação e reinicialização (se necessário), confirme que está usando WSL2:
+
+```powershell
+wsl --list --verbose
+```
+
+A coluna `VERSION` deve exibir 2 para a sua distribuição.
+
+2. Instalando as dependências de OpenGL no WSL
+
+Dentro do terminal do WSL (Ubuntu), atualize os pacotes e instale as bibliotecas necessárias:
+
+``` Bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y \
+    build-essential \
+    libgl1-mesa-dev \
+    libglu1-mesa-dev \
+    mesa-utils \
+    libglfw3 \
+    libglfw3-dev \
+    libassimp-dev \
+    libx11-dev \
+    libxrandr-dev \
+    libxi-dev
+```
+
+3. Suporte a janelas gráficas (display)
+
+Para que programas OpenGL consigam abrir janelas, o WSL precisa de acesso a um servidor de display. O procedimento varia conforme sua versão do Windows.
+
+No Windows 11, o suporte gráfico já vem embutido via WSLg. Nenhuma configuração adicional é necessária e o display funciona automaticamente. 
+
+Caso você esteja utilizando o Windows 10, talvez você tenha que instalar um servidor externo, procure na internet para mais informações.
+
 ## Ferramenta de build
 
 Para compilar e rodar nosso projeto, usaremos um `makefile`; um arquivo usado em conjunto com o comando [make](https://en.wikipedia.org/wiki/Make_(software)). Primeiro, crie um arquivo chamado "Makefile" na raiz do seu projeto:
@@ -115,6 +173,8 @@ Para compilar e rodar nosso projeto, usaremos um `makefile`; um arquivo usado em
 ``` Bash
 touch Makefile
 ```
+
+> touch para Linux; ni para Windows
 
 e depois coloque todo esse código dentro do arquivo.
 
@@ -176,7 +236,7 @@ clean:
 
 Explicar este código foge bastante do escopo da trilha, então se você quiser aprender mais sobre, pesquise nas interwebs.
 
-Com este arquivo pronto, você poderá compilar os programas que escreveremos no restante da trilha simplesmente digitando `make` no terminal. Isso gerará uma pasta `bin/` com um executável chamado `trilha` lá dentro, pronto para o combate. Para compilar e rodar o projeto em um comando só, no Linux, você pode usar:
+Com este arquivo pronto, você poderá compilar os programas que escreveremos no restante da trilha simplesmente digitando `make` no terminal. Isso gerará uma pasta `bin/` com um executável chamado `trilha` lá dentro, pronto para o combate. Para compilar e rodar o projeto em um comando só, no Linux (e no WSL), você pode usar:
 
 ``` Bash
 make; ./bin/trilha
