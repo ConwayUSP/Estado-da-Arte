@@ -201,7 +201,7 @@ Imagine um plano com uma textura de alta resolução muito longe da câmera. Ten
 **Mipmaps** são basicamente versões menores da sua textura (metade do tamanho, depois um quarto, e assim por diante) que o OpenGL gera para usar quando o objeto está longe.
 
 <div align="center">
-  <img src="../imagens/03_niveis_mipmap.png" alt="mipmapped texture">
+  <img src="../imagens/03_mipmap_nvidia.jpg"  width=700 alt="mipmapped texture">
 </div>
 
 > Exemplo de como uma textura fica.
@@ -411,3 +411,10 @@ Até o próximo capítulo!
 
 1. Comente a linha com stbi_set_flip_vertically_on_load. Modifique apenas as coordenadas UV dos vértices para exibir a textura invertida verticalmente e, em seguida, espelhada horizontalmente. Para cada caso, explique quais valores UV mudaram e o que isso revela sobre a origem do sistema de coordenadas UV no OpenGL.
 2. Usando um quadrado com coordenadas UV que ultrapassem o intervalo [0, 1] (por exemplo, de 0.0 até 2.0), experimente os quatro modos de wrapping: `GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE e GL_CLAMP_TO_BORDER`. Para o último, defina uma cor de borda que não seja preto nem branco.
+
+## Referências e Links complementares
+
+- Referência da imagem do Mipmap: https://forums.developer.nvidia.com/t/tutorial-creating-and-modifying-custom-mipmaps/202234c
+- Referência da imagem de Texture Wrapping: https://community.khronos.org/t/how-to-get-gl-clamp-to-border-effect/104085
+- Referência da imagem de Texture Filtering: https://open.gl/textures
+- Documentação popular aprimorada para a API OpenGL e GLSL: https://docs.gl/
