@@ -89,7 +89,7 @@ glBindVertexArray(lightVAO);
 // Precisamos apenas fazer o binding com o VBO, os dados do VBO do contêiner
 // já contêm os dados.
 glBindBuffer(GL_ARRAY_BUFFER, VBO);
-// set the vertex attribute
+
 // Definindo o atributo do vértice
 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),(void*)0);
 glEnableVertexAttribArray(0);
@@ -347,5 +347,144 @@ Temos um grande avanço em comparação ao ponto em que paramos anteriormente, n
 ### Um Detalhe a Mais
 
 ### Luz especular
+
+Para começarmos a finalizar o modelo de iluminação de Phong, vamos adicionar a iluminação especular.
+
+Ela é um pouco parecida com a iluminação difusa, é baseada na direção do vetor de direção da luz e dos vetores normais do objeto, mas também é baseada na direção da visão, tipo para qual direção um jogador está olhando para o fragmento no meio de uma simulação gráfica em um joguinho.
+
+Se pensarmos na superfície do objeto como sendo um espelho, a luz especular é a mais forte onde quer que percebéssemos a luz refletida na superfície. Observe:
+
+(Imagem)
+
+Nós calculamos um vetor de reflexão ao refletir a direção da luz nos arredores do vetor normal. Então, calculamos a distância angular entre o seu vetor de reflexão e a direção da visão.
+
+Quanto menor o ângulo entre eles, maior será o impacto da luz especular.
+
+O vetor de visão é mais uma variável que precisaremos declarar, que podemos calcular usando a posição do "telespectador" no world space e a posição do fragmento. Então, calculamos a intensidade da luz especular, multiplicamos com a cor da luz e adicionamos para o ambiente e componentes de difusão.
+
+Vamos, então, criar mais um uniform para o shader de fragmento e passar o vetor de posição da câmera para o shader:
+
+```glsl
+uniform vec3 viewPos;
+lightingShader.setVec3("viewPos", camera.Position);
+```
+
+Precisamos definir uma intensidade para a iluminação especular. Será um brilho "médio" para que não haja exagero:
+
+```glsl
+float specularStrength = 0.5;
+```
+
+Calculando o vetor de direção para visão e o vetor de reflexão correspondente ao longo do eixo normal:
+
+```glsl
+vec3 viewDir = normalize(viewPos - FragPos);
+vec3 reflectDir = reflect(-lightDir, norm);
+```
+> Note que negamos o vetor lightDir. A função reflect espera que o primeiro vetor aponte da fonte de luz em direção à posição do fragmento, mas o vetor lightDir está apontando na direção oposta: do fragmento em direção à fonte de luz (isso depende da ordem da subtração realizada anteriormente quando calculamos o vetor lightDir).
+
+
+Finalmente, o que falta fazer é calcular a componente da luz especular. Faremos isso da seguinte maneira:
+
+```glsl
+float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+vec3 specular = specularStrength * spec * lightColor;
+```
+
+Primeiro, calculamos o produto escalar entre `viewDir` e `reflectDir`, novamente aplicando a função max entre o valor retornado e `0.0` para não surgir um valor negativo inesperado. Depois, elevamos o resultado a 32. Esse número, no caso, é é o valor de brilho do destaque. Veja a imagem abaixo:
+
+![Cubos com exemplos de iluminação](../imagens/07_especular1.png)
+> Imagem retirada do livro Learn OpenGL. Quanto maior o valor de brilho de um objeto, mais ele reflete a luz de forma adequada, em vez de dispersá-la, e, portanto, menor se torna o reflexo. A imagem mostra o impacto visual de diferentes valores de brilho.
+
+Não queremos que a componente especular chame tanta atenção, então manteremos em 32.
+
+Vamos adicionar ao nosso ambiente, aos componentes de difusão e multiplicar os resultados combinados com a cor do objeto:
+
+```glsl
+vec3 result = (ambient + diffuse + specular) * objectColor;
+FragColor = vec4(result, 1.0);
+```
+
+Você terá mais ou menos o seguinte resultado:
+
+(imagem)
+
+## Definindo materiais para o modelo Phong
+
+No mundo real, cada material reage de maneira diferente à luz. Objetos metálicos geralmente emitem um brilho maior e característico, diferente de um filtro de barro ou algo nesse sentido.
+
+Se quisermos simular isso em computação gráfica, precisamos definir propriedades materiais para cada superfície.
+Ao realizar essa definição, podemos estabelecer uma cor material para cada um dos três componentes de iluminação: ambiente, difuso e especular. Ao fazer isso, teremos um bom controle a respeito da cor de saída da superfície.
+
+Agora, adicione uma componente de `brilho` (shininess) para essas três cores e teremos todas as propriedades materiais que precisamos:
+
+```glsl
+struct Material {
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float shininess;
+}
+
+uniform Material material;
+```
+
+Para ficar mais fácil, criamos uma estrutura para abrigar essas componentes de propriedades da superfície. 
+
+Como você pode ver, definimos um vetor de cor para cada um dos componentes da iluminação Phong. 
+
+(i) O vetor de material ambiente define a cor que a superfície reflete sob iluminação ambiente; geralmente, essa cor é a mesma da superfície. 
+(ii) O vetor de material difuso define a cor da superfície sob iluminação difusa. A cor difusa (assim como a da iluminação ambiente) é definida para a cor desejada da superfície. 
+(iii) O vetor de material especular define a cor do brilho especular na superfície (ou pode até mesmo refletir uma cor específica da superfície). 
+(iv) Por fim, o brilho influencia a dispersão/raio do brilho especular.
+
+Com essas quatro componentes, podemos simular muitos materiais do mundo real. 
+
+Existe uma tabela em devernay.free.fr que mostra uma lista de propriedades materiais que simulam materiais reais encontrados no mundo. A imagem a seguir, retirada do livro Learn OpenGL, mostra alguns exemplos:
+
+![Exemplos de iluminação de diferentes materiais](../imagens/07_exemplosmateriais.png)
+
+Vamos, então, brincar um pouco com as implementações?
+
+### Definindo materiais
+
+Nós já criamos uma estrutura no fragment shader, então precisaremos mudar os cálculos de iluminação para manter a coerência com as propriedades do novo material. Veja o código a seguir:
+
+```glsl
+void main(){    
+    // ambient
+    vec3 ambient = lightColor * material.ambient;
+  	
+    // diffuse 
+    vec3 norm = normalize(Normal);
+    vec3 lightDir = normalize(lightPos - FragPos);
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = lightColor * (diff * material.diffuse);
+    
+    // specular
+    vec3 viewDir = normalize(viewPos - FragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);  
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    vec3 specular = lightColor * (spec * material.specular);  
+        
+    vec3 result = ambient + diffuse + specular;
+    FragColor = vec4(result, 1.0);
+}
+```
+
+Como você pode ver, agora acessamos todas as propriedades da estrutura do material onde precisarmos e, desta vez, calculamos a cor de saída resultante com a ajuda das cores do material. Cada um dos atributos do material do objeto é multiplicado por seus respectivos componentes de iluminação.
+
+Podemos definir o material do objeto no aplicativo configurando os uniforms apropriados. Uma estrutura em GLSL, no entanto, não é especial em nenhum aspecto ao configurar uniforms; no caso, uma estrutura funciona apenas como um namespace de variáveis uniform. Se quisermos preencher a estrutura, teremos que definir os uniforms individualmente, mas prefixados com o nome da estrutura:
+
+```glsl
+lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+lightingShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+lightingShader.setFloat("material.shininess", 32.0f);
+```
+
+Definimos os componentes de luz ambiente e difusa para a cor desejada para o objeto e o componente especular para uma cor de brilho médio; não queremos que o componente especular seja muito forte. Também mantemos o brilho em 32.
+
+## Modificando as propriedades da fonte de luz
 
 ## Conclusão
