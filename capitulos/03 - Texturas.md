@@ -392,6 +392,8 @@ Texturas dão vida ao cenário. Sem elas, estaríamos presos a um mundo de cores
 
 Se sua textura aparecer preta, 90% das vezes é porque você esqueceu o `glBindTexture` ou o caminho do arquivo estava errado.
 
+Até o próximo capítulo!
+
 ```
 (0,1) T _______________________ (1,1)
       ^ |                     |
@@ -407,6 +409,5 @@ Se sua textura aparecer preta, 90% das vezes é porque você esqueceu o `glBindT
 
 ## Exercícios propostos
 
-1. Substitua o atributo de cor do triângulo por coordenadas UV e aplique uma textura à sua escolha sobre ele. Atualize a estrutura do VAO, os shaders e carregue a imagem com `stb_image`. A imagem deve cobrir o triângulo inteiro sem distorções 
+1. Comente a linha com stbi_set_flip_vertically_on_load. Modifique apenas as coordenadas UV dos vértices do retângulo para exibir a textura invertida verticalmente e, em seguida, espelhada horizontalmente. Para cada caso, explique quais valores UV mudaram e o que isso revela sobre a origem do sistema de coordenadas UV no OpenGL.
 2. Usando um quadrado com coordenadas UV que ultrapassem o intervalo [0, 1] (por exemplo, de 0.0 até 2.0), experimente os quatro modos de wrapping: `GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE e GL_CLAMP_TO_BORDER`. Para o último, defina uma cor de borda que não seja preto nem branco.
-3. Use uma textura com padrão bem definido (xadrez, tijolos) com repetição alta (10.0 ou mais) e compare visualmente três configurações de filtering: `GL_NEAREST/GL_NEAREST, GL_LINEAR/GL_LINEAR e GL_LINEAR_MIPMAP_LINEAR/GL_LINEAR` (com mipmaps gerados apenas nessa última). Analise qual configuração produziu o resultado mais estável e sem ruído.

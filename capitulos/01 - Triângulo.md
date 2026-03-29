@@ -228,7 +228,7 @@ Você deve ter notado que colocamos um código "mágico" (os **Shaders**) no in�
  
 ## Exercícios propostos
 
-1. Pesquise e substitua o parâmetro GL_TRIANGLES dentro da função glDrawArrays por outras opções de primitivas. Observe como a ordem dos seus vértices no array muda completamente o desenho dependendo do modo escolhido.
+1. Pesquise sobre e substitua o parâmetro GL_TRIANGLES dentro da função glDrawArrays por outras opções de primitivas. Observe como a ordem dos seus vértices no array muda completamente o desenho dependendo do modo escolhido.
 2. Pesquise sobre a função glPolygonMode. Adicione essa linha no seu código para fazer com que o triângulo seja desenhado apenas com linhas de contorno, sem preenchimento.
 
 Divirta-se!
