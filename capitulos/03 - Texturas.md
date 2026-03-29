@@ -392,6 +392,8 @@ Texturas dão vida ao cenário. Sem elas, estaríamos presos a um mundo de cores
 
 Se sua textura aparecer preta, 90% das vezes é porque você esqueceu o `glBindTexture` ou o caminho do arquivo estava errado.
 
+Até o próximo capítulo!
+
 ```
 (0,1) T _______________________ (1,1)
       ^ |                     |
