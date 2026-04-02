@@ -40,7 +40,9 @@ Ela é o vetor que representa o nosso objeto. Aqui, não tem mistério:
 
 Ok! Mas e aquele número 1 na quarta linha da nossa matriz? Se estamos tratando aqui de um modelo 3D, por que o nosso vetor teria quatro componentes?
 
-Ora, aquele valor serve unicamente para facilitar o processo de transformação. Para redimencionar um objeto, alteraremos o valor das componentes através de multiplicações em cada uma. 
+Por enquanto, tente ignorar a existência dele. 
+
+Para redimencionar um objeto, alteraremos o valor das componentes através de multiplicações em cada uma. 
 Ao invés de multiplicarmos nosso vetor de maneira sucessiva por escalares, vamos "compactar" toda a nossa transformação em uma única nova matriz e realizar apenas uma multiplicação de matrizes. Isso facilita bastante o processo, além de reduzir a complexidade computacional. (Por quê?)
 
 Inclusive, segue abaixo a nossa querida matriz de redimensionamento:
@@ -63,9 +65,15 @@ Mavilha! Repare que essa alteração provocaria uma distorção das dimensões d
 No que diz respeito à translação, estamos falando literalmente de mover (transladar) o nosso objeto pela nossa simulação ao alterar sua posição. Para isso, fazemos uma adição entre dois vetores, retornando um novo vetor com uma posição diferente baseada em um vetor de translação.
 
 Se representarmos o nosso vetor de translação como sendo _(Tx, Ty, Tz)_, podemos definir a nossa matriz de translação da seguinte maneira:
+
 <img src="../imagens/05_matriztransl.png" width=300>
 
 E, assim como fizemos na aplicação de redimensionamento, iremos multiplicar as nossas matrizes para obter um novo resultado, isto é, o nosso vetor com posição atualizada!
+
+A partir daqui, aquela quarta componente começa a ganhar grande utilidade para nós. A sua existência facilita o processo de transformação. Isso, pois, caso utilizássemos matrizes `3x3`, não conseguiríamos acessar as componentes corretamente na hora da multiplicação. Convidamos você a fazer o exercício mental e/ou com papel e lápis: tente realizar a multiplicação de matrizes na versão `3x3` para a translação na mão e você perceberá uma das funcionalidades da quarta componente com o valor 1.
+
+Enfim, quando realizamos a transformação, temos o seguinte:
+
 
 <img src="../imagens/05_translocamento.png" width=400>
 
