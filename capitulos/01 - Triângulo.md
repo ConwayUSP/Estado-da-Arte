@@ -280,4 +280,6 @@ Você deve ter notado que colocamos um código "mágico" (os **Shaders**) no in�
 
 Divirta-se!
 
+## Mapa mental
 
+<img width="1200" height="960" alt="mapa_mental_01" src="https://github.com/user-attachments/assets/205854aa-72c7-451f-9307-12df954808dd" />
