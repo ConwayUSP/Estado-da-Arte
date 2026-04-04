@@ -281,3 +281,7 @@ Como sempre, obrigado por ler até aqui :)
  |                                          |
  +------------------------------------------+
 ```
+
+## Mapa mental
+
+<img width="1200" height="960" alt="mapa_mental_04" src="https://github.com/user-attachments/assets/9fee8c7a-da53-488d-97c0-b8031b9c5df2" />
