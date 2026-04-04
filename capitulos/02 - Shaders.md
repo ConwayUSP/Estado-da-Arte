@@ -543,3 +543,9 @@ Enfim, parabéns por ter chegado até aqui!
 
 1. Tente modificar nosso programa e/ou nossos shaders para que a cor do triângulo mude com o tempo de alguma forma interessante.
 2. Estenda nossa classe de shaders para incluir um _setter_ para uniforms dos tipos vec2, vec3 e vec4.
+
+## Mapa mental
+
+<img width="1200" height="960" alt="mapa_mental_02" src="https://github.com/user-attachments/assets/bff3a610-d573-4ce5-8ab3-29d0dcaf42f1" />
+
+
