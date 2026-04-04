@@ -508,3 +508,7 @@ Se você quiser brincar um pouco com o que aprendemos até agora, tente o seguin
 
 1. Altere os argumentos da função `glClearColor` para chegar em uma cor que você gosta muito
 2. Tente fazer com que quando o usuário aperte alguma tecla (por exemplo espaço), a janela mude de cor - talvez ciclicamente por uma paleta ou até mesmo gerando uma cor aleatória.
+
+## Mapa mental
+
+<img width="1200" height="960" alt="mapa_mental_00" src="https://github.com/user-attachments/assets/839a9cd5-7397-4187-841a-90126875e7db" />
