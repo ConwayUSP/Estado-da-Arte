@@ -418,3 +418,9 @@ Até o próximo capítulo!
 - Referência da imagem de Texture Wrapping: https://community.khronos.org/t/how-to-get-gl-clamp-to-border-effect/104085
 - Referência da imagem de Texture Filtering: https://open.gl/textures
 - Documentação popular aprimorada para a API OpenGL e GLSL: https://docs.gl/
+
+## Mapa mental
+
+<img width="1200" height="960" alt="mapa_mental_03" src="https://github.com/user-attachments/assets/268a9d40-8351-4c10-b9bd-aa6e69b0edf8" />
+
+
