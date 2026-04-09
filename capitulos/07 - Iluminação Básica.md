@@ -29,24 +29,26 @@ glm::vec3 coral(1.0f, 0.5f, 0.31f);
 
 Na vida real, a cor de um objeto o qual visualizamos nada mais é do que a cor que ele reflete. Parte do espectro de cores é absorvida e o resto é refletido. 
 
-(Imagem aqui)
+![Reflexão da luz](../imagens/07_reflexao.png)
+
+> PS: nós sabemos que a disposição do espectro de cores não é assim. Mas, para fins de didática e de preguiça de fazer algo completamente acurado, resolvemos simplificar. Na prática, isso não interfere no conceito que estamos apresentando aqui, certo?
 
 Como o espectro de cores que coincide no nosso objeto influencia diretamente na cor que percebemos dele, precisamos representar isso de alguma maneira no computador. Fazemos isso multiplicando componente por componente do vetor de luz e do vetor que representa a cor do objeto:
 
 ```cpp
 glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
 glm::vec3 toyColor(1.0f, 0.5f, 0.31f);
-glm::vec3 result = lightColor * toyColor; // = (1.0f, 0.5f, 0.31f);
+glm::vec3 result = lightColor * toyColor; // resultado = (1.0f, 0.5f, 0.31f);
 ```
 
-Acima, no vetor de luz, utilizamos as componentes que combinadas formam a luz branca. Ocorreu, então, uma reflexão fiel da cor do objeto. 
+Acima, no vetor de luz, utilizamos as componentes que combinadas formam a luz branca. Ocorreu, então, uma reflexão fiel da cor do objeto. No caso, as componentes do vetor resultante possuem os mesmos valores vetor que representa a cor do brinquedo.
 
 Agora, o que aconteceria se usássemos uma cor verde?
 
 ```cpp
 glm::vec3 lightColor(0.0f, 1.0f, 0.0f); // Todas as componentes zeradas, exceto a verde
 glm::vec3 toyColor(1.0f, 0.5f, 0.31f);
-glm::vec3 result = lightColor * toyColor; // = (0.0f, 0.5f, 0.0f);
+glm::vec3 result = lightColor * toyColor; // resultado = (0.0f, 0.5f, 0.0f);
 ```
 
 No caso, não existiria cor vermelha ou azul para ser refletida, resultando apenas na reflexão da componente verde, que é inteiramente preservada.
@@ -56,10 +58,10 @@ Mas, e se nós usássemos alguma cor mais específica, como verde oliva:
 ```cpp
 glm::vec3 lightColor(0.33f, 0.42f, 0.18f);
 glm::vec3 toyColor(1.0f, 0.5f, 0.31f);
-glm::vec3 result = lightColor * toyColor; // = (0.33f, 0.21f, 0.06f);
+glm::vec3 result = lightColor * toyColor; // resultado = (0.33f, 0.21f, 0.06f);
 ```
 
-Enfim. Podemos fazer um objeto refletir diferentes tonalidades de cor a partir do uso de diferentes iluminações.
+Enfim. Podemos fazer um objeto refletir diferentes tonalidades de cor a partir do uso de diferentes iluminações. Na vida real, as coisas também não funcionam desta maneira? É assim que representamos no computador!
 
 ## Iluminando Uma Cena
 
@@ -82,7 +84,7 @@ void main(){
 
 Já que queremos renderizar uma fonte de luz na forma de um cubo, vamos querer gerar um novo VAO especificamente para a fonte de luz:
 
-```cpp
+```glsl
 unsigned int lightVAO;
 glGenVertexArrays(1, &lightVAO);
 glBindVertexArray(lightVAO);
@@ -163,7 +165,7 @@ glDrawArrays(GL_TRIANGLES, 0, 36);
 
 Enfim. Desenvolvendo o seu código em `C++` para OpenGL corretamente, compilando e rodando, teremos o seguinte:
 
-(Imagem aqui)
+(Imagem aqui no futuro)
 
 Qualquer dúvida, não deixe de consultar o código completo na pasta de códigos da nossa trilha!
 
@@ -348,7 +350,7 @@ Temos um grande avanço em comparação ao ponto em que paramos anteriormente, n
 
 Vamos tratar aqui, em três tópicos, sobre alguns problemas que aparecem neste contexto e como podemos resolver utilizando um pouco mais de conceitos sobre vetores.
 
-(Imagem aqui)
+(Imagem aqui no futuro)
 
 1. O Problema da Translação
 
