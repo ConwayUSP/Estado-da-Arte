@@ -272,6 +272,23 @@ Para instalar o GLFW na versão 3, você pode baixar o binário do Windows ou ma
 sudo apt-get install libglfw3 libglfw3-dev
 ```
 
+Caso você utilize distribuições baseadas em Arch Linux (By the Way), utilize:
+
+> Nota: o pacote GLFW no repositório extra é o padrão atual. Então provavelmente você não vai precisar rodar esses comandos
+
+Para instalar o GLFW:
+
+``` Bash
+sudo pacman -S glfw
+```
+
+Instalar ferramentas de compilação:
+
+``` Bash
+sudo pacman -S base-devel mesa
+```
+
+
 Caso tenha algum problema, você também pode [compilar a biblioteca](https://www.glfw.org/docs/latest/compile.html) direto do source code.
 
 Feito isso, você vai conseguir incluir a biblioteca em seus programas assim como fazemos com qualquer outra biblioteca do C ou C++
@@ -303,6 +320,18 @@ Para baixar algumas bibliotecas essenciais que usaremos ao longo do curso, rode,
 
 ```sh
 sudo apt install libglu1-mesa-dev libassimp-dev libxi-dev
+```
+
+Versão alternativa para usuários de Arch (sim, também pensamos em vocês):
+
+```sh
+sudo pacman -Syu mesa assimp libxi
+```
+
+Se precisar de compiladores e ferramentas de desenvolvimento comuns (equivalente ao build-essential do Ubuntu), instale também o grupo base-devel:
+
+```sh
+sudo pacman -S --needed base-devel
 ```
 
 ## O boilerplate do GLFW e GLAD
