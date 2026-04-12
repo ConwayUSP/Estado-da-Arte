@@ -88,16 +88,16 @@ int main() {
   glfwSetCursorPosCallback(window, callback_mouse);
   glfwSetScrollCallback(window, callback_scroll);
 
-  // CORREÇÃO: Habilitar o teste de profundidade para o 3D funcionar
+  //  Habilitar o teste de profundidade para o 3D funcionar
   glEnable(GL_DEPTH_TEST);
 
-  // CORREÇÃO: Shaders corretos para o Objeto e para a Luz
+  //  Shaders corretos para o Objeto e para a Luz
   Shader lightingShader("shaders/vertex.vert", "shaders/fragment.frag");
   Shader lightCubeShader(
       "shaders/vertex.vert",
       "shaders/lightCube.frag"); // Crie este frag que retorna vec4(1.0)
 
-  // CORREÇÃO: VAO do cubo principal (antigo "VAO")
+  //  VAO do cubo principal (antigo "VAO")
   unsigned int VBO, cubeVAO;
   glGenVertexArrays(1, &cubeVAO);
   glGenBuffers(1, &VBO);
@@ -113,7 +113,7 @@ int main() {
                         (void *)(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
 
-  // CORREÇÃO: VAO da luz instanciado separadamente
+  //  VAO da luz instanciado separadamente
   unsigned int lightCubeVAO;
   glGenVertexArrays(1, &lightCubeVAO);
   glBindVertexArray(lightCubeVAO);
@@ -130,25 +130,21 @@ int main() {
   lightingShader.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
   lightingShader.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
   lightingShader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-
   lightingShader.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
   lightingShader.setVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
   lightingShader.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-
-  // O setFloat recebe apenas 2 argumentos (string e float), então ele já estava
-  // certo!
   lightingShader.setFloat("material.shininess", 32.0f);
 
   while (!glfwWindowShouldClose(window)) {
-    // CORREÇÃO: Cálculo do Delta Time para movimentação fluida
+    //  Cálculo do Delta Time para movimentação fluida
     float currentFrame = static_cast<float>(glfwGetTime());
     dt = currentFrame - ultimoTempo;
     ultimoTempo = currentFrame;
 
-    // CORREÇÃO: Chamar processaInput
+    //  Chamar processaInput
     processaInput(window);
 
-    // CORREÇÃO: Limpar os buffers de cor e profundidade
+    //  Limpar os buffers de cor e profundidade
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -165,7 +161,7 @@ int main() {
     lightingShader.setVec3("light.diffuse", diffuseColor);
     lightingShader.setVec3("viewPos", camera.Posicao);
 
-    // CORREÇÃO: Matrizes de transformação globais
+    //  Matrizes de transformação globais
     glm::mat4 projection = glm::perspective(
         glm::radians(camera.Zoom), (float)800 / (float)600, 0.1f, 100.0f);
     glm::mat4 view = camera.MatrizView();
