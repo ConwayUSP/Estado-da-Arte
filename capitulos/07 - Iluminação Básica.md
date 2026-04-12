@@ -19,7 +19,7 @@ Na sua infância (ou qualquer outra fase da sua vida), possivelmente você brinc
 
 Então, eis aqui uma oportunidade de voltar a brincar com cores.
 
-Como seria possível fazer isso no computador? 
+Como seria possível fazer isso no computador?
 
 No mundo digital precisamos fazer o mapeamento de valores contínuos (infinitos) de cores para os discretos. Além disso, nós teremos três "tintas" básicas para chegar em praticamente qualquer outra cor. No caso, o vermelho (Red), o verde (Green) e o azul (Blue), os quais foram o famoso _RGB_. A "quantidade de cada tinta" que vamos usar fica dentro de um intervalo [0, 1]. Com base nisso, podemos definir um vetor de cores da seguinte maneira com GLM:
 
@@ -27,7 +27,7 @@ No mundo digital precisamos fazer o mapeamento de valores contínuos (infinitos)
 glm::vec3 coral(1.0f, 0.5f, 0.31f);
 ```
 
-Na vida real, a cor de um objeto o qual visualizamos nada mais é do que a cor que ele reflete. Parte do espectro de cores é absorvida e o resto é refletido. 
+Na vida real, a cor de um objeto o qual visualizamos nada mais é do que a cor que ele reflete. Parte do espectro de cores é absorvida e o resto é refletido.
 
 ![Reflexão da luz](../imagens/07_reflexao.png)
 
@@ -109,7 +109,7 @@ void main(){
 }
 ```
 
-O shader de fragmento aceita uma cor de objeto e de luz de uma variável uniforme. Aqui, novamente, nós multiplicamos a cor da luz com a do objeto. 
+O shader de fragmento aceita uma cor de objeto e de luz de uma variável uniforme. Aqui, novamente, nós multiplicamos a cor da luz com a do objeto.
 
 Vamos definir a cor do objeto como sendo a mesma do coral e da luz como sendo branca
 
@@ -134,9 +134,9 @@ void main(){
 }
 ```
 
-Quando quisermos renderizar, vamos querer rederizar o objeto contêiner usando o shader de iluminação que acabamos de definir. Quando quisermos desenhar a fonte de luz, usaremos os shaders da fonte de luz em si. 
+Quando quisermos renderizar, vamos querer rederizar o objeto contêiner usando o shader de iluminação que acabamos de definir. Quando quisermos desenhar a fonte de luz, usaremos os shaders da fonte de luz em si.
 
-A ideia do cubo é só mostrar de onde a luz da cena vem. Por isso, renderizamos ele na mesma posição que a fonte de luz. 
+A ideia do cubo é só mostrar de onde a luz da cena vem. Por isso, renderizamos ele na mesma posição que a fonte de luz.
 
 Então, vamos declarar um `vec3` global para representar a localização da fonte de luz nas coordenadas do word-space:
 
@@ -158,7 +158,7 @@ O código de renderização final deve ficar mais ou menos assim:
 lightCubeShader.use();
 // Nas próximas linhas, defina o modelo e a matriz de visão e de projeção
 // (...)
-// Desenhando o objeto "cubo luminoso" 
+// Desenhando o objeto "cubo luminoso"
 glBindVertexArray(lightCubeVAO);
 glDrawArrays(GL_TRIANGLES, 0, 36);
 ```
@@ -173,7 +173,7 @@ Qualquer dúvida, não deixe de consultar o código completo na pasta de código
 
 O funcionamento da luz no mundo real é extremamente complexo e existem diversos fatores que podem alterar a sua disposição e se alcance até nossas retinas. Obviamente, precisamos nos limitar a certas coisas específicas pois, normalmente, não possuímos poder computacional ilimitado ou algo nesse sentido.
 
-A iluminação no OpenGL é baseada em modelos simplificados, mas que produzem resultados bem realistas e interessantes para nós. 
+A iluminação no OpenGL é baseada em modelos simplificados, mas que produzem resultados bem realistas e interessantes para nós.
 
 Um desses modelos é o `Modelo de Iluminação de Phong` e a construção a partir desse pilar consiste em três componentes: _iluminação ambiente, difusa e especular_.
 
@@ -195,7 +195,7 @@ Adicionar uma iluminação ambiente no nosso projeto é bem simples. Nós pegamo
 void main(){
     float ambientStrength = 0.1;
     vec3 ambient = ambientStrength * lightColor;
-    
+
     vec3 result = ambient * objectColor;
     FragColor = vec4(result, 1.0);
 }
@@ -204,17 +204,18 @@ void main(){
 Ao rodar o programa, você vai perceber que já estará funcionando e terá mais ou menos algo nesse sentido:
 
 (imagem)
+
 > O objeto está meio escuro, mas não completamente. Além disso, o cubo de luz não foi afetado (por quê?).
 
 ### Luz Difusa
 
-Se a primeira aplicação de iluminação não te animou tanto, é aqui que começamos a ter resultados mais interessantes. 
+Se a primeira aplicação de iluminação não te animou tanto, é aqui que começamos a ter resultados mais interessantes.
 
 A iluminação difusa dá ao objeto maior clareza conforme os fragmentos são mais alinhados com os raios da fonte de luz. Para você ter uma noção melhor, observe a seguinte imagem:
 
 (imagem)
 
-À esquerda, encontramos uma fonte de iluminação com um raio de luz coincidindo com um ponto específico do nosso objeto. No caso, é necessário estimar o ângulo de incidência para definir a iluminação final. Se o raio de luz é perpendicular, tal como um solzão de meio-dia, temos a maior quantidade de reflexão possível. 
+À esquerda, encontramos uma fonte de iluminação com um raio de luz coincidindo com um ponto específico do nosso objeto. No caso, é necessário estimar o ângulo de incidência para definir a iluminação final. Se o raio de luz é perpendicular, tal como um solzão de meio-dia, temos a maior quantidade de reflexão possível.
 
 Para mensurar esse ângulo, utilizamos uma coisa chamada de _vetor normal_, que é um vetor perpendicular à superfície do fragmento. O ângulo entre os dois vetores pode ser calculado usando o produto escalar. Caso você não se lembre a respeito do produto escalar, nós abordamos ele no nosso [capítulo de revisão de conceitos matemáticos](https://github.com/ConwayUSP/Estado-da-Arte/blob/main/capitulos/04%20-%20Matematica.md). Vale à pena dar uma conferida.
 
@@ -258,6 +259,7 @@ float vertices[] = {
     -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 };
 ```
+
 ```glsl
 // Vertex Shader
 out vec3 Normal;
@@ -291,7 +293,7 @@ E, também, atualizar o uniform no loop de renderização (por quê?). Vamos uti
 lightningShader.setVec3("lightPos", lightPos);
 ```
 
-Por fim, precisamos da posição atual do fragmento. 
+Por fim, precisamos da posição atual do fragmento.
 
 Os cálculos para iluminação serão feitos no _world space_, então precisaremos de uma posição de vértice que eseja, à princípio, no _world space_.
 
@@ -344,7 +346,7 @@ Se tudo der certo e você conseguir compilar o projeto (esperamos que sim), voc�
 
 (Imagem)
 
-Temos um grande avanço em comparação ao ponto em que paramos anteriormente, não é? 
+Temos um grande avanço em comparação ao ponto em que paramos anteriormente, não é?
 
 ### Um Detalhe a Mais
 
@@ -365,6 +367,7 @@ Se um objeto for redimensionado de forma desigual (ex: esticado apenas no eixo X
 Para corrigir essa distorção, utiliza-se a Matriz Normal, que é calculada como: _A transposta da inversa da parte 3×3 superior esquerda da matriz de modelo._
 
 Em código (GLSL), a aplicação no Vertex Shader ficaria assim:
+
 ```glsl
 Normal = mat3(transpose(inverse(model))) * aNormal;
 ```
@@ -404,8 +407,8 @@ Calculando o vetor de direção para visão e o vetor de reflexão correspondent
 vec3 viewDir = normalize(viewPos - FragPos);
 vec3 reflectDir = reflect(-lightDir, norm);
 ```
-> Note que negamos o vetor lightDir. A função reflect espera que o primeiro vetor aponte da fonte de luz em direção à posição do fragmento, mas o vetor lightDir está apontando na direção oposta: do fragmento em direção à fonte de luz (isso depende da ordem da subtração realizada anteriormente quando calculamos o vetor lightDir).
 
+> Note que negamos o vetor lightDir. A função reflect espera que o primeiro vetor aponte da fonte de luz em direção à posição do fragmento, mas o vetor lightDir está apontando na direção oposta: do fragmento em direção à fonte de luz (isso depende da ordem da subtração realizada anteriormente quando calculamos o vetor lightDir).
 
 Finalmente, o que falta fazer é calcular a componente da luz especular. Faremos isso da seguinte maneira:
 
@@ -417,6 +420,7 @@ vec3 specular = specularStrength * spec * lightColor;
 Primeiro, calculamos o produto escalar entre `viewDir` e `reflectDir`, novamente aplicando a função max entre o valor retornado e `0.0` para não surgir um valor negativo inesperado. Depois, elevamos o resultado a 32. Esse número, no caso, é é o valor de brilho do destaque. Veja a imagem abaixo:
 
 ![Cubos com exemplos de iluminação](../imagens/07_especular1.png)
+
 > Imagem retirada do livro Learn OpenGL. Quanto maior o valor de brilho de um objeto, mais ele reflete a luz de forma adequada, em vez de dispersá-la, e, portanto, menor se torna o reflexo. A imagem mostra o impacto visual de diferentes valores de brilho.
 
 Não queremos que a componente especular chame tanta atenção, então manteremos em 32.
@@ -452,16 +456,16 @@ struct Material {
 uniform Material material;
 ```
 
-Para ficar mais fácil, criamos uma estrutura para abrigar essas componentes de propriedades da superfície. 
+Para ficar mais fácil, criamos uma estrutura para abrigar essas componentes de propriedades da superfície.
 
-Como você pode ver, definimos um vetor de cor para cada um dos componentes da iluminação Phong. 
+Como você pode ver, definimos um vetor de cor para cada um dos componentes da iluminação Phong.
 
-(i) O vetor de material ambiente define a cor que a superfície reflete sob iluminação ambiente; geralmente, essa cor é a mesma da superfície. 
-(ii) O vetor de material difuso define a cor da superfície sob iluminação difusa. A cor difusa (assim como a da iluminação ambiente) é definida para a cor desejada da superfície. 
-(iii) O vetor de material especular define a cor do brilho especular na superfície (ou pode até mesmo refletir uma cor específica da superfície). 
+(i) O vetor de material ambiente define a cor que a superfície reflete sob iluminação ambiente; geralmente, essa cor é a mesma da superfície.
+(ii) O vetor de material difuso define a cor da superfície sob iluminação difusa. A cor difusa (assim como a da iluminação ambiente) é definida para a cor desejada da superfície.
+(iii) O vetor de material especular define a cor do brilho especular na superfície (ou pode até mesmo refletir uma cor específica da superfície).
 (iv) Por fim, o brilho influencia a dispersão/raio do brilho especular.
 
-Com essas quatro componentes, podemos simular muitos materiais do mundo real. 
+Com essas quatro componentes, podemos simular muitos materiais do mundo real.
 
 Existe uma tabela em [devernay.free.fr](http://devernay.free.fr/cours/opengl/materials.html) que mostra uma lista de propriedades que simulam materiais reais encontrados no mundo. A imagem a seguir, retirada do livro Learn OpenGL, mostra alguns exemplos:
 
@@ -474,22 +478,22 @@ Vamos, então, brincar um pouco com as implementações?
 Nós já criamos uma estrutura no fragment shader, então precisaremos mudar os cálculos de iluminação para manter a coerência com as propriedades do novo material. Veja o código a seguir:
 
 ```glsl
-void main(){    
+void main(){
     // ambient
     vec3 ambient = lightColor * material.ambient;
-  	
-    // diffuse 
+
+    // diffuse
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(lightPos - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = lightColor * (diff * material.diffuse);
-    
+
     // specular
     vec3 viewDir = normalize(viewPos - FragPos);
-    vec3 reflectDir = reflect(-lightDir, norm);  
+    vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = lightColor * (spec * material.specular);  
-        
+    vec3 specular = lightColor * (spec * material.specular);
+
     vec3 result = ambient + diffuse + specular;
     FragColor = vec4(result, 1.0);
 }
@@ -545,19 +549,19 @@ Para facilitar, vamos criar uma estrutura parecida com a que criamos anterioment
 ```glsl
 struct Light {
     vec3 position;
-  
+
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
 };
-uniform Light light; 
+uniform Light light;
 ```
 
-Uma fonte de luz possui intensidades diferentes para seus componentes ambiente, difuso e especular. 
+Uma fonte de luz possui intensidades diferentes para seus componentes ambiente, difuso e especular.
 
 (i) A luz ambiente geralmente é configurada com baixa intensidade, pois não queremos que a cor ambiente seja muito dominante;
-(ii) O componente difuso de uma fonte de luz geralmente é configurado com a cor exata que desejamos para a luz; frequentemente, um branco brilhante; 
-(iii) O componente especular geralmente é mantido em vec3(1.0), brilhando com intensidade máxima. 
+(ii) O componente difuso de uma fonte de luz geralmente é configurado com a cor exata que desejamos para a luz; frequentemente, um branco brilhante;
+(iii) O componente especular geralmente é mantido em vec3(1.0), brilhando com intensidade máxima.
 
 Observe que também adicionamos o vetor de posição da luz à estrutura.
 
@@ -566,15 +570,15 @@ Precisamos atualizar o fragment shader:
 ```glsl
 vec3 ambient  = light.ambient * material.ambient;
 vec3 diffuse  = light.diffuse * (diff * material.diffuse);
-vec3 specular = light.specular * (spec * material.specular); 
+vec3 specular = light.specular * (spec * material.specular);
 ```
 
 E, também, definir as intensidades da luz na aplicação:
 
 ```cpp
 lightingShader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
-lightingShader.setVec3("light.diffuse",  0.5f, 0.5f, 0.5f); 
-lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
+lightingShader.setVec3("light.diffuse",  0.5f, 0.5f, 0.5f);
+lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 ```
 
 E, voilá:
@@ -592,16 +596,15 @@ glm::vec3 lightColor;
 lightColor.x = sin(glfwGetTime() * 2.0f);
 lightColor.y = sin(glfwGetTime() * 0.7f);
 lightColor.z = sin(glfwGetTime() * 1.3f);
-  
-glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); 
-glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); 
-  
+
+glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f);
+glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
 lightingShader.setVec3("light.ambient", ambientColor);
 lightingShader.setVec3("light.diffuse", diffuseColor);
 ```
 
-Convidamos você a fazer essa implementação e tentar compilar e rodar. Veja o resultado com seus olhos! Além disso, tente exercitar a criatividade mexendo no código com suas próprias ideias!
-
+Convidamos você a fazer essa implementação e tentar compilar e rodar. Temos a versão final na nossa pasta de códigos. Veja o resultado com seus olhos! Além disso, tente exercitar a criatividade mexendo no código com suas próprias ideias!
 
 ## Conclusão
 

@@ -1,6 +1,6 @@
 # Transformações e Espaços
 
-Ainda na pegada do capítulo anterior, vamos apresentar para vocês aplicações matemáticas que são essenciais para o desenvolvimento de um projeto não apenas no OpenGL, mas na computação gráfica como um todo. 
+Ainda na pegada do capítulo anterior, vamos apresentar para vocês aplicações matemáticas que são essenciais para o desenvolvimento de um projeto não apenas no OpenGL, mas na computação gráfica como um todo.
 
 Aqui, mostraremos matrizes utilizadas para as seguintes transformações:
 
@@ -17,12 +17,11 @@ Além, é claro, das suas composições e do uso de GLM para a criação delas. 
 
 Por fim, demonstraremos projeções ortográficas e de perspectiva e teste de profundidade. Sem mais delongas. Vamos lá:
 
-
 ## Redimensionamento
 
 Imagine que você, ao final desta trilha, está modelando uma simulação onde existe uma árvore e um prédio de 30 andares.
 
-Se a árvore não estiver anabolizada, é natural supor que o prédio terá um tamanho consideravelmente maior, não? 
+Se a árvore não estiver anabolizada, é natural supor que o prédio terá um tamanho consideravelmente maior, não?
 
 Ou, melhor, vamos mudar de exemplo: imagine que você está fazendo uma simulação onde uma formiga terá o tamanho de um elefante (por algum motivo). Como seremos capazes de fazer isso no nosso computador?
 
@@ -40,9 +39,9 @@ Ela é o vetor que representa o nosso objeto. Aqui, não tem mistério:
 
 Ok! Mas e aquele número 1 na quarta linha da nossa matriz? Se estamos tratando aqui de um modelo 3D, por que o nosso vetor teria quatro componentes?
 
-Por enquanto, tente ignorar a existência dele. 
+Por enquanto, tente ignorar a existência dele.
 
-Para redimencionar um objeto, alteraremos o valor das componentes através de multiplicações em cada uma. 
+Para redimencionar um objeto, alteraremos o valor das componentes através de multiplicações em cada uma.
 Ao invés de multiplicarmos nosso vetor de maneira sucessiva por escalares, vamos "compactar" toda a nossa transformação em uma única nova matriz e realizar apenas uma multiplicação de matrizes. Isso facilita bastante o processo, além de reduzir a complexidade computacional. (Por quê?)
 
 Inclusive, segue abaixo a nossa querida matriz de redimensionamento:
@@ -55,10 +54,9 @@ Ao realizar a multiplicação dessa matriz pela outra que representa nosso objet
 
 <img src="../imagens/05_redimensionamento.png" width=400>
 
->Caso você tenha ficado na dúvida do porquê de chegarmos neste resultado, verifique o capítulo anterior na parte de multiplicação de matrizes.
+> Caso você tenha ficado na dúvida do porquê de chegarmos neste resultado, verifique o capítulo anterior na parte de multiplicação de matrizes.
 
 Mavilha! Repare que essa alteração provocaria uma distorção das dimensões do nosso objeto a partir do que estivesse definido para _(S1, S2, S3)_. Assim, é possível fazer uma formiga ficar com as mesmas proporções que um elefante!
-
 
 ## Translação
 
@@ -74,14 +72,13 @@ A partir daqui, aquela quarta componente começa a ganhar grande utilidade para 
 
 Enfim, quando realizamos a transformação, temos o seguinte:
 
-
 <img src="../imagens/05_translocamento.png" width=400>
 
 > _Um breve trecho adaptado do livro Learn OpenGL sobre Coordenadas homogêneas:_ A componente w (a quarta linha, no nosso caso 4x1 acima) de um vetor também é conhecida como coordenada homogênea. Para obter o vetor 3D a partir de um vetor homogêneo, dividimos as coordenadas x, y e z pela sua coordenada w. Normalmente não percebemos isso, pois a componente w é 1,0 na maioria das vezes. O uso de coordenadas homogêneas tem várias vantagens: permite
-realizar translações matriciais em vetores 3D (sem uma componente w não podemos transladar
-vetores) e usar o valor de w para criar perspectiva 3D. Além disso,
-sempre que a coordenada homogênea for igual a 0, o vetor é especificamente conhecido como um
-vetor de direção, pois um vetor com coordenada w igual a 0 não pode ser transladado.
+> realizar translações matriciais em vetores 3D (sem uma componente w não podemos transladar
+> vetores) e usar o valor de w para criar perspectiva 3D. Além disso,
+> sempre que a coordenada homogênea for igual a 0, o vetor é especificamente conhecido como um
+> vetor de direção, pois um vetor com coordenada w igual a 0 não pode ser transladado.
 
 Logo, com a matriz de translação no nosso arsenal, podemos mover objetos em qualquer um dos três eixos _(X, Y, Z)_, o que é essencial para nós.
 
@@ -89,7 +86,7 @@ Logo, com a matriz de translação no nosso arsenal, podemos mover objetos em qu
 
 <img src="../imagens/05_angulo.png" width=700>
 
-Quando falamos de rotação, é possível perceber que aqui as coisas ficam um pouco mais complexas do que as duas aplicações que acabamos de apresentar. Isso, pois, elas são mais intuitivas. Tentaremos manter a simplicidade aqui o máximo possível. 
+Quando falamos de rotação, é possível perceber que aqui as coisas ficam um pouco mais complexas do que as duas aplicações que acabamos de apresentar. Isso, pois, elas são mais intuitivas. Tentaremos manter a simplicidade aqui o máximo possível.
 
 Podemos rotacionar no nosso objeto em torno de cada um dos eixos. Para cada um, temos uma matriz de rotação diferente que se baseia em um ângulo theta (Θ), que é baseado em graus ou radianos e é recebido pelas funções trigonométricas _seno_ e _cosseno_. Explicar detalhadamente o funcionamento delas acaba saindo um pouco do escopo da nossa trilha. Se você quiser se aprofundar, pesquise vídeos no youtube ou livros voltados para isso.
 
@@ -117,7 +114,7 @@ Repare que, para cada um dos casos acima, o eixo o qual rotacionaremos em torno 
 
 ### _Matriz para rotação em torno de eixo arbitrário_:
 
-Para rotacionar em torno de um eixo 3D arbitrário, nós podemos combinar todas as três que acabamos de apresentar ao primeiro rotacionar em torno do eixo X, depois Y e então Z, por exemplo. Entretanto, isso rapidamente gera um problema chamado [_Gimbal lock_](https://pt.wikipedia.org/wiki/Gimbal_lock). 
+Para rotacionar em torno de um eixo 3D arbitrário, nós podemos combinar todas as três que acabamos de apresentar ao primeiro rotacionar em torno do eixo X, depois Y e então Z, por exemplo. Entretanto, isso rapidamente gera um problema chamado [_Gimbal lock_](https://pt.wikipedia.org/wiki/Gimbal_lock).
 
 Não discutiremos os detalhes, mas uma solução melhor é rotacionar em torno de um eixo unitário arbitrário, por exemplo, (0,662, 0,2, 0,722) (observe que este é um vetor unitário), diretamente em vez de combinar as
 matrizes de rotação. Tal matriz existe e é dada abaixo com _(Rx, Ry, Rz)_ como o eixo de rotação arbitrário (que coisinha linda...):
@@ -159,15 +156,20 @@ Para instalar no Linux (saia do Windows imediatamente), temos duas formas comuns
 A maioria das distribuições Linux possui o GLM nos repositórios oficiais. Essa é a melhor opção porque facilita as atualizações e a gestão de dependências.
 
 _Ubuntu / Debian / Linux Mint:_
+
 ```sh
 sudo apt update
 sudo apt install libglm-dev
 ```
+
 _Fedora:_
+
 ```sh
 sudo dnf install glm-devel
 ```
+
 _Arch Linux:_
+
 ```sh
 sudo pacman -S glm
 ```
@@ -177,10 +179,13 @@ sudo pacman -S glm
 Se você precisa de uma versão específica ou quer a mais recente que ainda não chegou nos repositórios, pode baixar direto do código-fonte.
 
 Clone o repositório:
+
 ```sh
 git clone https://github.com/g-truc/glm.git
 ```
+
 Mova para o diretório de inclusão local (opcional, mas útil para acesso global):
+
 ```sh
 sudo cp -r glm/glm /usr/local/include/
 ```
@@ -314,7 +319,7 @@ unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
 glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 ```
 
-O código acima, basicamente, é enviar os dados da matriz para os shaders através da `glUniform` com `Matrix4fv` como posfixo. 
+O código acima, basicamente, é enviar os dados da matriz para os shaders através da `glUniform` com `Matrix4fv` como posfixo.
 
 O primeiro argumento de `glUniformMatrix4fv` é o local da variável uniforme no shader, obtido com `glGetUniformLocation`. O segundo argumento é o número de matrizes a serem enviadas (1, neste caso). O terceiro argumento é um booleano que indica se a matriz deve ser transposta antes de ser enviada. O quarto argumento é um ponteiro para os dados da matriz.
 
@@ -350,7 +355,7 @@ A transformação de coordenadas para NDC geralmente é realizada passo a passo,
 ### Local Space
 
 O Local Space (ou Espaço Local) é o espaço de coordenadas que "parte" do seu objeto, que é local para ele, i.e. onde seu objeto começa.
-Imagine que você está construindo um modelo 3D de uma casa. O espaço local da casa seria o espaço onde você começa a construir a casa, onde a origem (0,0,0) está no chão do primeiro andar, e os eixos X e Z são paralelos ao chão. Isso significa que qualquer ponto dentro da casa pode ser descrito em relação a essa origem, a partir de suas coordenadas locais. 
+Imagine que você está construindo um modelo 3D de uma casa. O espaço local da casa seria o espaço onde você começa a construir a casa, onde a origem (0,0,0) está no chão do primeiro andar, e os eixos X e Z são paralelos ao chão. Isso significa que qualquer ponto dentro da casa pode ser descrito em relação a essa origem, a partir de suas coordenadas locais.
 Todos os vértices do seu modelo estão no espaço local: todos são locais para o seu objeto.
 
 ### World Space
@@ -375,7 +380,7 @@ transforma então as coordenadas dentro desse intervalo especificado em coordena
 (-1.0, 1.0). Todas as coordenadas fora desse intervalo serão cortadas. Com este intervalo que especificamos na matriz de projeção, uma coordenada de (1250, 500, 750) não seria visível, uma vez que a coordenada x está fora do intervalo e, portanto, é convertida para uma coordenada maior que 1,0 em NDC e, consequentemente, é cortada.
 
 > Observe que se apenas uma parte de uma primitiva, por exemplo, um triângulo, estiver fora do volume de recorte,
-o OpenGL reconstruirá o triângulo como um ou mais triângulos para caber dentro do intervalo.
+> o OpenGL reconstruirá o triângulo como um ou mais triângulos para caber dentro do intervalo.
 
 A caixa de visualização que uma matriz de projeção cria é chamada de _frustrum_ (ou tronco de cone) e cada coordenada dentro desse _frustrum_ vai aparecer na tela do usuário.
 
@@ -407,14 +412,13 @@ Os primeiros quatro parâmetros definem o espaço de visualização em pixels (e
 
 Uma matriz de _Projeção Ortográfica_ faz um mapeamento para o plano 2D que é a sua tela, mas essa projeção direta produz resultados não realistas, visto que a perspectiva não é considerada. Por isso, é comum usar uma matriz de projeção em perspectiva em vez disso.
 
-
 ### Projeção em Perspectiva
 
 Você sabe (eu espero) que na vida real objetos mais distantes aparecem menores do que objetos mais próximos. Isso é chamado de perspectiva e é uma das características que tornam a visão humana tão poderosa.
 
-<img src="../imagens/05_exemploperspectiva.jpg" width=800>
+<img src="../imagens/05_exemploperspectiva.webp" width=800>
 
-> Imagem do jogo Sonic Mania: observe como aquelas montanhas atrás do Sonic e do Tails aparentam estar distantes e menores do que os personagens próximos. Isso é um exemplo de perpectiva em jogos.
+> Imagem do jogo Shadow x Sonic Generations: observe como todos aqueles elementos na paisagem aparentam estar distantes e menores do que o Shadow. Isso é um exemplo de perpectiva em jogos.
 
 A matriz de projeção em perspectiva manipula o valor _w_ de cada coordenada homogênea dos vértices, fazendo com que objetos mais distantes sejam projetados com menor profundidade na tela. A divisão por _w_ é o que dá a ilusão de perspectiva:
 
@@ -427,6 +431,7 @@ Uma matriz de projeção em perspectiva pode ser criada com GLM da seguinte mane
 ```cpp
 glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width/(float)height, 0.1f, 100.0f);
 ```
+
 No caso, o primeiro parâmetro é o ângulo de campo de visão em graus, o segundo é o aspect ratio (largura dividido por altura), o terceiro é a distância do plano de corte próximo e o quarto é a distância do plano de corte distante.
 
 O que o glm::perspective faz no exemplo acima é definir uma projeção em perspectiva com um campo de visão de 45 graus, aspect ratio igual à proporção da tela, e distâncias de corte de 0.1 a 100 unidades. Os valores exatos dependem do cenário e podem ser ajustados conforme necessário.
@@ -436,8 +441,8 @@ A imagem de um tronco de cone (_frustrum_) em perspectiva pode ser vista abaixo:
 <img src="../imagens/05_projpers.png" width=800>
 
 > Sempre que o valor do plano próximo da sua matriz de perspectiva for definido muito alto (como 10,0), o OpenGL cortará todas as coordenadas próximas à câmera (entre 0,0 e 10,0), o que pode dar um
-resultado visual que você talvez já tenha visto em videogames, onde era possível ver através
-de certos objetos ao se aproximar desconfortavelmente deles.
+> resultado visual que você talvez já tenha visto em videogames, onde era possível ver através
+> de certos objetos ao se aproximar desconfortavelmente deles.
 
 ### Unificando tudo
 
@@ -524,7 +529,7 @@ glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
 Tente fazer isso e veja o que acontece!
 
-Podemos, também, criar um cubo! 
+Podemos, também, criar um cubo!
 
 Para renderizar um cubo, precisamos de um total de 36 vertices (6 faces X 2 triângulos X 3 vértices).
 
@@ -577,7 +582,7 @@ float vertices[] = {
 };
 ```
 
-Ele já contém as posições 3D e as coordenadas de textura para cada face do cubo. 
+Ele já contém as posições 3D e as coordenadas de textura para cada face do cubo.
 
 Além disso, vamos atualizar o `glBufferData` para usar os 36 vértices:
 
@@ -626,7 +631,6 @@ Veja:
 
 ![Cubo girando com o tempo e z-buffer](../imagens/05_cuborodando_zbuffer.png)
 
-
 E se a gente quiser pirar o cabeção mais ainda e colocar 10 cubos rodando simultaneamente? Vejamos:
 
 Primeiro, definir um vetor para armazenar as posições dos cubos. Façamos a seguinte declaração antes do loop de renderização:
@@ -653,16 +657,16 @@ Agora, dentro do loop de renderização, vamos iterar sobre os cubos e aplicar a
 glBindVertexArray(VAO);
 
 for (int i = 0; i < 10; i++) {
-    
+
     // Cria uma matriz de modelo e aplica a rotação com base no tempo e no índice do cubo
-    
+
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, cubePositions[i]);
-    
+
     float angle = 20.0f * i;
     float timeAngle = (float)glfwGetTime() * 50.0f;
-    
-    // Aplica a rotação ao modelo, somando o ângulo do cubo e o ângulo do tempo 
+
+    // Aplica a rotação ao modelo, somando o ângulo do cubo e o ângulo do tempo
     model = glm::rotate(model, (glm::radians(angle) + timeAngle), glm::vec3(1.0f, 0.3f, 0.5f));
     modelLoc = glGetUniformLocation(meuShaderInsano.ID, "model");
 

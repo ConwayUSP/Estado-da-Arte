@@ -1,5 +1,9 @@
 #version 430 core
 layout(location = 0) in vec3 aPos;
+layout(location = 1) in vec3 aNormal; // Assumindo que aNormal está na location 1
+
+out vec3 FragPos;
+out vec3 Normal;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -7,15 +11,9 @@ uniform mat4 projection;
 
 void main() {
     gl_Position = projection * view * model * vec4(aPos, 1.0);
-    unsigned int lightVAO;
-    glGenVertexArrays(1, & lightVAO);
-    glBindVertexArray(lightVAO);
+    FragPos = vec3(model * vec4(aPos, 1.0));
 
-    // Precisamos apenas fazer o binding com o VBO, os dados do VBO do contêiner
-    // já contêm os dados.
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    // Definindo o atributo do vértice
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void * ) 0);
-    glEnableVertexAttribArray(0);
+    // Para lidar com escalas não-uniformes, o ideal seria usar a Matriz Normal:
+    // Normal = mat3(transpose(inverse(model))) * aNormal;
+    Normal = aNormal;
 }
