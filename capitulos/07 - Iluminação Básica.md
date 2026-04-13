@@ -84,7 +84,7 @@ void main(){
 
 Já que queremos renderizar uma fonte de luz na forma de um cubo, vamos querer gerar um novo VAO especificamente para a fonte de luz:
 
-```glsl
+```cpp
 unsigned int lightVAO;
 glGenVertexArrays(1, &lightVAO);
 glBindVertexArray(lightVAO);
@@ -113,7 +113,7 @@ O shader de fragmento aceita uma cor de objeto e de luz de uma variável uniform
 
 Vamos definir a cor do objeto como sendo a mesma do coral e da luz como sendo branca
 
-```glsl
+```cpp
 lightningShader.use();
 lightningShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
 lightningShader.setVec3("lightColor", 1.0f, 1.00f, 1.00f);
@@ -165,7 +165,7 @@ glDrawArrays(GL_TRIANGLES, 0, 36);
 
 Enfim. Desenvolvendo o seu código em `C++` para OpenGL corretamente, compilando e rodando, teremos o seguinte:
 
-(Imagem aqui no futuro)
+![Cubos com exemplos de iluminação](../imagens/07_primeiroscubos.png)
 
 Qualquer dúvida, não deixe de consultar o código completo na pasta de códigos da nossa trilha!
 
