@@ -257,7 +257,7 @@ while (!glfwWindowShouldClose(window)) {
 
 Enfim. Desenvolvendo o seu código em `C++` para OpenGL corretamente, compilando e rodando, teremos o seguinte:
 
-![Cubos com exemplos de iluminação](../imagens/07_primeiroscubos.png)
+![Primeiro Cubo](../imagens/07_primeiroscubos.png)
 
 Qualquer dúvida, não deixe de consultar o código completo na pasta de códigos da nossa trilha!
 
@@ -281,7 +281,8 @@ iii) Iluminação Especular: simula o ponto de uma luz que aparece em objetos br
 
 ### Luz Ambiente
 
-Adicionar uma iluminação ambiente no nosso projeto é bem simples. Nós pegamos a cor da luz, multiplicamos ela por uma constante pequena de "fator ambiente", multiplicamos pela cor do objeto e usamos isso como a cor do fragmento no shader do cubo do objeto. Em outras palavras:
+Adicionar uma iluminação ambiente no nosso projeto é bem simples. Nós pegamos a cor da luz, multiplicamos ela por uma constante pequena de "fator ambiente", multiplicamos pela cor do objeto e usamos isso como a cor do fragmento no shader do cubo principal.
+Em outras palavras, no `fragment.frag`, coloque a função main da seguinte maneira:
 
 ```glsl
 void main(){
@@ -295,9 +296,9 @@ void main(){
 
 Ao rodar o programa, você vai perceber que já estará funcionando e terá mais ou menos algo nesse sentido:
 
-(imagem)
+![Segundo Cubo](../imagens/07_Segundo_cubo.png)
 
-> O objeto está meio escuro, mas não completamente. Além disso, o cubo de luz não foi afetado (por quê?).
+O objeto está meio escuro, mas não completamente. Além disso, o cubo de luz não foi afetado (por quê?).
 
 ### Luz Difusa
 
