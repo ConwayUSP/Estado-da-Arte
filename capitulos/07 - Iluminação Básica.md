@@ -65,9 +65,11 @@ Enfim. Podemos fazer um objeto refletir diferentes tonalidades de cor a partir d
 
 ## Iluminando Uma Cena
 
-Para criar a iluminação de uma cena, a primeira coisa que precisamos é de uma fonte de luz. Aqui, para fins de simplificação, ela será um cubo. Além disso, também usaremos um dos benditos contêiner de cubo.
+Para criar a iluminação de uma cena, a primeira coisa que precisamos é de uma fonte de luz. Aqui, para fins de simplificação, ela será um cubo. Além disso, colocaremos mais um cubo para ser iluminado pelo primeiro.
 
-Inicialmente, vamos precisar de um vertex shader para desenhar o contêiner. As posições dos vértices do contêiner devem continuar as mesmas, então nenhuma novidade por aqui.
+Inicialmente, vamos precisar de um `vertex shader` para desenhar o contêiner. As posições dos vértices do contêiner devem continuar as mesmas, então nenhuma novidade por aqui em comparação ao que já fizemos nos capítulos anteriores.
+
+Para isso, colocaremos no nosso `vertex.vert`, na pasta de shaders, o seguinte código:
 
 ```glsl
 #version 430 core
@@ -82,22 +84,51 @@ void main(){
 }
 ```
 
-Já que queremos renderizar uma fonte de luz na forma de um cubo, vamos querer gerar um novo VAO especificamente para a fonte de luz:
+No caso, aqui temos as nossas matrizes de modelo, visão e projeção.
+
+Antes de qualquer coisa dentro da nossa função principal do nosso arquivo `main.cpp`, vamos definir os shaders:
 
 ```cpp
-unsigned int lightVAO;
-glGenVertexArrays(1, &lightVAO);
-glBindVertexArray(lightVAO);
-// Precisamos apenas fazer o binding com o VBO, os dados do VBO do contêiner
-// já contêm os dados.
-glBindBuffer(GL_ARRAY_BUFFER, VBO);
+//  Shaders corretos para o Objeto e para a Luz
+  Shader lightingShader("shaders/vertex.vert", "shaders/fragment.frag");
+  Shader lightCubeShader(
+      "shaders/vertex.vert",
+      "shaders/lightCube.frag"); // Crie este frag que retorna vec4(1.0)
+```
 
-// Definindo o atributo do vértice
-glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),(void*)0);
+Vamos gerar o VAO do cubo principal:
+
+```cpp
+//  VAO do cubo principal
+  unsigned int VBO, cubeVAO;
+  glGenVertexArrays(1, &cubeVAO);
+  glGenBuffers(1, &VBO);
+
+  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  glBindVertexArray(cubeVAO);
+  // Passo corrigido para 6 * sizeof(float), tamanho da normal corrigido para 3
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
+                        (void *)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
+```
+
+Já que queremos renderizar uma fonte de luz na forma de um cubo, vamos querer gerar um novo VAO especificamente para a fonte de luz. Então, vamos adicionar as seguintes linhas no nosso `main.cpp`:
+
+```cpp
+//  VAO da luz instanciado separadamente
+unsigned int lightCubeVAO;
+glGenVertexArrays(1, &lightCubeVAO);
+glBindVertexArray(lightCubeVAO);
+glBindBuffer(GL_ARRAY_BUFFER, VBO); // Reutiliza o VBO do cubo
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
 glEnableVertexAttribArray(0);
 ```
 
-Ok! Agora que criamos os cubos, vamos definir o shader de fragmento para ambos:
+Ok! Agora que criamos os cubos, vamos definir o shader de fragmento para ambos. Em `fragment.frag` teremos:
 
 ```glsl
 #version 430 core
@@ -114,16 +145,28 @@ O shader de fragmento aceita uma cor de objeto e de luz de uma variável uniform
 Vamos definir a cor do objeto como sendo a mesma do coral e da luz como sendo branca
 
 ```cpp
-lightningShader.use();
-lightningShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-lightningShader.setVec3("lightColor", 1.0f, 1.00f, 1.00f);
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
+lightingShader.use();
+lightingShader.setVec3("light.position", lightPos);
+
+// Propriedades do Material e da Luz
+lightingShader.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+lightingShader.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+lightingShader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+lightingShader.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+lightingShader.setVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+lightingShader.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+lightingShader.setFloat("material.shininess", 32.0f);
 ```
+
+Perceba que aqui definimos tipos de iluminação diferentes: ambiente, difusa, especular. No decorrer do capítulo, explicaremos cada um em mais detalhes. Entenda, por enquanto, que são diferentes variáveis da luminosidade em uma projeto de computação gráfica.
 
 Em um projeto real, conforme formos ajustando os shaders de iluminação no avanço do nosso código, o nosso querido cubo luminoso seria afetado, e isso não é algo que queremos. Aqui, queremos que ele mantenha uma cor e um brilho constante.
 
 Para isso, vamos criar um outro conjunto de shaders que usaremos para desenhar a nossa fonte de luz e manter ela segura de eventuais mudanças nos shaders de iluminação.
 
-O vertex shader que vamos criar é o mesmo que o vertex shader de iluminação, então é só dar copy-paste do código:
+O vertex shader que vamos criar é o mesmo que o vertex shader de iluminação. Crie o arquivo `lightCube.vert` e cole o seguinte código.
 
 ```glsl
 #version 430 core
@@ -136,15 +179,15 @@ void main(){
 
 Quando quisermos renderizar, vamos querer rederizar o objeto contêiner usando o shader de iluminação que acabamos de definir. Quando quisermos desenhar a fonte de luz, usaremos os shaders da fonte de luz em si.
 
-A ideia do cubo é só mostrar de onde a luz da cena vem. Por isso, renderizamos ele na mesma posição que a fonte de luz.
+A ideia do cubo é só mostrar de onde a luz da cena vem, ou seja, facilitação para nossa visualização. Por isso, renderizamos ele na mesma posição que a fonte de luz.
 
-Então, vamos declarar um `vec3` global para representar a localização da fonte de luz nas coordenadas do word-space:
+Então, por isso declaramos um `vec3` "global" anteriormente para representar a localização da fonte de luz nas coordenadas do word-space:
 
 ```c++
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 ```
 
-E, depois, transladar o cubo de fonte de luz para a posição da fonte de luz em si e encolhê-lo antes de renderizar:
+Continuando, vamos transladar o cubo de fonte de luz para a posição da fonte de luz. Coloque as seguintes linhas dentro do loop de renderização:
 
 ```c++
 model = glm::mat4(1.0f);
@@ -155,12 +198,61 @@ model = glm::scale(model, glm::vec3(0.2f);
 O código de renderização final deve ficar mais ou menos assim:
 
 ```cpp
-lightCubeShader.use();
-// Nas próximas linhas, defina o modelo e a matriz de visão e de projeção
-// (...)
-// Desenhando o objeto "cubo luminoso"
-glBindVertexArray(lightCubeVAO);
-glDrawArrays(GL_TRIANGLES, 0, 36);
+while (!glfwWindowShouldClose(window)) {
+  //  Cálculo do Delta Time para movimentação fluida
+  float currentFrame = static_cast<float>(glfwGetTime());
+  dt = currentFrame - ultimoTempo;
+  ultimoTempo = currentFrame;
+
+  //  Chamar processaInput
+  processaInput(window);
+
+  //  Limpar os buffers de cor e profundidade
+  glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  // Animação da Luz
+  glm::vec3 lightColor;
+  lightColor.x = sin(glfwGetTime() * 2.0f);
+  lightColor.y = sin(glfwGetTime() * 0.7f);
+  lightColor.z = sin(glfwGetTime() * 1.3f);
+  glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+  glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
+  lightingShader.use();
+  lightingShader.setVec3("light.ambient", ambientColor);
+  lightingShader.setVec3("light.diffuse", diffuseColor);
+  lightingShader.setVec3("viewPos", camera.Posicao);
+
+  //  Matrizes de transformação globais
+  glm::mat4 projection = glm::perspective(
+      glm::radians(camera.Zoom), (float)800 / (float)600, 0.1f, 100.0f);
+  glm::mat4 view = camera.MatrizView();
+  lightingShader.setMat4("projection", projection);
+  lightingShader.setMat4("view", view);
+
+  // 1. Objeto Principal
+  glm::mat4 model = glm::mat4(1.0f);
+  lightingShader.setMat4("model", model);
+  glBindVertexArray(cubeVAO);
+  glDrawArrays(GL_TRIANGLES, 0, 36);
+
+  // 2. Fonte de Luz
+  lightCubeShader.use();
+  lightCubeShader.setMat4("projection", projection);
+  lightCubeShader.setMat4("view", view);
+
+  model = glm::mat4(1.0f);
+  model = glm::translate(model, lightPos);
+  model = glm::scale(model, glm::vec3(0.2f));
+  lightCubeShader.setMat4("model", model);
+
+  glBindVertexArray(lightCubeVAO);
+  glDrawArrays(GL_TRIANGLES, 0, 36);
+
+  glfwSwapBuffers(window);
+  glfwPollEvents();
+}
 ```
 
 Enfim. Desenvolvendo o seu código em `C++` para OpenGL corretamente, compilando e rodando, teremos o seguinte:

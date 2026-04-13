@@ -97,7 +97,7 @@ int main() {
       "shaders/vertex.vert",
       "shaders/lightCube.frag"); // Crie este frag que retorna vec4(1.0)
 
-  //  VAO do cubo principal (antigo "VAO")
+  //  VAO do cubo principal
   unsigned int VBO, cubeVAO;
   glGenVertexArrays(1, &cubeVAO);
   glGenBuffers(1, &VBO);
