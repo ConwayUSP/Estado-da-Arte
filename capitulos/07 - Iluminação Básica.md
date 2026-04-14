@@ -324,7 +324,7 @@ Conforme acabamos de falar, um vetor normal é um vetor (unitário neste caso) q
 
 Podemos calcular os vetores normais para todos os vértices do cubo ao utilizar o produto vetorial (caso você não lembre, novamente indicamos o [Capítulo 4](https://github.com/ConwayUSP/Estado-da-Arte/blob/main/capitulos/04%20-%20Matematica.md) desta trilha).
 
-Porém, já que um cubo não é uma forma muito complicada, podemos adicionar eles manualmente (ou não) nos dados do vertex. Observe (e não se assuste):
+Porém, já que um cubo não é uma forma muito complicada, podemos adicionar eles manualmente (ou não) nos dados do vertex:
 
 ```cpp
 // Dados dos vértices
@@ -380,27 +380,51 @@ Declarando a posição da luz como um uniform no fragment shader:
 uniform vec3 lightPos;
 ```
 
-E, também, atualizar o uniform no loop de renderização (por quê?). Vamos utilizar o `lightPos` declarado no capítulo passado como sendo a fonte da luz difusa:
+E, também, atualizar o uniform no loop de renderização. Vamos utilizar o `lightPos` declarado anteriormente como sendo a fonte da luz difusa. Para isso, adicione a seguinte linha no loop de renderização:
 
 ```cpp
-lightningShader.setVec3("lightPos", lightPos);
+// -- DESENHA O CUBO PRINCIPAL --
+    lightingShader.use();
+    lightingShader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+    lightingShader.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
+    // ADICIONE ESTA LINHA PARA ENVIAR A POSIÇÃO DA LUZ:
+    lightingShader.setVec3("lightPos", lightPos);
+
+    lightingShader.setMat4("projection", projection);
+    lightingShader.setMat4("view", view);
 ```
 
-Por fim, precisamos da posição atual do fragmento.
+Precisamos da posição atual do fragmento.
 
-Os cálculos para iluminação serão feitos no _world space_, então precisaremos de uma posição de vértice que eseja, à princípio, no _world space_.
+Os cálculos para iluminação serão feitos no _world space_, então precisaremos de uma posição de vértice que esteja, à princípio, nele.
 
 Dá para fazer isso ao multiplicar o atributo de posição do vértice apenas com a matriz modelo para transformar ele em coordenadas de _world space_. Isso é tranquilo de fazer no vertex shader, então vamos declarar uma variável de saída e calcular suas coordenadas:
 
 ```glsl
+#version 430 core
+layout(location = 0) in vec3 aPos;
+layout(location = 1) in vec3 aNormal; // Recebe as normais configuradas no C++
+
 out vec3 FragPos;
 out vec3 Normal;
-void main(){
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
+void main() {
+    // Calcula a posição do vértice no mundo para a direção da luz
     FragPos = vec3(model * vec4(aPos, 1.0));
-    Normal = aNormal;
+
+    // Matriz normal: garante que os vetores apontem para a direção certa mesmo com escalas não-uniformes
+    Normal = mat3(transpose(inverse(model))) * aNormal;
+
+    gl_Position = projection * view * vec4(FragPos, 1.0);
 }
 ```
+
+Para garantir que a iluminação não quebre futuramente quando você começar a aplicar transformações de escala (scale) nos seus modelos 3D, é ideal calcular uma matriz normal. Por isso, fizemos aquela multiplicação envolvendo a `aNormal`.
 
 E, por fim, vamos adicionar a variável de entrada para o nosso fragment shader:
 
@@ -437,7 +461,7 @@ FragColor = vec4(result, 1.0);
 
 Se tudo der certo e você conseguir compilar o projeto (esperamos que sim), você vai ter algo assim:
 
-(Imagem)
+![Terceiro Cubo](../imagens/07_terceirocubo.png)
 
 Temos um grande avanço em comparação ao ponto em que paramos anteriormente, não é?
 
