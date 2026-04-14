@@ -2,6 +2,10 @@
 
 Uma das coisas que mais possuem potencial para alterar a maneira a qual compreendemos um projeto de computação gráfica é, justamente, a iluminação da cena em questão. A percepção individual de todos os objetos ali presentes gira em torno disso, refletindo como interpretaremos o mundo.
 
+<img src="../imagens/07_exemplopotencial.jpg" width=300>
+
+> Aqui temos uma imagem da, até então, última série animada do `Homem-Aranha`. Ela segue uma modelagem 3D que visa trazer um aspecto clássico dos quadrinhos. Porém, a animação foi bem criticada. A imagem da parte de baixo é com uma iluminação aplicada por fãs. Observe o salto de qualidade que existe aqui. Realmente, acaba fazendo bastante a diferença.
+
 Tendo em vista esse ponto, neste capítulo nós veremos:
 
 1. Armazenando e misturando cores
@@ -424,7 +428,7 @@ void main() {
 }
 ```
 
-Para garantir que a iluminação não quebre futuramente quando você começar a aplicar transformações de escala (scale) nos seus modelos 3D, é ideal calcular uma matriz normal. Por isso, fizemos aquela multiplicação envolvendo a `aNormal`.
+Para garantir que a iluminação não quebre futuramente quando você começar a aplicar transformações de escala (scale) nos seus modelos 3D, é ideal calcular uma matriz normal. Por isso, fizemos aquela multiplicação envolvendo a `aNormal`. Isso vai ser um pouco mais detalhado daqui a pouco.
 
 E, por fim, vamos adicionar a variável de entrada para o nosso fragment shader:
 
@@ -505,11 +509,18 @@ Quanto menor o ângulo entre eles, maior será o impacto da luz especular.
 
 O vetor de visão é mais uma variável que precisaremos declarar, que podemos calcular usando a posição do "telespectador" no world space e a posição do fragmento. Então, calculamos a intensidade da luz especular, multiplicamos com a cor da luz e adicionamos para o ambiente e componentes de difusão.
 
-Vamos, então, criar mais um uniform para o shader de fragmento e passar o vetor de posição da câmera para o shader:
+Vamos, então, criar mais um uniform para o shader de fragmento e passar o vetor de posição da câmera para o shader.
+
+Em `fragment.frag`, junto dos outros `uniforms`:
 
 ```glsl
 uniform vec3 viewPos;
-lightingShader.setVec3("viewPos", camera.Position);
+```
+
+No nosso `main.cpp`, dentro do loop principal de renderização:
+
+```cpp
+lightingShader.setVec3("viewPos", camera.Posicao);
 ```
 
 Precisamos definir uma intensidade para a iluminação especular. Será um brilho "médio" para que não haja exagero:
@@ -549,9 +560,48 @@ vec3 result = (ambient + diffuse + specular) * objectColor;
 FragColor = vec4(result, 1.0);
 ```
 
+O nosso `fragment.frag` completo ficará assim:
+
+```glsl
+#version 430 core
+out vec4 FragColor;
+uniform vec3 objectColor;
+uniform vec3 lightColor;
+uniform vec3 lightPos;
+uniform vec3 viewPos;
+in vec3 FragPos;
+in vec3 Normal;
+
+void main() {
+    // Componente ambiente
+    float ambientStrength = 0.1;
+    vec3 ambient = ambientStrength * lightColor;
+
+    // Componente difusa
+    vec3 norm = normalize(Normal);
+    vec3 lightDir = normalize(lightPos - FragPos);
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = diff * lightColor;
+
+    // Componente especular
+    float specularStrength = 0.5;
+    vec3 viewDir = normalize(viewPos - FragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    vec3 specular = specularStrength * spec * lightColor;
+
+    vec3 result = (ambient + diffuse + specular) * objectColor;
+    FragColor = vec4(result, 1.0);
+}
+```
+
 Você terá mais ou menos o seguinte resultado:
 
-(imagem)
+![Quarto Cubo](../imagens/07_quartocubo.png)
+
+Isso não é um projeto de computação gráfica! Isso é uma paisagem...
+
+<img src="../imagens/07_killmonger.jpg" width=300>
 
 ## Definindo materiais para o modelo Phong
 
