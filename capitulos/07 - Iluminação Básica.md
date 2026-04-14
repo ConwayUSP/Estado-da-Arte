@@ -310,7 +310,7 @@ Se a primeira aplicação de iluminação não te animou tanto, é aqui que come
 
 A iluminação difusa dá ao objeto maior clareza conforme os fragmentos são mais alinhados com os raios da fonte de luz. Para você ter uma noção melhor, observe a seguinte imagem:
 
-(imagem)
+![Terceiro Cubo](../imagens/07_lampada.png)
 
 À esquerda, encontramos uma fonte de iluminação com um raio de luz coincidindo com um ponto específico do nosso objeto. No caso, é necessário estimar o ângulo de incidência para definir a iluminação final. Se o raio de luz é perpendicular, tal como um solzão de meio-dia, temos a maior quantidade de reflexão possível.
 
@@ -473,7 +473,7 @@ Temos um grande avanço em comparação ao ponto em que paramos anteriormente, n
 
 Vamos tratar aqui, em três tópicos, sobre alguns problemas que aparecem neste contexto e como podemos resolver utilizando um pouco mais de conceitos sobre vetores.
 
-(Imagem aqui no futuro)
+![Terceiro Cubo](../imagens/07_distorcao.png)
 
 1. O Problema da Translação
 
@@ -481,7 +481,7 @@ Vetores normais representam direções, não posições. Como não possuem a coo
 
 2. O Problema da Escala Não-Uniforme
 
-Se um objeto for redimensionado de forma desigual (ex: esticado apenas no eixo X), os vértices mudam de posição de tal forma que a normal original deixa de ser perpendicular à superfície. Isso causa distorções graves na iluminação.
+Se um objeto for redimensionado de forma desigual (ex: esticado apenas no eixo Y, como na imagem acima), os vértices mudam de posição de tal forma que a normal original deixa de ser perpendicular à superfície. Isso causa distorções graves na iluminação.
 
 3. A Solução: Matriz Normal
 
@@ -501,7 +501,7 @@ Ela é um pouco parecida com a iluminação difusa, é baseada na direção do v
 
 Se pensarmos na superfície do objeto como sendo um espelho, a luz especular é a mais forte onde quer que percebéssemos a luz refletida na superfície. Observe:
 
-(Imagem)
+![Terceiro Cubo](../imagens/07_vetoresevisao.png)
 
 Nós calculamos um vetor de reflexão ao refletir a direção da luz nos arredores do vetor normal. Então, calculamos a distância angular entre o seu vetor de reflexão e a direção da visão.
 
