@@ -160,18 +160,8 @@ int main() {
     lightingShader.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
     lightingShader.setVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
     lightingShader.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-
-    glm::vec3 lightColor;
-    lightColor.x = sin(glfwGetTime() * 2.0f);
-    lightColor.y = sin(glfwGetTime() * 0.7f);
-    lightColor.z = sin(glfwGetTime() * 1.3f);
-
-    glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
-    glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
-
-    lightingShader.setVec3("light.ambient", ambientColor);
-    lightingShader.setVec3("light.diffuse", diffuseColor);
-
+    lightingShader.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+    lightingShader.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
     lightingShader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
     lightingShader.setFloat("material.shininess", 32.0f);
     lightingShader.setMat4("projection", projection);

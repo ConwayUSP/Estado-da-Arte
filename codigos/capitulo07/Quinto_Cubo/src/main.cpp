@@ -157,6 +157,10 @@ int main() {
     lightingShader.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
     lightingShader.setVec3("lightPos", lightPos);
     lightingShader.setVec3("viewPos", camera.Posicao);
+    lightingShader.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+    lightingShader.setVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+    lightingShader.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+    lightingShader.setFloat("material.shininess", 32.0f);
     lightingShader.setMat4("projection", projection);
     lightingShader.setMat4("view", view);
 

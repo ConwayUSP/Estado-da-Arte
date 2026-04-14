@@ -602,6 +602,8 @@ Você terá mais ou menos o seguinte resultado:
 Isso não é um projeto de computação gráfica! Isso é uma paisagem...
 
 <img src="../imagens/07_killmonger.jpg" width=300>
+    
+Enfim. Continuando...
 
 ## Definindo materiais para o modelo Phong
 
@@ -610,7 +612,9 @@ No mundo real, cada material reage de maneira diferente à luz. Objetos metálic
 Se quisermos simular isso em computação gráfica, precisamos definir propriedades materiais para cada superfície.
 Ao realizar essa definição, podemos estabelecer uma cor material para cada um dos três componentes de iluminação: ambiente, difuso e especular. Ao fazer isso, teremos um bom controle a respeito da cor de saída da superfície.
 
-Agora, adicione uma componente de `brilho` (shininess) para essas três cores e teremos todas as propriedades materiais que precisamos:
+Agora, adicione uma componente de `brilho` (shininess) para essas três cores e teremos todas as propriedades materiais que precisamos.
+
+Em `fragment.frag` adicione:
 
 ```glsl
 struct Material {
@@ -618,7 +622,7 @@ struct Material {
     vec3 diffuse;
     vec3 specular;
     float shininess;
-}
+};
 
 uniform Material material;
 ```
@@ -668,12 +672,14 @@ void main(){
 
 Como você pode ver, agora acessamos todas as propriedades da estrutura do material onde precisarmos e, desta vez, calculamos a cor de saída resultante com a ajuda das cores do material. Cada um dos atributos do material do objeto é multiplicado por seus respectivos componentes de iluminação.
 
-Podemos definir o material do objeto no aplicativo configurando os uniforms apropriados. Uma estrutura em GLSL, no entanto, não é especial em nenhum aspecto ao configurar uniforms; no caso, uma estrutura funciona apenas como um namespace de variáveis uniform. Se quisermos preencher a estrutura, teremos que definir os uniforms individualmente, mas prefixados com o nome da estrutura:
+Podemos definir o material do objeto no aplicativo configurando os uniforms apropriados. Uma estrutura em GLSL, no entanto, não é especial em nenhum aspecto ao configurar uniforms; no caso, uma estrutura funciona apenas como um namespace de variáveis uniform. Se quisermos preencher a estrutura, teremos que definir os uniforms individualmente, mas prefixados com o nome da estrutura.
 
-```glsl
-lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-lightingShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+Dentro do nosso loop de renderização, adicione as seguintes linhas junto às outras `lightingShader.setVec3` que fizemos anteriormente:
+
+```cpp
+lightingShader.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+lightingShader.setVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+lightingShader.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
 lightingShader.setFloat("material.shininess", 32.0f);
 ```
 
@@ -681,7 +687,7 @@ Definimos os componentes de luz ambiente e difusa para a cor desejada para o obj
 
 Enfim, compilando e rodando, teremos o seguinte:
 
-(Imagem)
+![Quinto cubo](../imagens/07_quintocubo.png)
 
 O que achou? Ficou um pouco esquisito ainda, né?
 
@@ -711,7 +717,9 @@ vec3 ambient = vec3(0.1) * material.ambient;
 
 E poderíamos fazer algo semelhante para a difusa e especular também.
 
-Para facilitar, vamos criar uma estrutura parecida com a que criamos anteriomente, só que desta vez vai ser para as propriedades da luz:
+Para facilitar, vamos criar uma estrutura parecida com a que criamos anteriomente, só que desta vez vai ser para as propriedades da luz.
+
+Adicione em `fragment.frag`:
 
 ```glsl
 struct Light {
@@ -728,11 +736,11 @@ Uma fonte de luz possui intensidades diferentes para seus componentes ambiente, 
 
 (i) A luz ambiente geralmente é configurada com baixa intensidade, pois não queremos que a cor ambiente seja muito dominante;
 (ii) O componente difuso de uma fonte de luz geralmente é configurado com a cor exata que desejamos para a luz; frequentemente, um branco brilhante;
-(iii) O componente especular geralmente é mantido em vec3(1.0), brilhando com intensidade máxima.
+(iii) O componente especular geralmente é mantido em `vec3(1.0)`, brilhando com intensidade máxima.
 
 Observe que também adicionamos o vetor de posição da luz à estrutura.
 
-Precisamos atualizar o fragment shader:
+Precisamos atualizar as seguintes declarações no fragment shader:
 
 ```glsl
 vec3 ambient  = light.ambient * material.ambient;
@@ -740,17 +748,17 @@ vec3 diffuse  = light.diffuse * (diff * material.diffuse);
 vec3 specular = light.specular * (spec * material.specular);
 ```
 
-E, também, definir as intensidades da luz na aplicação:
+E, também, definir as intensidades da luz na aplicação. Então coloque o seguinte no loop de renderização:
 
 ```cpp
-lightingShader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
-lightingShader.setVec3("light.diffuse",  0.5f, 0.5f, 0.5f);
-lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+lightingShader.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+lightingShader.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+lightingShader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
 ```
 
 E, voilá:
 
-(imagem aqui)
+![Sexto cubo](../imagens/07_sextocubo.png)
 
 Agora, alterar os aspectos visuais dos objetos é relativamente mais simples!
 
