@@ -1,6 +1,6 @@
 # Iluminação Básica
 
-Uma das coisas que mais possuem potencial para alterar a maneira a qual compreendemos um projeto de computação gráfica é, justamente, a iluminação da cena em questão. A percepção individual de todos os objetos ali presentes gira em torno disso, refletindo como interpretaremos o mundo.
+Uma das coisas que mais possuem potencial para alterar a maneira como compreendemos um projeto de computação gráfica é, justamente, a iluminação da cena em questão. A percepção individual de todos os objetos ali presentes gira em torno disso, refletindo como interpretaremos o mundo.
 
 <img src="../imagens/07_exemplopotencial.jpg" width=300>
 
@@ -25,7 +25,7 @@ Então, eis aqui uma oportunidade de voltar a brincar com cores.
 
 Como seria possível fazer isso no computador?
 
-No mundo digital precisamos fazer o mapeamento de valores contínuos (infinitos) de cores para os discretos. Além disso, nós teremos três "tintas" básicas para chegar em praticamente qualquer outra cor. No caso, o vermelho (Red), o verde (Green) e o azul (Blue), os quais foram o famoso _RGB_. A "quantidade de cada tinta" que vamos usar fica dentro de um intervalo [0, 1]. Com base nisso, podemos definir um vetor de cores da seguinte maneira com GLM:
+No mundo digital precisamos fazer o mapeamento de valores contínuos (infinitos) de cores para os discretos. Além disso, nós teremos três "tintas" básicas para chegar em praticamente qualquer outra cor. No caso, o vermelho (Red), o verde (Green) e o azul (Blue), os quais formam o famoso _RGB_. A "quantidade de cada tinta" que vamos usar fica dentro de um intervalo [0, 1]. Com base nisso, podemos definir um vetor de cores da seguinte maneira com GLM:
 
 ```cpp
 glm::vec3 coral(1.0f, 0.5f, 0.31f);
@@ -45,7 +45,7 @@ glm::vec3 toyColor(1.0f, 0.5f, 0.31f);
 glm::vec3 result = lightColor * toyColor; // resultado = (1.0f, 0.5f, 0.31f);
 ```
 
-Acima, no vetor de luz, utilizamos as componentes que combinadas formam a luz branca. Ocorreu, então, uma reflexão fiel da cor do objeto. No caso, as componentes do vetor resultante possuem os mesmos valores vetor que representa a cor do brinquedo.
+Acima, no vetor de luz, utilizamos as componentes que combinadas formam a luz branca. Ocorreu, então, uma reflexão fiel da cor do objeto. No caso, as componentes do vetor resultante possuem os mesmos valores do vetor que representa a cor do brinquedo.
 
 Agora, o que aconteceria se usássemos uma cor verde?
 
@@ -181,11 +181,11 @@ void main(){
 }
 ```
 
-Quando quisermos renderizar, vamos querer rederizar o objeto contêiner usando o shader de iluminação que acabamos de definir. Quando quisermos desenhar a fonte de luz, usaremos os shaders da fonte de luz em si.
+Quando quisermos renderizar, vamos querer renderizar o objeto contêiner usando o shader de iluminação que acabamos de definir. Quando quisermos desenhar a fonte de luz, usaremos os shaders da fonte de luz em si.
 
 A ideia do cubo é só mostrar de onde a luz da cena vem, ou seja, facilitação para nossa visualização. Por isso, renderizamos ele na mesma posição que a fonte de luz.
 
-Então, por isso declaramos um `vec3` "global" anteriormente para representar a localização da fonte de luz nas coordenadas do word-space:
+Então, por isso declaramos um `vec3` "global" anteriormente para representar a localização da fonte de luz nas coordenadas do world-space:
 
 ```c++
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
@@ -267,7 +267,7 @@ Qualquer dúvida, não deixe de consultar o código completo na pasta de código
 
 ## Iluminação Básica
 
-O funcionamento da luz no mundo real é extremamente complexo e existem diversos fatores que podem alterar a sua disposição e se alcance até nossas retinas. Obviamente, precisamos nos limitar a certas coisas específicas pois, normalmente, não possuímos poder computacional ilimitado ou algo nesse sentido.
+O funcionamento da luz no mundo real é extremamente complexo e existem diversos fatores que podem alterar a sua disposição e seu alcance até nossas retinas. Obviamente, precisamos nos limitar a certas coisas específicas pois, normalmente, não possuímos poder computacional ilimitado ou algo nesse sentido.
 
 A iluminação no OpenGL é baseada em modelos simplificados, mas que produzem resultados bem realistas e interessantes para nós.
 
@@ -318,7 +318,7 @@ Para mensurar esse ângulo, utilizamos uma coisa chamada de _vetor normal_, que 
 
 > Perceba que, para conseguirmos o cosseno do ângulo entre dois vetores, trabalharemos com vetores unitários (vetores com comprimento igual a 1). Então, precisamos ter certeza de que todos os vetores estejam normalizados, se não o produto escalar vai retornar valores que vão além do cosseno.
 
-O produto escalar resultante vai retornar que usaremos para calcular o impacto da luz na cor do fragmento, fazendo com que tenhamos resultados diferentes em função dos diferentes posicionamentos do objeto diante da fonte de luz.
+O produto escalar resultante vai retornar um valor que usaremos para calcular o impacto da luz na cor do fragmento, fazendo com que tenhamos resultados diferentes em função dos diferentes posicionamentos do objeto diante da fonte de luz.
 
 Então, para calcular isso, vamos precisar do _vetor normal_ e do raio de luz direcionado. Para este último, um vetor de direção que é um vetor resultante da diferença a posição da luz e do fragmento.
 
@@ -503,7 +503,7 @@ Se pensarmos na superfície do objeto como sendo um espelho, a luz especular é 
 
 ![Terceiro Cubo](../imagens/07_vetoresevisao.png)
 
-Nós calculamos um vetor de reflexão ao refletir a direção da luz nos arredores do vetor normal. Então, calculamos a distância angular entre o seu vetor de reflexão e a direção da visão.
+Nós calculamos um vetor de reflexão ao refletir a direção da luz em torno do vetor normal. Então, calculamos a distância angular entre o seu vetor de reflexão e a direção da visão.
 
 Quanto menor o ângulo entre eles, maior será o impacto da luz especular.
 
@@ -545,7 +545,7 @@ float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
 vec3 specular = specularStrength * spec * lightColor;
 ```
 
-Primeiro, calculamos o produto escalar entre `viewDir` e `reflectDir`, novamente aplicando a função max entre o valor retornado e `0.0` para não surgir um valor negativo inesperado. Depois, elevamos o resultado a 32. Esse número, no caso, é é o valor de brilho do destaque. Veja a imagem abaixo:
+Primeiro, calculamos o produto escalar entre `viewDir` e `reflectDir`, novamente aplicando a função max entre o valor retornado e `0.0` para não surgir um valor negativo inesperado. Depois, elevamos o resultado a 32. Esse número, no caso, é o valor de brilho do destaque. Veja a imagem abaixo:
 
 ![Cubos com exemplos de iluminação](../imagens/07_especular1.png)
 
