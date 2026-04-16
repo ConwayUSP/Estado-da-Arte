@@ -31,6 +31,8 @@ Nós da Conway que escrevemos esta trilha **não** somos especialistas em comput
 Telegram: @Jonyski e @Fatorarpolinomio
 Email: grupoconway.si@gmail.com
 
+Além disso, você pode colocar algo na parte de `Issues` do nosso repositório ou preencher o seguinte forms de feedback da trilha: https://docs.google.com/forms/d/e/1FAIpQLScPXMtx0XUaQVWfbkz94S_CnyG34tFt1LT_zl_Sq_hHJx5ymA/viewform?usp=dialog
+
 Enfim, se você está prestes a começar sua caminhada -
 
 ```
