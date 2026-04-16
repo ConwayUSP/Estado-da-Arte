@@ -386,6 +386,8 @@ Abaixo está um resultado da mistura de texturas:
   <img src="../imagens/03_texturas_misturadas.png" alt="Uso de duas texturas simultaneamente">
 </div>
 
+Teste ficar alterando a porcentagem de cada textura no código.
+
 ## Conclusão
 
 Texturas dão vida ao cenário. Sem elas, estaríamos presos a um mundo de cores sólidas e matemáticas. O segredo aqui é entender o mapeamento UV e como o OpenGL lida com a memória da GPU. 
