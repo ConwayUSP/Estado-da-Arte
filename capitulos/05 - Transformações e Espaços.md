@@ -351,7 +351,7 @@ O Local Space (ou Espaço Local) é o espaço de coordenadas que "parte" do seu 
 Imagine que você está construindo um modelo 3D de uma casa. O espaço local da casa seria o espaço onde você começa a construir a casa, onde a origem (0,0,0) está no chão do primeiro andar, e os eixos X e Z são paralelos ao chão. Isso significa que qualquer ponto dentro da casa pode ser descrito em relação a essa origem, a partir de suas coordenadas locais.
 Todos os vértices do seu modelo estão no espaço local: todos são locais para o seu objeto.
 
-<img src="../imagens/05_exemplosteve.png" width=440>
+<img src="../imagens/05_exemplosteve.png" width=200>
 
 > Todas as partes do corpo do Steve, no caso, seus vértices, têm como referência o centro de sua cabeça oca.
 
