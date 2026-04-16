@@ -247,13 +247,13 @@ Ela é uma biblioteca header-only: basta baixar o arquivo [stb_image.h](https://
 
 O #define diz para a biblioteca incluir sua implementação neste arquivo. Nos demais arquivos do projeto (como o `main.cpp`), basta incluir o header normalmente, sem o `define`.
 
-Para as seguintes seções de textura, vamos usar uma imagem de um [container de madeira](https://github.com/ConwayUSP/Estado-da-Arte/blob/main/imagens/03_container.jpg). Para carregar uma imagem usando `stb_image.h`, utilizamos sua função `stbi_load`.
+Para as seguintes seções de textura, vamos usar uma imagem de um [caixote de madeira](https://github.com/ConwayUSP/Estado-da-Arte/blob/main/imagens/03_caixote.jpg). Para carregar uma imagem usando `stb_image.h`, utilizamos sua função `stbi_load`.
 
 Depois, carregar uma imagem é moleza:
 
 ```cpp
 int largura, altura, nCanais;
-unsigned char *dados = stbi_load("textures/container.jpg", &largura, &altura, &nCanais, 0);
+unsigned char *dados = stbi_load("textures/caixote.jpg", &largura, &altura, &nCanais, 0);
 ```
 
 > O OpenGL espera que o pixel (0,0) esteja no canto inferior esquerdo, mas a maioria dos formatos de imagem começa pelo canto superior esquerdo. Sem correção, sua textura aparecerá de cabeça para baixo. Antes de qualquer `stbi_load`, chame: `stbi_set_flip_vertically_on_load(true);`.
@@ -286,7 +286,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 ```cpp
 stbi_set_flip_vertically_on_load(true);  // Inverte a imagem verticalmente ao carregar
 int largura, altura, nCanais;
-unsigned char *dados = stbi_load("textures/container.jpg", &largura, &altura, &nCanais, 0);
+unsigned char *dados = stbi_load("textures/caixote.jpg", &largura, &altura, &nCanais, 0);
 
 if (dados) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, largura, altura, 0, GL_RGB, GL_UNSIGNED_BYTE, dados);
@@ -373,8 +373,8 @@ uniform sampler2D textura1;
 uniform sampler2D textura2;
 
 void main() {
-    // 0.2 = 80% da textura1 + 20% da textura2
-    FragColor = mix(texture(textura1, TexCoord), texture(textura2, TexCoord), 0.2);
+    // 0.2 = 70% da textura1 + 30% da textura2
+    FragColor = mix(texture(textura1, TexCoord), texture(textura2, TexCoord), 0.3);
 }
 ```
 
