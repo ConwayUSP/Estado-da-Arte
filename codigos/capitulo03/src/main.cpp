@@ -78,7 +78,7 @@ int main() {
 
     stbi_set_flip_vertically_on_load(true);
     int largura, altura, nCanais;
-    unsigned char *dados = stbi_load("textures/container.jpg", &largura, &altura, &nCanais, 0);
+    unsigned char *dados = stbi_load("textures/caixote.jpg", &largura, &altura, &nCanais, 0);
     if (dados) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, largura, altura, 0, GL_RGB, GL_UNSIGNED_BYTE, dados);
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -97,7 +97,7 @@ int main() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     // Imagens PNG podem ter canal alpha (RGBA), então usamos GL_RGBA
-    dados = stbi_load("textures/awesomeface.png", &largura, &altura, &nCanais, 0);
+    dados = stbi_load("textures/mascote.png", &largura, &altura, &nCanais, 0);
     if (dados) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, largura, altura, 0, GL_RGBA, GL_UNSIGNED_BYTE, dados);
         glGenerateMipmap(GL_TEXTURE_2D);
