@@ -190,7 +190,7 @@ Mova para o diretório de inclusão local (opcional, mas útil para acesso globa
 sudo cp -r glm/glm /usr/local/include/
 ```
 
-### Mão na massa
+### Mão na Massa
 
 Agora, que você já fez a instalação, podemos começar a brincar um pouco com as nossas ferramentas. Vamos começar fazendo os includes genéricos necessários:
 
@@ -270,20 +270,13 @@ Ao compilar e rodar, vamos ter a saída:
 
 O vetor resultante daquela multiplicação é _(1+1, 0+1, 0+0)_, gerando _(2, 1, 0)_. Então, aquela nossa saída felizmente está correta.
 
-Agora, vamos fazer algo um pouco mais legal e visual: escalar e rotacionar um objeto dos capítulos anteriores:
+Agora, vamos fazer algo um pouco mais legal e visual: escalar e rotacionar um objeto dos capítulos anteriores. Vamos adicionar as seguintes linhas dentro do loop de renderização:
 
 ```cpp
-#include <iostream>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-int main(){
-    glm::mat4 trans = glm::mat4(1.0f);
-    trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-    trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
-    return 0;
-}
+glm::mat4 trans = glm::mat4(1.0f);
+trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+return 0;
 ```
 
 No código acima, começamos declarando uma matriz de transformação `trans` com valores padrão (identidade) e, em seguida, aplicamos uma rotação de 90 graus no eixo Z e uma escala de 0.5 em todos os eixos.
@@ -315,8 +308,8 @@ O nosso container agora deve ser duas vezes menor e rotacionado em 90 graus.
 Nós ainda precisamos passar a matriz de transformação para o shader. Vamos lá:
 
 ```cpp
-unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+unsigned int transformLoc = glGetUniformLocation(meuShaderInsano.ID, "transform");
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 ```
 
 O código acima, basicamente, é enviar os dados da matriz para os shaders através da `glUniform` com `Matrix4fv` como posfixo.
@@ -329,7 +322,7 @@ Assim, teremos como resultado:
 
 Simples, mas bacana, né?
 
-Podemos pirar o cabeção, também, e fazer uma translação junto com rotação:
+Podemos pirar o cabeção, também, e fazer uma translação junto com rotação. No caso, ele vai rotacionar com a passagem do tempo. Substitua as linhas anteriores das atribuições em `trans` para:
 
 ```cpp
 trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
@@ -342,7 +335,7 @@ Resultado:
 
 ![Resultado da nossa segunda aplicação](../imagens/05_resultadosegaplica.png)
 
-Bem daora, né? Não deixe de verficar o código completo na nossa pasta de códigos.
+Bem daora, né? Não deixe de verficar o código completo na nossa pasta de códigos. Para ver o quadrado girando, basta compilar e rodar o código.
 
 ## Espaços
 
@@ -416,7 +409,7 @@ Uma matriz de _Projeção Ortográfica_ faz um mapeamento para o plano 2D que é
 
 Você sabe (eu espero) que na vida real objetos mais distantes aparecem menores do que objetos mais próximos. Isso é chamado de perspectiva e é uma das características que tornam a visão humana tão poderosa.
 
-<img src="../imagens/05_exemploperspectiva.webp" width=800>
+<img src="../imagens/05_exemploperspectiva.webp" width=400>
 
 > Imagem do jogo Shadow x Sonic Generations: observe como todos aqueles elementos na paisagem aparentam estar distantes e menores do que o Shadow. Isso é um exemplo de perpectiva em jogos.
 
@@ -454,7 +447,7 @@ Perceba que a ordem da multiplicação de matrizes está invertida em relação 
 
 Esse tópico é um pouco difícil de entender, mas é essencial para a renderização 3D. Porém, não se preocupe se não entender completamente — o importante é saber como usar essas transformações corretamente. Vamos colocar a mão na massa com código!
 
-### Mão na massa
+### Mais Mão na Massa
 
 Agora, temos as ferramentas e o conhecimento necessário para romper a barreira da segunda dimensão e entrar no mundo tridimensional!
 
@@ -587,7 +580,8 @@ Ele já contém as posições 3D e as coordenadas de textura para cada face do c
 Além disso, vamos atualizar o `glBufferData` para usar os 36 vértices:
 
 ```cpp
-glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+glBindBuffer(GL_ARRAY_BUFFER, VBO);
+glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 ```
 
 E que tal se o cubo também rodasse com o passar do tempo? Coloque isso aqui dentro do loop de renderização:
