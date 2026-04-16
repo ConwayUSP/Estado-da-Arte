@@ -355,6 +355,11 @@ Todos os vértices do seu modelo estão no espaço local: todos são locais para
 
 Se nós importássemos todos os nossos objetos diretamente na nossa aplicação, eles provavelmente ficariam se sobrepondo no centro do nosso mundo, com origem em (0, 0, 0), o que não é o que queremos. Geralmente, é preferível definir uma posição específica para cada um dos nossos modelos dentro da nossa simulação.
 As coordenadas no World Space (ou Espaço do Mundo) são exatamente o que parecem ser: as coordenadas de todos os seus vértices em relação ao mundo simulado.
+
+<img src="../imagens/05_exemplomine.png" width=440>
+
+> No Minecraft, quando você aperta `F3` e aparece as coordenadas do seu personagem, elas dizem respeito ao seu deslocamento em relação à origem `(0, 0, 0)` do mundo.
+
 As coordenadas do seu objeto são transformados do Local para o World Space; isso acontece através da _Matriz de Modelo_.
 
 A Matriz de Modelo é uma matriz de transformação que translada, redimensiona e/ou rotaciona seu objeto para um lugar no mundo para uma localização/orientação a qual ele pertence. Você pode pensar na matriz do capítulo anterior para posicionar o contêiner em toda a cena como uma espécie de matriz de modelo também; transformamos as coordenadas locais do contêiner para algum lugar diferente na cena/mundo.
@@ -364,9 +369,15 @@ A Matriz de Modelo é uma matriz de transformação que translada, redimensiona 
 O View Space (Espaço de Vista) é o que as pessoas normalmente se referem como sendo a câmera do _OpenGL_ (às vezes, também é conhecido como _Camera Space_ ou _Eye Space_).
 O View Space é o resultado da transformação das coordenadas de seu World Space para coordenadas as quais estão na frente da perspectiva do usuário. No caso, o View Space é, então, o espaço visto a partir da perspectiva da câmera. Isso é, normalmente, realizado com a combinação de translações e rotações para que certos itens sejam transformados para frente da câmera. Essa combinação normalmente é guardada dentro de uma _Matriz de Visão_, que transforma coordenadas do mundo para o View Space.
 
+<img src="../imagens/05_exemplocs.webp" width=440>
+
 ### Clip Space
 
 No fim da rodagem de cada vertex shader, o _OpenGL_ espera que as coordenadas estejam em um intervalo específico e que cada uma que não esteja seja cortada (clipada, ou "clipped" do inglês). Coordenadas cortadas são descartadas para que as remanescentes se tornem fragmentos visíveis na sua tela. É daí que o _Clip Space_ recebe seu nome.
+
+<img src="../imagens/05_exemplomine2.webp" width=440>
+    
+> Quando você coloca poucos chunks no mine, blocos do horizonte são cortados, economizando processamento gráfico.
 
 Para transformar coordendas de vértices de _View_ para _Clip Space_, nós definimos a _Matriz de Projeção_, que especifica um intervalo de coordenadas, e.g. -1000 e 1000 para cada dimensão. A matriz de projeção
 transforma então as coordenadas dentro desse intervalo especificado em coordenadas de dispositivo normalizadas
