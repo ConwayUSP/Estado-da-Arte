@@ -707,3 +707,7 @@ Você sabe: obrigado por ler até aqui :)
  |                                          |
  +------------------------------------------+
 ```
+
+## Mapa Mental
+
+![Mapa Mental](../imagens/05_mapamental.png)
