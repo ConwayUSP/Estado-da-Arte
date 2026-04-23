@@ -44,3 +44,7 @@ Enfim, se você está prestes a começar sua caminhada -
  |                |
  +----------------+
 ```
+
+## Conclusão
+
+Caso você seja um membro da Conway e deseje finalizar oficialmente a trilha para receber sua certificação, confira os detalhes [neste documento](https://docs.google.com/document/d/1Mb4Z3j0Z_TQVZAu3Ph6M3tqAYrykKF4EP1-x8vPSNEI/edit?usp=sharing).
