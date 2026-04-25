@@ -708,6 +708,12 @@ Você sabe: obrigado por ler até aqui :)
  +------------------------------------------+
 ```
 
+## Exercícios propostos
+
+1. Experimente os parâmetros de campo de visão (FoV) e proporção da função de projeção do GLM. Veja se consegue descobrir como eles afetam o frustum de perspectiva.
+
+2. Brinque com a matriz de visualização, transladando-a em várias direções e observe como a cena muda. Pense na matriz de visualização como um objeto de câmera.
+
 ## Mapa Mental
 
 ![Mapa Mental](../imagens/05_mapamental.png)

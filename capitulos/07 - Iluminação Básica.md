@@ -796,3 +796,11 @@ No próximo, daremos continuidade a essa parte utilizando mapas de iluminação.
  |       baby.     |
  +-----------------+
 ```
+
+## Exercícios propostos
+
+1. No momento, a fonte de luz é uma fonte de luz estática e monótona que não se move. Tente mover
+   a fonte de luz pela cena ao longo do tempo usando seno ou cosseno. Observar a iluminação
+   mudar ao longo do tempo lhe dará uma boa compreensão do modelo de iluminação de Phong.
+
+2. Experimente diferentes intensidades de luz ambiente, difusa e especular e veja como elas impactam o resultado. Experimente também com o fator de brilho. Tente compreender por que certos valores produzem uma determinada saída visual.
