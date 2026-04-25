@@ -62,14 +62,7 @@ glm::vec3 cimaCamera = glm::cross(direcaoCamera, direitaCamera);
 
 Tendo construído o espaço de visão da nossa câmera, podemos usar os vetores da base desse espaço e a posição da câmera (`P`) para formar uma matriz que traduz qualquer vetor para este espaço - a matriz _view_. Essa matriz é formada assim:
 
-``` 
-┌             ┐   ┌            ┐
-│Rx  Ry  Rz  0│   │1  0  0  -Px│
-│Cx  Cy  Cz  0│ × │0  1  0  -Py│
-│Dx  Dy  Dz  0│   │0  0  1  -Pz│
-│0   0   0   1│   │0  0  0   1 │
-└             ┘   └            ┘
-```
+![Matriz lookAt](../imagens/06_matriz_lookat.png)
 
 Contudo, para nossa alergia, basicamente tudo que vimos até agora é resolvido pela função `lookAt` do GLM. Esta função recebe como argumentos a posição da câmera, a posição do alvo para o qual ela está olhando, e aquele vetor que aponta para cima no world space que nós usamos no truque. Ou seja, podemos construir nossa matriz view dessa forma:
 
