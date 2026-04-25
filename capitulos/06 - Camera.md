@@ -73,7 +73,7 @@ Tendo construído o espaço de visão da nossa câmera, podemos usar os vetores 
 
 Contudo, para nossa alergia, basicamente tudo que vimos até agora é resolvido pela função `lookAt` do GLM. Esta função recebe como argumentos a posição da câmera, a posição do alvo para o qual ela está olhando, e aquele vetor que aponta para cima no world space que nós usamos no truque. Ou seja, podemos construir nossa matriz view dessa forma:
 
-``` 
+``` cpp
 glm::mat4 view;
 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), 
   	        	   glm::vec3(0.0f, 0.0f, 0.0f), 
