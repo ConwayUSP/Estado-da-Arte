@@ -37,7 +37,7 @@ Também é possível buildar a partir do código fonte seguindo [estas instruç�
 
 Como cada formato de arquivo para modelos 3D utiliza um padrão e uma estrutura diferente para representar seus dados, o Assimp nos faz o belo favor de colocá-los em uma estrutura própria e relativamente simples. A ideia geral é que nós teremos um objeto que representa uma **Cena** (_Scene_). A cena possui uma árvore, uma lista de **Meshes** e uma lista de **Materiais**. Cada nó da árvore possui uma lista dos índices dos meshes que o compõem. Já os _Meshes_ em si são objetos com informações sobre vértices, materiais, coordenadas de textura e outras informações sobre um objeto 3D da cena. A imagem abaixo demonstra aproximadamente a estrutura de uma cena do Assimp.
 
-![Cena do Assimp](!TODO)
+![Cena do Assimp](../imagens/10_estrutura_assimp.png)
 
 ## Meshes
 
